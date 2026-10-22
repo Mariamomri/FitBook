@@ -37,6 +37,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\Column(length: 50)]
+    private ?string $firstname = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $lastname = null;
+
+    #[ORM\Column(length: 30, nullable: true)]
+    private ?string $phone = null;
+
+    #[ORM\Column(length: 20)]
+    private ?string $accentColor = null;
+
+    #[ORM\Column]
+    private ?bool $isActive = true;  //per evitare che un utente appena creato sia disabilitato di default, lo imposto a true
+
     use Timestampable; //uso il tarait in classe
 
     public function getId(): ?int
@@ -118,5 +133,65 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // @deprecated, to be removed when upgrading to Symfony 8
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): static
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): static
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): static
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getAccentColor(): ?string
+    {
+        return $this->accentColor;
+    }
+
+    public function setAccentColor(string $accentColor): static
+    {
+        $this->accentColor = $accentColor;
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): static
+    {
+        $this->isActive = $isActive;
+
+        return $this;
     }
 }
