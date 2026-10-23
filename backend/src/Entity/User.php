@@ -6,7 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use App\Entity\Traits\Timestampable; //collegato il tarits
+use App\Entity\Traits\Timestampable; //collegato il trait
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -52,7 +52,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isActive = true;  //per evitare che un utente appena creato sia disabilitato di default, lo imposto a true
 
-    use Timestampable; //uso il tarait in classe
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?CarteMembre $carteMembre = null;
+
+    use Timestampable; //uso il trait in classe
 
     public function getId(): ?int
     {
@@ -191,6 +194,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsActive(bool $isActive): static
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getCarteMembre(): ?CarteMembre
+    {
+        return $this->carteMembre;
+    }
+
+    public function setCarteMembre(CarteMembre $carteMembre): static
+    {
+        // set the owning side of the relation if necessary
+        if ($carteMembre->getUser() !== $this) {
+            $carteMembre->setUser($this);
+        }
+
+        $this->carteMembre = $carteMembre;
 
         return $this;
     }
