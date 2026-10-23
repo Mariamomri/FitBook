@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SalleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\Timestampable;
@@ -50,6 +52,17 @@ class Salle
     #[ORM\ManyToOne(inversedBy: 'salles')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $gestionnaire = null;
+
+    /**
+     * @var Collection<int, Horaire>
+     */
+    #[ORM\OneToMany(targetEntity: Horaire::class, mappedBy: 'salle', orphanRemoval: true)]
+    private Collection $horaires;
+
+    public function __construct()
+    {
+        $this->horaires = new ArrayCollection();
+    }
 
     use Timestampable;
 
@@ -186,6 +199,36 @@ class Salle
     public function setGestionnaire(?User $gestionnaire): static
     {
         $this->gestionnaire = $gestionnaire;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Horaire>
+     */
+    public function getHoraires(): Collection
+    {
+        return $this->horaires;
+    }
+
+    public function addHoraire(Horaire $horaire): static
+    {
+        if (!$this->horaires->contains($horaire)) {
+            $this->horaires->add($horaire);
+            $horaire->setSalle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHoraire(Horaire $horaire): static
+    {
+        if ($this->horaires->removeElement($horaire)) {
+            // set the owning side to null (unless already changed)
+            if ($horaire->getSalle() === $this) {
+                $horaire->setSalle(null);
+            }
+        }
 
         return $this;
     }
