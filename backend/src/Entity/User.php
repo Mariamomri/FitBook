@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -54,6 +56,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?CarteMembre $carteMembre = null;
+
+    /**
+     * @var Collection<int, Salle>
+     */
+    #[ORM\OneToMany(targetEntity: Salle::class, mappedBy: 'gestionnaire', orphanRemoval: true)]
+    private Collection $salles;
+
+    public function __construct()
+    {
+        $this->salles = new ArrayCollection();
+    }
 
     use Timestampable; //uso il trait in classe
 
@@ -211,6 +224,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->carteMembre = $carteMembre;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Salle>
+     */
+    public function getSalles(): Collection
+    {
+        return $this->salles;
+    }
+
+    public function addSalle(Salle $salle): static
+    {
+        if (!$this->salles->contains($salle)) {
+            $this->salles->add($salle);
+            $salle->setGestionnaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSalle(Salle $salle): static
+    {
+        if ($this->salles->removeElement($salle)) {
+            // set the owning side to null (unless already changed)
+            if ($salle->getGestionnaire() === $this) {
+                $salle->setGestionnaire(null);
+            }
+        }
 
         return $this;
     }
