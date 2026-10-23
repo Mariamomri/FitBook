@@ -43,9 +43,16 @@ class Coach
     #[ORM\JoinTable(name: 'enseigner')] // table de liaison = association « enseigner » du MCD
     private Collection $activites;
 
+    /**
+     * @var Collection<int, Cours>
+     */
+    #[ORM\OneToMany(targetEntity: Cours::class, mappedBy: 'coach')]
+    private Collection $cours;
+
     public function __construct()
     {
         $this->activites = new ArrayCollection();
+        $this->cours = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -145,6 +152,36 @@ class Coach
     public function removeActivite(Activite $activite): static
     {
         $this->activites->removeElement($activite);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cours>
+     */
+    public function getCours(): Collection
+    {
+        return $this->cours;
+    }
+
+    public function addCour(Cours $cour): static
+    {
+        if (!$this->cours->contains($cour)) {
+            $this->cours->add($cour);
+            $cour->setCoach($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCour(Cours $cour): static
+    {
+        if ($this->cours->removeElement($cour)) {
+            // set the owning side to null (unless already changed)
+            if ($cour->getCoach() === $this) {
+                $cour->setCoach(null);
+            }
+        }
 
         return $this;
     }

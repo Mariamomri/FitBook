@@ -29,9 +29,16 @@ class Activite
     #[ORM\ManyToMany(targetEntity: Coach::class, mappedBy: 'activites')]
     private Collection $coaches;
 
+    /**
+     * @var Collection<int, Cours>
+     */
+    #[ORM\OneToMany(targetEntity: Cours::class, mappedBy: 'activite')]
+    private Collection $cours;
+
     public function __construct()
     {
         $this->coaches = new ArrayCollection();
+        $this->cours = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -85,6 +92,36 @@ class Activite
     {
         if ($this->coaches->removeElement($coach)) {
             $coach->removeActivite($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cours>
+     */
+    public function getCours(): Collection
+    {
+        return $this->cours;
+    }
+
+    public function addCour(Cours $cour): static
+    {
+        if (!$this->cours->contains($cour)) {
+            $this->cours->add($cour);
+            $cour->setActivite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCour(Cours $cour): static
+    {
+        if ($this->cours->removeElement($cour)) {
+            // set the owning side to null (unless already changed)
+            if ($cour->getActivite() === $this) {
+                $cour->setActivite(null);
+            }
         }
 
         return $this;

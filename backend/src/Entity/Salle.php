@@ -59,9 +59,16 @@ class Salle
     #[ORM\OneToMany(targetEntity: Horaire::class, mappedBy: 'salle', orphanRemoval: true)]
     private Collection $horaires;
 
+    /**
+     * @var Collection<int, Cours>
+     */
+    #[ORM\OneToMany(targetEntity: Cours::class, mappedBy: 'salle', orphanRemoval: true)]
+    private Collection $cours;
+
     public function __construct()
     {
         $this->horaires = new ArrayCollection();
+        $this->cours = new ArrayCollection();
     }
 
     use Timestampable;
@@ -227,6 +234,36 @@ class Salle
             // set the owning side to null (unless already changed)
             if ($horaire->getSalle() === $this) {
                 $horaire->setSalle(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cours>
+     */
+    public function getCours(): Collection
+    {
+        return $this->cours;
+    }
+
+    public function addCour(Cours $cour): static
+    {
+        if (!$this->cours->contains($cour)) {
+            $this->cours->add($cour);
+            $cour->setSalle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCour(Cours $cour): static
+    {
+        if ($this->cours->removeElement($cour)) {
+            // set the owning side to null (unless already changed)
+            if ($cour->getSalle() === $this) {
+                $cour->setSalle(null);
             }
         }
 
