@@ -49,10 +49,17 @@ class Coach
     #[ORM\OneToMany(targetEntity: Cours::class, mappedBy: 'coach')]
     private Collection $cours;
 
+    /**
+     * @var Collection<int, Disponibilite>
+     */
+    #[ORM\OneToMany(targetEntity: Disponibilite::class, mappedBy: 'coach', orphanRemoval: true)]
+    private Collection $disponibilites;
+
     public function __construct()
     {
         $this->activites = new ArrayCollection();
         $this->cours = new ArrayCollection();
+        $this->disponibilites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -180,6 +187,36 @@ class Coach
             // set the owning side to null (unless already changed)
             if ($cour->getCoach() === $this) {
                 $cour->setCoach(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Disponibilite>
+     */
+    public function getDisponibilites(): Collection
+    {
+        return $this->disponibilites;
+    }
+
+    public function addDisponibilite(Disponibilite $disponibilite): static
+    {
+        if (!$this->disponibilites->contains($disponibilite)) {
+            $this->disponibilites->add($disponibilite);
+            $disponibilite->setCoach($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDisponibilite(Disponibilite $disponibilite): static
+    {
+        if ($this->disponibilites->removeElement($disponibilite)) {
+            // set the owning side to null (unless already changed)
+            if ($disponibilite->getCoach() === $this) {
+                $disponibilite->setCoach(null);
             }
         }
 
