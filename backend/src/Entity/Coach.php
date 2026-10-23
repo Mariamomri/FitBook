@@ -55,11 +55,18 @@ class Coach
     #[ORM\OneToMany(targetEntity: Disponibilite::class, mappedBy: 'coach', orphanRemoval: true)]
     private Collection $disponibilites;
 
+    /**
+     * @var Collection<int, Avis>
+     */
+    #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'coach')]
+    private Collection $avis;
+
     public function __construct()
     {
         $this->activites = new ArrayCollection();
         $this->cours = new ArrayCollection();
         $this->disponibilites = new ArrayCollection();
+        $this->avis = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -217,6 +224,36 @@ class Coach
             // set the owning side to null (unless already changed)
             if ($disponibilite->getCoach() === $this) {
                 $disponibilite->setCoach(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Avis>
+     */
+    public function getAvis(): Collection
+    {
+        return $this->avis;
+    }
+
+    public function addAvi(Avis $avi): static
+    {
+        if (!$this->avis->contains($avi)) {
+            $this->avis->add($avi);
+            $avi->setCoach($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAvi(Avis $avi): static
+    {
+        if ($this->avis->removeElement($avi)) {
+            // set the owning side to null (unless already changed)
+            if ($avi->getCoach() === $this) {
+                $avi->setCoach(null);
             }
         }
 

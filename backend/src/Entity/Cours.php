@@ -51,9 +51,16 @@ class Cours
     #[ORM\OneToMany(targetEntity: Seance::class, mappedBy: 'cours', orphanRemoval: true)]
     private Collection $seances;
 
+    /**
+     * @var Collection<int, Avis>
+     */
+    #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'cours')]
+    private Collection $avis;
+
     public function __construct()
     {
         $this->seances = new ArrayCollection();
+        $this->avis = new ArrayCollection();
     }
 
     use Timestampable;
@@ -183,6 +190,36 @@ class Cours
             // set the owning side to null (unless already changed)
             if ($seance->getCours() === $this) {
                 $seance->setCours(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Avis>
+     */
+    public function getAvis(): Collection
+    {
+        return $this->avis;
+    }
+
+    public function addAvi(Avis $avi): static
+    {
+        if (!$this->avis->contains($avi)) {
+            $this->avis->add($avi);
+            $avi->setCours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAvi(Avis $avi): static
+    {
+        if ($this->avis->removeElement($avi)) {
+            // set the owning side to null (unless already changed)
+            if ($avi->getCours() === $this) {
+                $avi->setCours(null);
             }
         }
 
