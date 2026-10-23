@@ -72,10 +72,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $reservations;
 
+    /**
+     * @var Collection<int, Salle>
+     */
+    #[ORM\ManyToMany(targetEntity: Salle::class)]
+    #[ORM\JoinTable(name: 'favori_salle')] // association « favori_salle » du MCD (users 0,n — salle 0,n)
+    private Collection $favoriSalles;
+
+    /**
+     * @var Collection<int, Cours>
+     */
+    #[ORM\ManyToMany(targetEntity: Cours::class)]
+    #[ORM\JoinTable(name: 'favori_cours')] // association « favori_cours » du MCD (users 0,n — cours 0,n)
+    private Collection $favoriCours;
+
+    /**
+     * @var Collection<int, Coach>
+     */
+    #[ORM\ManyToMany(targetEntity: Coach::class)]
+    #[ORM\JoinTable(name: 'favori_coach')] // association « favori_coach » du MCD (users 0,n — coach 0,n)
+    private Collection $favoriCoachs;
+
     public function __construct()
     {
         $this->salles = new ArrayCollection();
         $this->reservations = new ArrayCollection();
+        $this->favoriSalles = new ArrayCollection();
+        $this->favoriCours = new ArrayCollection();
+        $this->favoriCoachs = new ArrayCollection();
     }
 
     use Timestampable; //uso il trait in classe
@@ -311,6 +335,78 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $reservation->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Salle>
+     */
+    public function getFavoriSalles(): Collection
+    {
+        return $this->favoriSalles;
+    }
+
+    public function addFavoriSalle(Salle $salle): static
+    {
+        if (!$this->favoriSalles->contains($salle)) {
+            $this->favoriSalles->add($salle);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoriSalle(Salle $salle): static
+    {
+        $this->favoriSalles->removeElement($salle);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cours>
+     */
+    public function getFavoriCours(): Collection
+    {
+        return $this->favoriCours;
+    }
+
+    public function addFavoriCour(Cours $cour): static
+    {
+        if (!$this->favoriCours->contains($cour)) {
+            $this->favoriCours->add($cour);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoriCour(Cours $cour): static
+    {
+        $this->favoriCours->removeElement($cour);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Coach>
+     */
+    public function getFavoriCoachs(): Collection
+    {
+        return $this->favoriCoachs;
+    }
+
+    public function addFavoriCoach(Coach $coach): static
+    {
+        if (!$this->favoriCoachs->contains($coach)) {
+            $this->favoriCoachs->add($coach);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoriCoach(Coach $coach): static
+    {
+        $this->favoriCoachs->removeElement($coach);
 
         return $this;
     }
