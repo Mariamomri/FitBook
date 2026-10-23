@@ -57,6 +57,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?CarteMembre $carteMembre = null;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Coach $coach = null;
+
     /**
      * @var Collection<int, Salle>
      */
@@ -254,6 +257,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $salle->setGestionnaire(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCoach(): ?Coach
+    {
+        return $this->coach;
+    }
+
+    public function setCoach(Coach $coach): static
+    {
+        // set the owning side of the relation if necessary
+        if ($coach->getUser() !== $this) {
+            $coach->setUser($this);
+        }
+
+        $this->coach = $coach;
 
         return $this;
     }
