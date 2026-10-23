@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CoursRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\Timestampable;
@@ -42,6 +44,17 @@ class Cours
 
     #[ORM\ManyToOne(inversedBy: 'cours')]
     private ?Coach $coach = null; // nullable : un cours peut exister sans coach (animer 0,1)
+
+    /**
+     * @var Collection<int, Seance>
+     */
+    #[ORM\OneToMany(targetEntity: Seance::class, mappedBy: 'cours', orphanRemoval: true)]
+    private Collection $seances;
+
+    public function __construct()
+    {
+        $this->seances = new ArrayCollection();
+    }
 
     use Timestampable;
 
@@ -142,6 +155,36 @@ class Cours
     public function setCoach(?Coach $coach): static
     {
         $this->coach = $coach;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Seance>
+     */
+    public function getSeances(): Collection
+    {
+        return $this->seances;
+    }
+
+    public function addSeance(Seance $seance): static
+    {
+        if (!$this->seances->contains($seance)) {
+            $this->seances->add($seance);
+            $seance->setCours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSeance(Seance $seance): static
+    {
+        if ($this->seances->removeElement($seance)) {
+            // set the owning side to null (unless already changed)
+            if ($seance->getCours() === $this) {
+                $seance->setCours(null);
+            }
+        }
 
         return $this;
     }
