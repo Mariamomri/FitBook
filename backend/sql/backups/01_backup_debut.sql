@@ -16,6 +16,60 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `activites`
+--
+
+DROP TABLE IF EXISTS `activites`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `activites` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nom` varchar(100) NOT NULL,
+  `description` longtext NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `activites`
+--
+
+LOCK TABLES `activites` WRITE;
+/*!40000 ALTER TABLE `activites` DISABLE KEYS */;
+/*!40000 ALTER TABLE `activites` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cartes_membre`
+--
+
+DROP TABLE IF EXISTS `cartes_membre`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cartes_membre` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `numero_affiliation` varchar(20) NOT NULL,
+  `date_emission` datetime NOT NULL,
+  `date_expiration` datetime NOT NULL,
+  `statut` varchar(20) NOT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_F0968FE9A5CD1AFF` (`numero_affiliation`),
+  UNIQUE KEY `UNIQ_F0968FE9A76ED395` (`user_id`),
+  CONSTRAINT `FK_F0968FE9A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cartes_membre`
+--
+
+LOCK TABLES `cartes_membre` WRITE;
+/*!40000 ALTER TABLE `cartes_membre` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cartes_membre` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `doctrine_migration_versions`
 --
 
@@ -27,7 +81,7 @@ CREATE TABLE `doctrine_migration_versions` (
   `executed_at` datetime DEFAULT NULL,
   `execution_time` int DEFAULT NULL,
   PRIMARY KEY (`version`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,8 +90,45 @@ CREATE TABLE `doctrine_migration_versions` (
 
 LOCK TABLES `doctrine_migration_versions` WRITE;
 /*!40000 ALTER TABLE `doctrine_migration_versions` DISABLE KEYS */;
-INSERT INTO `doctrine_migration_versions` VALUES ('DoctrineMigrations\\Version20261022222050','2026-10-22 22:21:38',14);
+INSERT INTO `doctrine_migration_versions` VALUES ('DoctrineMigrations\\Version20261023101741','2026-10-23 10:19:09',422);
 /*!40000 ALTER TABLE `doctrine_migration_versions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `salles`
+--
+
+DROP TABLE IF EXISTS `salles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `salles` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nom` varchar(100) NOT NULL,
+  `adresse` varchar(255) NOT NULL,
+  `code_postal` varchar(10) NOT NULL,
+  `ville` varchar(50) NOT NULL,
+  `description` longtext NOT NULL,
+  `telephone` varchar(30) NOT NULL,
+  `capacite` int NOT NULL,
+  `equipements` varchar(255) DEFAULT NULL,
+  `latitude` decimal(10,7) DEFAULT NULL,
+  `longitude` decimal(10,7) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `gestionnaire_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_799D45AA6885AC1B` (`gestionnaire_id`),
+  CONSTRAINT `FK_799D45AA6885AC1B` FOREIGN KEY (`gestionnaire_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `salles`
+--
+
+LOCK TABLES `salles` WRITE;
+/*!40000 ALTER TABLE `salles` DISABLE KEYS */;
+/*!40000 ALTER TABLE `salles` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -61,7 +152,7 @@ CREATE TABLE `users` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_IDENTIFIER_EMAIL` (`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -82,4 +173,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-10-23  0:26:54
+-- Dump completed on 2026-10-23 12:21:28
