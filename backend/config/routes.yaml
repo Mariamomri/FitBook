@@ -9,3 +9,7 @@
 
 controllers:
     resource: routing.controllers
+
+# route de connexion : renvoie le token JWT (gérée par le firewall « login »)
+api_login_check:
+    path: /api/login_check
