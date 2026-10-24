@@ -1,14 +1,10 @@
-seulement pour la consultation de prof le password sont en .env.local
+-- utiliser un utilisateur autre que « root » avec un mot de passe.
+-- Le vrai mot de passe n'est pas dans ce fichier : il se trouve uniquement dans backend/.env.local .
 
--	Utiliser un utilisateur MySQL autre que « root » avec un mot de passe.
-mysql -u root -p
-CREATE USER 'julien'@'localhost' IDENTIFIED BY 'fitbook';
+
+CREATE USER 'julien'@'localhost' IDENTIFIED BY 'psw_est_sur.env.local';
 GRANT ALL PRIVILEGES ON fitbook_db.* TO 'julien'@'localhost';
 FLUSH PRIVILEGES;
-exit;
 
-mysql -u julien -p
-SELECT CURRENT_USER();
-exit;
-
---------------------------------------------------------------------------------------------------------------
+-- mysql -u julien -p)
+-- SELECT CURRENT_USER();

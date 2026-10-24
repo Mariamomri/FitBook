@@ -16,7 +16,7 @@ class CarteMembre
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 20, unique: true)] //numero di affiliazione unico per ogni carta
+    #[ORM\Column(length: 20, unique: true)] //numéro d'affiliation unique pour chaque carte
     private ?string $numeroAffiliation = null;
 
     #[ORM\Column]

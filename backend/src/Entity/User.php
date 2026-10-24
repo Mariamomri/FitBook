@@ -8,15 +8,15 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use App\Entity\Traits\Timestampable; //collegato il trait
-use ApiPlatform\Metadata\ApiResource; //per usare api platform e esporre l'entità User come risorsa API
+use App\Entity\Traits\Timestampable; //importe le trait Timestampable
+use ApiPlatform\Metadata\ApiResource; //pour utiliser API Platform et exposer l'entité User comme ressource API
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 
 #[ApiResource] //per esporre l'entità via l'API Platform
 
-#[ORM\HasLifecycleCallbacks] // dice a Doctrine di guardare i PrePersist e PreUpdate di questa classe. Senza questa riga le date non si riempiono.
+#[ORM\HasLifecycleCallbacks] // dit à Doctrine de lire les PrePersist et PreUpdate de cette classe. Sans cette ligne, les dates ne se remplissent pas.
 #[ORM\Table(name: "users")]
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -54,7 +54,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $accentColor = null;
 
     #[ORM\Column]
-    private ?bool $isActive = true;  //per evitare che un utente appena creato sia disabilitato di default, lo imposto a true
+    private ?bool $isActive = true;  //pour éviter qu'un utilisateur qui vient d'être créé soit désactivé par défaut, je le mets à true
 
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?CarteMembre $carteMembre = null;
@@ -104,7 +104,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->favoriCoachs = new ArrayCollection();
     }
 
-    use Timestampable; //uso il trait in classe
+    use Timestampable; //utilise le trait dans la classe
 
     public function getId(): ?int
     {
