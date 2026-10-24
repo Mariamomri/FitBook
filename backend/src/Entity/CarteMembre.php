@@ -4,9 +4,11 @@ namespace App\Entity;
 
 use App\Repository\CarteMembreRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: CarteMembreRepository::class)]
 #[ORM\Table(name: 'cartes_membre')]
+#[ApiResource] //pour exposer l'entité via l'API Platform
 class CarteMembre
 {
     #[ORM\Id]

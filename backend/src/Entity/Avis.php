@@ -6,12 +6,14 @@ use App\Repository\AvisRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\Timestampable;
+use ApiPlatform\Metadata\ApiResource; //pour exposer l'entité via l'API Platform
 
 // Un avis vient toujours d'une réservation (donner_lieu 1,1) et porte sur UNE cible :
 // une salle OU un coach OU un cours (noter_salle / noter_coach / noter_cours 0,1).
 #[ORM\Entity(repositoryClass: AvisRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'avis_notes')]
+#[ApiResource] //pour exposer l'entité via l'API Platform
 class Avis
 {
     #[ORM\Id]

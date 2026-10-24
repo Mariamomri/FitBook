@@ -9,10 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use App\Entity\Traits\Timestampable; //collegato il trait
+use ApiPlatform\Metadata\ApiResource; //per usare api platform e esporre l'entità User come risorsa API
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 
+#[ApiResource] //per esporre l'entità via l'API Platform
 
 #[ORM\HasLifecycleCallbacks] // dice a Doctrine di guardare i PrePersist e PreUpdate di questa classe. Senza questa riga le date non si riempiono.
 #[ORM\Table(name: "users")]

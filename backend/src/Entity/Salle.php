@@ -8,10 +8,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\Timestampable;
+use ApiPlatform\Metadata\ApiResource; //pour exposer l'entité via l'API Platform
 
 #[ORM\Entity(repositoryClass: SalleRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'salles')]
+#[ApiResource]
 class Salle
 {
     #[ORM\Id]

@@ -5,9 +5,11 @@ namespace App\Entity;
 use App\Repository\DisponibiliteRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource; //pour exposer l'entité via l'API Platform
 
 #[ORM\Entity(repositoryClass: DisponibiliteRepository::class)]
 #[ORM\Table(name: 'disponibilites_coaches')]
+#[ApiResource]
 class Disponibilite
 {
     #[ORM\Id]

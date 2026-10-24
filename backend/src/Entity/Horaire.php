@@ -5,9 +5,11 @@ namespace App\Entity;
 use App\Repository\HoraireRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource; //pour exposer l'entité via l'API Platform
 
 #[ORM\Entity(repositoryClass: HoraireRepository::class)]
 #[ORM\Table(name: 'horaires')]
+#[ApiResource]
 class Horaire
 {
     #[ORM\Id]

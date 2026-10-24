@@ -7,10 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\Timestampable;
+use ApiPlatform\Metadata\ApiResource; //pour exposer l'entité via l'API Platform
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'reservations')]
+#[ApiResource]
 class Reservation
 {
     #[ORM\Id]
