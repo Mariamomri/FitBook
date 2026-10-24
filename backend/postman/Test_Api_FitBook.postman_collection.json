@@ -1,0 +1,681 @@
+{
+  "info": {
+    "_postman_id": "fb14a3ac-c049-42d8-9de5-f24836ec5be7",
+    "name": "Test_Api_FitBook",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56644037",
+    "_collection_link": "https://go.postman.co/collection/56644037-fb14a3ac-c049-42d8-9de5-f24836ec5be7?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Create admin user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status creation admin + save ENV id and userIdentifier\", function() {\r\n    if(pm.response.to.have.status(201)){\r\n        pm.environment.set(\"idAdmin\", pm.response.json().id);\r\n        pm.environment.set(\"admin\", pm.response.json().userIdentifier);\r\n    }\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/ld+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"admin@fitbook.be\",\r\n  \"password\": \"$2y$13$4/MdFUcoEUtogKQBKT4GFep1x39IZD4MJc4EwEWCLLD0jxfmLYfdO\",\r\n  \"firstname\": \"Admin\",\r\n  \"lastname\": \"FitBook\",\r\n  \"accentColor\": \"vert\",\r\n  \"isActive\": true,\r\n  \"roles\": [\"ROLE_ADMIN\"]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/users",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login admin",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status Connecté\", function() {\r\n    if (pm.response.to.have.status(200)){\r\n        pm.environment.set(\"adminToken\", pm.response.json().token);\r\n    }\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"{{admin}}\",\r\n  \"password\": \"julien123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/login_check",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "login_check"
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": "",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Liste activites",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status liste activites\", function() {\r\n      pm.response.to.have.status(200);\r\n  })"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}api/activites",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "activites"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Connexion erreur",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "  pm.test(\"Statut connexion refusée (mauvais mot de passe)\", function() {\r\n      pm.response.to.have.status(401);\r\n  })"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\": \"{{admin}}\",\r\n    \"password\": \"mauvaismotdepasse\"\r\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/login_check",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "login_check"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Réservations sans token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "  pm.test(\"Status liste reservations refusée sans token\", function() {\r\n      pm.response.to.have.status(401);\r\n  })"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}api/reservations",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "reservations"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Réservations avec token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "   pm.test(\"Status liste reservations avec token\", function() {\r\n      pm.response.to.have.status(200);\r\n  })"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}api/reservations",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "reservations"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Créer coach",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "  pm.test(\"Status creation coach + save ENV id and userIdentifier\", function() {\r\n      if (pm.response.to.have.status(201)){\r\n          pm.environment.set(\"id\", pm.response.json().id);\r\n          pm.environment.set(\"userIdentifier\", pm.response.json().userIdentifier);\r\n      }\r\n  })"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/ld+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "  {\r\n    \"email\": \"coach@fitbook.be\",\r\n    \"password\": \"$2y$13$CKguMI/9cuuYSL2nuTuxZeKrrO68lFU8NVtZpxrEJEoUcIMWiOFmu\",\r\n    \"firstname\": \"Marc\",\r\n    \"lastname\": \"Coach\",\r\n    \"accentColor\": \"vert\",\r\n    \"isActive\": true,\r\n    \"roles\": [\"ROLE_COACH\"]\r\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/users",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login coach avec Environment Variable",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "  pm.test(\"Status Connecté\", function() {\r\n      if (pm.response.to.have.status(200)){\r\n          pm.environment.set(\"token\", pm.response.json().token);\r\n      }\r\n  })"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "  {\r\n    \"username\": \"{{userIdentifier}}\",\r\n    \"password\": \"coach123\"\r\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/login_check",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "login_check"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Créer activité",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status create activite + save idActivite\", function() {\r\n    if (pm.response.to.have.status(201)){\r\n        pm.environment.set(\"idActivite\", pm.response.json().id);\r\n    }\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/ld+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \r\n    \"nom\": \"Yoga\", \r\n    \"description\": \"Cours de yoga pour tous niveaux\" \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/activites",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "activites"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Créer salle",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Statut création salle + sauvegarde idSalle\", function() {\r\n    if (pm.response.to.have.status(201)){\r\n        pm.environment.set(\"idSalle\", pm.response.json().id);\r\n    }\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/ld+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nom\": \"FitBook Ixelles\",\r\n  \"adresse\": \"Rue du Sport 10\",\r\n  \"codePostal\": \"1050\",\r\n  \"ville\": \"Bruxelles\",\r\n  \"description\": \"Salle de sport moderne\",\r\n  \"telephone\": \"02 123 45 67\",\r\n  \"capacite\": 50,\r\n  \"gestionnaire\": \"/api/users/{{idAdmin}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/salles",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "salles"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Créer cours",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Statut création cours + sauvegarde idCours\", function() {\r\n    if (pm.response.to.have.status(201)){\r\n        pm.environment.set(\"idCours\", pm.response.json().id);\r\n    }\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/ld+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"titre\": \"Yoga du matin\",\r\n  \"description\": \"Séance douce pour bien commencer la journée\",\r\n  \"niveau\": \"Débutant\",\r\n  \"capacite\": 15,\r\n  \"prix\": \"12.00\",\r\n  \"salle\": \"/api/salles/{{idSalle}}\",\r\n  \"activite\": \"/api/activites/{{idActivite}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/cours",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "cours"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Créer séance",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "  pm.test(\"Statut création séance + sauvegarde idLastSeance\", function() {\r\n      if (pm.response.to.have.status(201)){\r\n          pm.environment.set(\"idLastSeance\", pm.response.json().id);\r\n      }\r\n  })"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/ld+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "  {\r\n    \"dateDebut\": \"2026-11-05T09:00:00+01:00\",\r\n    \"dateFin\": \"2026-11-05T10:00:00+01:00\",\r\n    \"statut\": \"ouverte\",\r\n    \"cours\": \"/api/cours/{{idCours}}\"\r\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/seances",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "seances"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Modifier séance",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "  pm.test(\"Statut modification séance\", function() {\r\n      pm.response.to.have.status(200);\r\n  })"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/merge-patch+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"statut\": \"complète\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/seances/{{idLastSeance}}",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "seances",
+            "{{idLastSeance}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Supprimer séance",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Statut suppression séance + vider idLastSeance\", function() {\r\n    if (pm.response.to.have.status(204)){\r\n        pm.environment.set(\"idLastSeance\", null);\r\n    }\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/merge-patch+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"statut\": \"complète\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/seances/{{idLastSeance}}",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "seances",
+            "{{idLastSeance}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Supprimer coach",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "  pm.test(\"Statut suppression coach + vider id, userIdentifier et token\", function() {\r\n      if (pm.response.to.have.status(204)){\r\n          pm.environment.set(\"id\", null);\r\n          pm.environment.set(\"userIdentifier\", null);\r\n          pm.environment.set(\"token\", null);\r\n      }\r\n  })"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{url}}api/users/{{id}}",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "users",
+            "{{id}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
