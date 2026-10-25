@@ -106,6 +106,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinTable(name: 'favori_coach')] // association « favori_coach » du MCD (users 0,n — coach 0,n)
     private Collection $favoriCoachs;
 
+    #[ORM\Column]
+    private ?bool $isVerified = false; // un nouvel utilisateur n'a pas encore confirmé son email
+
     public function __construct()
     {
         $this->salles = new ArrayCollection();
@@ -420,6 +423,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeFavoriCoach(Coach $coach): static
     {
         $this->favoriCoachs->removeElement($coach);
+
+        return $this;
+    }
+
+    public function isVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }
