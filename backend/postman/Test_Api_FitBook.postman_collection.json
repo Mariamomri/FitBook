@@ -8,48 +8,6 @@
   },
   "item": [
     {
-      "name": "Create admin user",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test(\"Status creation admin + save ENV id and userIdentifier\", function() {\r\n    if(pm.response.to.have.status(201)){\r\n        pm.environment.set(\"idAdmin\", pm.response.json().id);\r\n        pm.environment.set(\"admin\", pm.response.json().userIdentifier);\r\n    }\r\n})"
-            ]
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/ld+json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"email\": \"admin@fitbook.be\",\r\n  \"plainPassword\": \"julien123\",\r\n  \"firstname\": \"Admin\",\r\n  \"lastname\": \"FitBook\",\r\n  \"accentColor\": \"vert\",\r\n  \"isActive\": true,\r\n  \"roles\": [\"ROLE_ADMIN\"]\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{url}}api/users",
-          "host": [
-            "{{url}}api"
-          ],
-          "path": [
-            "users"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
       "name": "Login admin",
       "event": [
         {
@@ -72,7 +30,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"username\": \"{{admin}}\",\r\n  \"password\": \"julien123\"\r\n}",
+          "raw": "{\r\n  \"username\": \"admin@fitbook.be\",\r\n  \"password\": \"julien123\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -152,7 +110,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"username\": \"{{admin}}\",\r\n    \"password\": \"mauvaismotdepasse\"\r\n  }",
+          "raw": "{\r\n    \"username\": \"admin@fitbook.be\",\r\n    \"password\": \"mauvaismotdepasse\"\r\n  }",
           "options": {
             "raw": {
               "language": "json"
@@ -325,6 +283,110 @@
       "response": []
     },
     {
+      "name": "Réserver non vérifié",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "   pm.test(\"Status liste reservations avec token\", function() {\r\n      pm.response.to.have.status(403);\r\n  })"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/ld+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/reservations",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "reservations"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Avis non vérifié",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "   pm.test(\"Status liste reservations avec token\", function() {\r\n      pm.response.to.have.status(403);\r\n  })"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/ld+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/avis",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "avis"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "Créer activité",
       "event": [
         {
@@ -409,7 +471,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"nom\": \"FitBook Ixelles\",\r\n  \"adresse\": \"Rue du Sport 10\",\r\n  \"codePostal\": \"1050\",\r\n  \"ville\": \"Bruxelles\",\r\n  \"description\": \"Salle de sport moderne\",\r\n  \"telephone\": \"02 123 45 67\",\r\n  \"capacite\": 50,\r\n  \"gestionnaire\": \"/api/users/{{idAdmin}}\"\r\n}",
+          "raw": "{\r\n  \"nom\": \"FitBook Ixelles\",\r\n  \"adresse\": \"Rue du Sport 10\",\r\n  \"codePostal\": \"1050\",\r\n  \"ville\": \"Bruxelles\",\r\n  \"description\": \"Salle de sport moderne\",\r\n  \"telephone\": \"02 123 45 67\",\r\n  \"capacite\": 50,\r\n  \"gestionnaire\": \"/api/users/1000\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
