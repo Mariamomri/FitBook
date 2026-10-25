@@ -7,12 +7,28 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\Timestampable;
-use ApiPlatform\Metadata\ApiResource; //pour exposer l'entité via l'API Platform
+
+//pour exposer l'entité via l'API Platform
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'reservations')]
-#[ApiResource]
+#[ApiResource(operations: [
+    new GetCollection(),
+    new Get(),
+    new Post(
+        security: "is_granted('ROLE_USER') and user.isVerified()",
+        securityMessage: 'Veuillez confirmer votre email avant de réserver.'
+    ),
+    new Patch(),
+    new Delete()
+])]
 class Reservation
 {
     #[ORM\Id]
