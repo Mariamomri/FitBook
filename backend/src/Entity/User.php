@@ -10,11 +10,14 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use App\Entity\Traits\Timestampable; //importe le trait Timestampable
 use ApiPlatform\Metadata\ApiResource; //pour utiliser API Platform et exposer l'entité User comme ressource API
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity; //pour utiliser l'annotation UniqueEntity et vérifier que l'email est unique
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[UniqueEntity(fields: ['email'], message: 'Un compte existe déjà avec cet email')]
 
-#[ApiResource] //per esporre l'entità via l'API Platform
+#[ApiResource] //pour exposer l'entité via API Platform
 
 #[ORM\HasLifecycleCallbacks] // dit à Doctrine de lire les PrePersist et PreUpdate de cette classe. Sans cette ligne, les dates ne se remplissent pas.
 #[ORM\Table(name: "users")]
@@ -27,6 +30,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\NotBlank()] // pour vérifier que l'email n'est pas vide
+    #[Assert\Email()] // pour vérifier que l'email est bien formé
     private ?string $email = null;
 
     /**
@@ -42,15 +47,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank()] // pour vérifier que le prénom n'est pas vide
+    #[Assert\Length(min: 2, max: 50)]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min: 2, max: 50)]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 30, nullable: true)]
+    #[Assert\Length(max: 30)] // pas plus de 30 caractères
     private ?string $phone = null;
 
     #[ORM\Column(length: 20)]
+    #[Assert\NotBlank()]
     private ?string $accentColor = null;
 
     #[ORM\Column]
