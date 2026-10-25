@@ -32,10 +32,16 @@ final class UserPasswordHasher implements ProcessorInterface
     // nouvel utilisateur ? (pas encore d'id en base)
     $isNew = $data->getId() === null;
 
-    // 1. hash du mot de passe (même code que le RegistrationController du prof)
+    // 1. hash du mot de passe
     if ($data->getPlainPassword()) {
       $data->setPassword($this->passwordHasher->hashPassword($data, $data->getPlainPassword()));
       $data->setPlainPassword(null); // on ne garde jamais le mot de passe en clair
+    }
+
+    // Nouvelle inscription : on ne fait pas confiance aux données envoyées example injection : { "email": "pirata@gmail.com", "plainPassword": "123456", "roles": ["ROLE_ADMIN"], "isVerified": true }
+    if ($isNew) {
+      $data->setIsVerified(false);
+      $data->setRoles(array_values(array_diff($data->getRoles(), ['ROLE_ADMIN'])));
     }
 
     // 2. enregistrement en base (persist + flush)
