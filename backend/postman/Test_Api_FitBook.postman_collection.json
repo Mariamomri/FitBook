@@ -30,7 +30,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"email\": \"admin@fitbook.be\",\r\n  \"password\": \"$2y$13$4/MdFUcoEUtogKQBKT4GFep1x39IZD4MJc4EwEWCLLD0jxfmLYfdO\",\r\n  \"firstname\": \"Admin\",\r\n  \"lastname\": \"FitBook\",\r\n  \"accentColor\": \"vert\",\r\n  \"isActive\": true,\r\n  \"roles\": [\"ROLE_ADMIN\"]\r\n}",
+          "raw": "{\r\n  \"email\": \"admin@fitbook.be\",\r\n  \"plainPassword\": \"julien123\",\r\n  \"firstname\": \"Admin\",\r\n  \"lastname\": \"FitBook\",\r\n  \"accentColor\": \"vert\",\r\n  \"isActive\": true,\r\n  \"roles\": [\"ROLE_ADMIN\"]\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -263,7 +263,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "  {\r\n    \"email\": \"coach@fitbook.be\",\r\n    \"password\": \"$2y$13$CKguMI/9cuuYSL2nuTuxZeKrrO68lFU8NVtZpxrEJEoUcIMWiOFmu\",\r\n    \"firstname\": \"Marc\",\r\n    \"lastname\": \"Coach\",\r\n    \"accentColor\": \"vert\",\r\n    \"isActive\": true,\r\n    \"roles\": [\"ROLE_COACH\"]\r\n  }",
+          "raw": "  {\r\n    \"email\": \"coach@fitbook.be\",\r\n    \"plainPassword\": \"coach123\",\r\n    \"firstname\": \"Marc\",\r\n    \"lastname\": \"Coach\",\r\n    \"accentColor\": \"vert\",\r\n    \"isActive\": true,\r\n    \"roles\": [\"ROLE_COACH\"]\r\n  }",
           "options": {
             "raw": {
               "language": "json"
