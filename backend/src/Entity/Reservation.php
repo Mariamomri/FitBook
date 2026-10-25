@@ -16,6 +16,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'reservations')]
@@ -37,17 +39,21 @@ class Reservation
     private ?int $id = null;
 
     #[ORM\Column(length: 20, unique: true)] // numéro de réservation affiché à l'utilisateur (ex. FB-2026-00123)
+    #[Assert\NotBlank(message: 'Le numéro est obligatoire')]
     private ?string $numero = null;
 
     #[ORM\Column(length: 20)]
+    #[Assert\NotBlank(message: 'Le statut est obligatoire')]
     private ?string $statut = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'L\'utilisateur est obligatoire')]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'La séance est obligatoire')]
     private ?Seance $seance = null;
 
     use Timestampable;
