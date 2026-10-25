@@ -13,11 +13,28 @@ use ApiPlatform\Metadata\ApiResource; //pour utiliser API Platform et exposer l'
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity; //pour utiliser l'annotation UniqueEntity et vérifier que l'email est unique
 use Symfony\Component\Validator\Constraints as Assert;
 
+// pour utiliser les annotations d'API Platform pour définir les opérations disponibles sur l'entité User
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\State\UserPasswordHasher;
+
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'Un compte existe déjà avec cet email')]
 
-#[ApiResource] //pour exposer l'entité via API Platform
+#[ApiResource(
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Post(processor: UserPasswordHasher::class),  // inscription : hash + mail de confirmation
+        new Patch(processor: UserPasswordHasher::class), // modification : hash si nouveau mot de passe
+        new Delete(),
+    ]
+)] //pour exposer l'entité via API Platform
 
 #[ORM\HasLifecycleCallbacks] // dit à Doctrine de lire les PrePersist et PreUpdate de cette classe. Sans cette ligne, les dates ne se remplissent pas.
 #[ORM\Table(name: "users")]
@@ -44,7 +61,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[ApiProperty(readable: false, writable: false)] // le hash n'est jamais renvoyé ni envoyé par l'API
     private ?string $password = null;
+
+    // mot de passe en clair reçu de l'API : pas de #[ORM\Column] → jamais enregistré en base
+    #[ApiProperty(readable: false)]
+    #[Assert\Length(min: 6)]
+    private ?string $plainPassword = null;
 
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank()] // pour vérifier que le prénom n'est pas vide
@@ -180,6 +203,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+        public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): static
+    {
+        $this->plainPassword = $plainPassword;
 
         return $this;
     }

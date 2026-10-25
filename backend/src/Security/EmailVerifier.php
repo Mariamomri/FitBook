@@ -24,7 +24,10 @@ class EmailVerifier
             $verifyEmailRouteName,
             (string) $user->getId(),
             (string) $user->getEmail(),
-            ['id' => $user->getId()] // l'id est ajouté dans le lien : l'utilisateur n'est pas connecté quand il clique
+
+            ['id' => $user->getId()] /* ID dans le lien : l'utilisateur clique depuis sa boîte mail, il n'est pas connecté (pas de token JWT).
+            Symfony retrouve donc l'utilisateur grâce à cet id.
+            Sécurité : la signature du lien est liée à l'id + l'email, si on change l'id le lien est refusé*/
         );
 
         $context = $email->getContext();
