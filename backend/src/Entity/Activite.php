@@ -1,0 +1,131 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\ActiviteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource; //pour exposer l'entité via l'API Platform
+
+#[ORM\Entity(repositoryClass: ActiviteRepository::class)]
+#[ORM\Table(name: 'activites')]
+#[ApiResource] //pour exposer l'entité via l'API Platform
+class Activite
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $nom = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $description = null;
+
+    /**
+     * @var Collection<int, Coach>
+     */
+    #[ORM\ManyToMany(targetEntity: Coach::class, mappedBy: 'activites')]
+    private Collection $coaches;
+
+    /**
+     * @var Collection<int, Cours>
+     */
+    #[ORM\OneToMany(targetEntity: Cours::class, mappedBy: 'activite')]
+    private Collection $cours;
+
+    public function __construct()
+    {
+        $this->coaches = new ArrayCollection();
+        $this->cours = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): static
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Coach>
+     */
+    public function getCoaches(): Collection
+    {
+        return $this->coaches;
+    }
+
+    public function addCoach(Coach $coach): static
+    {
+        if (!$this->coaches->contains($coach)) {
+            $this->coaches->add($coach);
+            $coach->addActivite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCoach(Coach $coach): static
+    {
+        if ($this->coaches->removeElement($coach)) {
+            $coach->removeActivite($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cours>
+     */
+    public function getCours(): Collection
+    {
+        return $this->cours;
+    }
+
+    public function addCour(Cours $cour): static
+    {
+        if (!$this->cours->contains($cour)) {
+            $this->cours->add($cour);
+            $cour->setActivite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCour(Cours $cour): static
+    {
+        if ($this->cours->removeElement($cour)) {
+            // set the owning side to null (unless already changed)
+            if ($cour->getActivite() === $this) {
+                $cour->setActivite(null);
+            }
+        }
+
+        return $this;
+    }
+}
