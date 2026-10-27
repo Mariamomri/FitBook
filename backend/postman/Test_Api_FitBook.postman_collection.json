@@ -335,6 +335,58 @@
       "response": []
     },
     {
+      "name": "Réserver séance complète",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "   pm.test(\"Status réservation refusée (séance complète)\", function() {\r\n      pm.response.to.have.status(422);\r\n  })"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/ld+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"numero\": \"FB-2026-T0001\",\r\n  \"statut\": \"confirmee\",\r\n  \"user\": \"/api/users/1000\",\r\n  \"seance\": \"/api/seances/2011\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/reservations",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "reservations"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "Avis non vérifié",
       "event": [
         {
