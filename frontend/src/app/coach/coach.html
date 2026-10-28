@@ -1,1 +1,17 @@
-<p>coach works!</p>
+<h1>Coachs</h1>
+
+@for (coach of coaches(); track coach.id) {
+  <div>
+    <h2>{{ coach.nomComplet }}</h2>
+    <p>{{ coach.biographie }}</p>
+    <p>Expérience : {{ coach.anneesExperience }} ans</p>
+    <p>Tarif : {{ coach.tarif }} € / heure</p>
+    <p>Langues : {{ coach.langues }}</p>
+
+    @if (coach.certifications) {
+      <p>Certifications : {{ coach.certifications }}</p>
+    }
+  </div>
+} @empty {
+  <p>Aucun coach.</p>
+}
