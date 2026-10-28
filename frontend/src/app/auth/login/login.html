@@ -1,1 +1,22 @@
-<p>login works!</p>
+<div class="login-container">
+  <div class="login-card">
+    <h2>Connexion</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+      <label>Email</label>
+      <input type="email" formControlName="email" placeholder="Votre email" />
+      @if (loginForm.controls.email.touched && loginForm.controls.email.invalid) {
+        <p class="erreur">Email invalide</p>
+      }
+
+      <label>Mot de passe</label>
+      <input type="password" formControlName="password" placeholder="Votre mot de passe" />
+
+      @if (erreur()) {
+        <p class="erreur">{{ erreur() }}</p>
+      }
+
+      <button type="submit">Se connecter</button>
+    </form>
+  </div>
+</div>
