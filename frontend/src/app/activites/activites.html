@@ -1,0 +1,10 @@
+<h1>Activités</h1>
+
+@for (activite of activites(); track activite.id) {
+  <div>
+    <h2>{{ activite.nom }}</h2>
+    <p>{{ activite.description }}</p>
+  </div>
+} @empty {
+  <p>Aucune activité.</p>
+}

@@ -1,0 +1,18 @@
+<h1>Salles</h1>
+
+@for (salle of salles(); track salle.id) {
+  <div>
+    <h2>{{ salle.nom }}</h2>
+    <p>{{ salle.adresse }}, {{ salle.codePostal }} {{ salle.ville }}</p>
+    <p>{{ salle.description }}</p>
+    <p>Téléphone : {{ salle.telephone }}</p>
+    <p>Capacité : {{ salle.capacite }} personnes</p>
+
+    <!-- equipements peut être vide (nullable dans Symfony) -->
+    @if (salle.equipements) {
+      <p>Équipements : {{ salle.equipements }}</p>
+    }
+  </div>
+} @empty {
+  <p>Aucune salle.</p>
+}
