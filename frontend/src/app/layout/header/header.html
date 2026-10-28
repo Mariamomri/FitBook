@@ -2,13 +2,12 @@
   <a routerLink="" routerLinkActive="actif" [routerLinkActiveOptions]="{ exact: true }">Accueil</a>
   <a routerLink="activites" routerLinkActive="actif">Activités</a>
   <a routerLink="salles" routerLinkActive="actif">Salles</a>
-  <a routerLink="cours" routerLinkActive="actif">Cours</a>
-  <a routerLink="coach" routerLinkActive="actif">Coach</a>
+  <a routerLink="coach" routerLinkActive="actif">Coachs</a>
 
   @if (authService.connecte()) {
     <a routerLink="dashboard" routerLinkActive="actif">Dashboard</a>
     <a routerLink="profil" routerLinkActive="actif">Profil</a>
-    <button (click)="deconnexion()">Déconnexion</button>
+    <button (click)="deconnexion()">Se déconnecter</button>
   } @else {
     <a routerLink="login" routerLinkActive="actif">Connexion</a>
     <a routerLink="inscription" routerLinkActive="actif">Inscription</a>

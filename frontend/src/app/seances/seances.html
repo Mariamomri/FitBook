@@ -1,0 +1,30 @@
+<h1>Séances</h1>
+
+@if (message()) {
+  <p class="succes">{{ message() }}</p>
+}
+@if (erreur()) {
+  <p class="erreur">{{ erreur() }}</p>
+}
+
+@for (seance of seances(); track seance.id) {
+  <div>
+    <h2>{{ seance.coursTitre }}</h2>
+    <p>Salle : {{ seance.salleNom }}</p>
+    <!-- 'UTC' : afficher l'heure enregistrée en base sans décalage horaire -->
+    <p>Le {{ seance.dateDebut | date: 'dd/MM/yyyy HH:mm' : 'UTC' }} → {{ seance.dateFin | date: 'HH:mm' : 'UTC' }}</p>
+    <p>Places restantes : {{ seance.placesRestantes }}</p>
+
+    @if (seance.statut === 'ouverte' && seance.placesRestantes > 0) {
+      @if (authService.connecte()) {
+        <button (click)="reserver(seance.id)">Réserver</button>
+      } @else {
+        <p>Connectez-vous pour réserver.</p>
+      }
+    } @else {
+      <p>Non disponible</p>
+    }
+  </div>
+} @empty {
+  <p>Aucune séance.</p>
+}
