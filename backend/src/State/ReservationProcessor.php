@@ -26,6 +26,10 @@ final class ReservationProcessor implements ProcessorInterface
       if ($reservation->getStatut() === 'confirmee') {
         $confirmees++;
       }
+      // La même personne ne peut pas réserver deux fois la même séance
+      if ($reservation->getUser() === $data->getUser() && $reservation->getStatut() === 'confirmee') {
+        throw new UnprocessableEntityHttpException('Vous avez déjà réservé cette séance.');
+      }
     }
 
     // Séance complète : on refuse la réservation

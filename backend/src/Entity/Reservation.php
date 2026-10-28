@@ -18,6 +18,8 @@ use ApiPlatform\Metadata\Post;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
+use App\State\ReservationProcessor;
+
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'reservations')]
@@ -25,6 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     new GetCollection(),
     new Get(),
     new Post(
+        processor: ReservationProcessor::class,
         security: "is_granted('ROLE_USER') and user.isVerified()",
         securityMessage: 'Veuillez confirmer votre email avant de réserver.'
     ),
