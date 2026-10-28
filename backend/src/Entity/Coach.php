@@ -148,6 +148,16 @@ class Coach
         return $this;
     }
 
+    // Nom complet du coach (pris dans User), exposé dans l'API
+    public function getNomComplet(): ?string
+    {
+        if ($this->user === null) {
+            return null;
+        }
+
+        return $this->user->getFirstname() . ' ' . $this->user->getLastname();
+    }
+
     /**
      * @return Collection<int, Activite>
      */
