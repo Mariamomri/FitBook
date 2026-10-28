@@ -124,4 +124,29 @@ class Seance
 
         return $this;
     }
+
+    // Titre du cours de la séance, exposé dans l'API
+    public function getCoursTitre(): ?string
+    {
+        return $this->cours?->getTitre();
+    }
+
+    // Nom de la salle (séance → cours → salle), exposé dans l'API
+    public function getSalleNom(): ?string
+    {
+        return $this->cours?->getSalle()?->getNom();
+    }
+
+    // Places restantes = capacité du cours − réservations confirmées (donnée calculée, pas stockée)
+    public function getPlacesRestantes(): int
+    {
+        $confirmees = 0;
+        foreach ($this->reservations as $reservation) {
+            if ($reservation->getStatut() === 'confirmee') {
+                $confirmees++;
+            }
+        }
+
+        return $this->cours->getCapacite() - $confirmees;
+    }
 }
