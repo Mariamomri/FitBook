@@ -1,1 +1,50 @@
-<p>inscription works!</p>
+<div class="login-container">
+  <div class="login-card">
+    <h2>Inscription</h2>
+
+    <form [formGroup]="inscriptionForm" (ngSubmit)="inscription()">
+      <label>Prénom</label>
+      <input type="text" formControlName="firstname" placeholder="Votre prénom" />
+      @if (
+        inscriptionForm.controls.firstname.touched && inscriptionForm.controls.firstname.invalid
+      ) {
+        <p class="erreur">Prénom obligatoire (2 caractères minimum)</p>
+      }
+
+      <label>Nom</label>
+      <input type="text" formControlName="lastname" placeholder="Votre nom" />
+      @if (inscriptionForm.controls.lastname.touched && inscriptionForm.controls.lastname.invalid) {
+        <p class="erreur">Nom obligatoire (2 caractères minimum)</p>
+      }
+
+      <label>Email</label>
+      <input type="email" formControlName="email" placeholder="Votre email" />
+      @if (inscriptionForm.controls.email.touched && inscriptionForm.controls.email.invalid) {
+        <p class="erreur">Email invalide</p>
+      }
+
+      <label>Téléphone (facultatif)</label>
+      <input type="tel" formControlName="phone" placeholder="0470 00 00 00" />
+
+      <label>Mot de passe</label>
+      <input type="password" formControlName="plainPassword" placeholder="6 caractères minimum" />
+      @if (
+        inscriptionForm.controls.plainPassword.touched &&
+        inscriptionForm.controls.plainPassword.invalid
+      ) {
+        <p class="erreur">6 caractères minimum</p>
+      }
+
+      @if (erreur()) {
+        <p class="erreur">{{ erreur() }}</p>
+      }
+      @if (succes()) {
+        <p class="succes">{{ succes() }}</p>
+      }
+
+      <button type="submit">S'inscrire</button>
+    </form>
+
+    <p>Déjà un compte ? <a routerLink="/login">Se connecter</a></p>
+  </div>
+</div>

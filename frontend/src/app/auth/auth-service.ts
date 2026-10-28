@@ -1,6 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { UserInterface } from './user-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -30,5 +31,11 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     this.connecte.set(false);
+  }
+
+    // Inscription : POST /api/users (API Platform attend du JSON-LD)
+  inscription(user: UserInterface): Observable<UserInterface> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/ld+json' });
+    return this.http.post<UserInterface>('https://127.0.0.1:8000/api/users', user, { headers });
   }
 }
