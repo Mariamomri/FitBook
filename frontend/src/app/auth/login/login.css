@@ -1,0 +1,43 @@
+/* Page en deux colonnes : visuel + formulaire */
+.auth {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 600px;
+  /* sort du conteneur centré pour toucher les bords de la page */
+  width: 100vw;
+  margin: -2rem 0 0 calc(50% - 50vw);
+}
+@media (min-width: 900px) {
+  .auth { grid-template-columns: 1fr 1fr; }
+}
+
+/* Panneau de gauche : dégradé sombre + cercle vert */
+.auth-visuel {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 260px;
+  padding: 2.5rem;
+  overflow: hidden;
+  background: linear-gradient(160deg, #2a2a30, #0f0f11 70%);
+}
+.cercle {
+  position: absolute;
+  top: -80px;
+  left: -80px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.auth-texte { position: relative; }
+.auth-texte h1 { font-size: 3.5rem; }
+.vert { color: var(--accent); }
+
+/* Formulaire de droite */
+.auth-form {
+  max-width: 460px;
+  padding: 4rem 2.5rem;
+}
+.auth-form h1 { font-size: 3rem; margin-bottom: 0.5rem; }
+.auth-form a { font-weight: 600; text-decoration: none; }

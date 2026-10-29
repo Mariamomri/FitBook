@@ -1,22 +1,38 @@
-<div class="login-container">
-  <div class="login-card">
-    <h2>Connexion</h2>
+<div class="auth">
+  <!-- Panneau de gauche (photo plus tard) -->
+  <div class="auth-visuel">
+    <span class="cercle"></span>
+    <div class="auth-texte">
+      <h1>Content de <span class="vert">te revoir.</span></h1>
+      <p class="muted">Tes séances, tes salles favorites et tes coachs t'attendent.</p>
+    </div>
+  </div>
+
+  <!-- Formulaire -->
+  <div class="auth-form">
+    <span class="etiquette">Espace membre</span>
+    <h1>Connexion</h1>
+    <p class="muted">Pas encore de compte ? <a routerLink="/inscription">Inscris-toi gratuitement</a></p>
+
+    @if (emailConfirme) {
+      <p class="alerte-ok">Ton email est confirmé, tu peux te connecter.</p>
+    }
 
     <form [formGroup]="loginForm" (ngSubmit)="login()">
-      <label>Email</label>
-      <input type="email" formControlName="email" placeholder="Votre email" />
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" placeholder="mariam@exemple.be" />
       @if (loginForm.controls.email.touched && loginForm.controls.email.invalid) {
-        <p class="erreur">Email invalide</p>
+        <p class="champ-erreur">Email invalide</p>
       }
 
-      <label>Mot de passe</label>
-      <input type="password" formControlName="password" placeholder="Votre mot de passe" />
+      <label for="password">Mot de passe</label>
+      <input id="password" type="password" formControlName="password" placeholder="Votre mot de passe" />
 
       @if (erreur()) {
-        <p class="erreur">{{ erreur() }}</p>
+        <p class="alerte">⚠ {{ erreur() }}</p>
       }
 
-      <button type="submit">Se connecter</button>
+      <button type="submit" class="btn bloc">Se connecter →</button>
     </form>
   </div>
 </div>
