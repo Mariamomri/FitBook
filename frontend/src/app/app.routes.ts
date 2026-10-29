@@ -18,7 +18,7 @@ export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'inscription', component: Inscription },
   { path: 'activites', component: Activites },
-  { path: 'cours/:id', component: CoursDetail },
+  { path: 'activites/:id', component: CoursDetail },
   { path: 'salles', component: Salles },
   { path: 'cours', component: Cours },
   { path: 'coach', component: Coach },
