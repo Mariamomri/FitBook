@@ -15,6 +15,11 @@ export class SeanceService {
     return this.http.get<{ member: SeanceInterface[] }>(`${this.api}/seances`);
   }
 
+  // Séances d'un seul cours (filtre côté Symfony)
+  getSeancesDuCours(idCours: number): Observable<{ member: SeanceInterface[] }> {
+    return this.http.get<{ member: SeanceInterface[] }>(`${this.api}/seances?cours=${idCours}`);
+  }
+
   // Réserver : on envoie seulement la séance, Symfony ajoute l'utilisateur connecté
   reserver(idSeance: number): Observable<unknown> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/ld+json' });

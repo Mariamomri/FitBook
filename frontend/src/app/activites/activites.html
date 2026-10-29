@@ -1,9 +1,12 @@
 <h1>Activités</h1>
 
-@for (activite of activites(); track activite.id) {
+@for (unCours of cours(); track unCours.id) {
   <div>
-    <h2>{{ activite.nom }}</h2>
-    <p>{{ activite.description }}</p>
+    <p>{{ unCours.activiteNom }} · {{ unCours.niveau }}</p>
+    <h2>{{ unCours.titre }}</h2>
+    <p>{{ unCours.salleNom }}</p>
+    <p>{{ unCours.prix }} €</p>
+    <a [routerLink]="['/activites', unCours.id]">Voir le détail</a>
   </div>
 } @empty {
   <p>Aucune activité.</p>

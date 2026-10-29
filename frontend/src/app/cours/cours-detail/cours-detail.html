@@ -1,0 +1,49 @@
+<a routerLink="/activites">← Retour aux activités</a>
+
+@if (cours(); as c) {
+  <p>{{ c.niveau }}</p>
+  <h1>{{ c.titre }}</h1>
+  <p>{{ c.activiteNom }} · {{ c.salleNom }}</p>
+  <p>{{ c.prix }} € par séance</p>
+
+  @if (c.coachNom) {
+    <p>Coach : {{ c.coachNom }}</p>
+  }
+
+  <h2>Description</h2>
+  <p>{{ c.description }}</p>
+
+  <h2>Créneaux</h2>
+
+  @if (message()) {
+    <p class="succes">{{ message() }}</p>
+  }
+  @if (erreur()) {
+    <p class="erreur">{{ erreur() }}</p>
+  }
+
+  @for (seance of seances(); track seance.id) {
+    <div>
+      <!-- 'UTC' : afficher l'heure enregistrée en base sans décalage horaire -->
+      <p>
+        {{ seance.dateDebut | date: 'dd/MM/yyyy HH:mm' : 'UTC' }} →
+        {{ seance.dateFin | date: 'HH:mm' : 'UTC' }}
+      </p>
+      <p>{{ seance.placesRestantes }} places restantes sur {{ c.capacite }}</p>
+
+      @if (seance.statut === 'ouverte' && seance.placesRestantes > 0) {
+        @if (authService.connecte()) {
+          <button (click)="reserver(seance.id)">Réserver</button>
+        } @else {
+          <a routerLink="/login">Connectez-vous pour réserver</a>
+        }
+      } @else {
+        <p>Non disponible</p>
+      }
+    </div>
+  } @empty {
+    <p>Aucun créneau pour ce cours.</p>
+  }
+} @else {
+  <p>Chargement...</p>
+}
