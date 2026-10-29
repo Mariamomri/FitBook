@@ -52,6 +52,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var list<string> The user roles
      */
+    #[ApiProperty(securityPostDenormalize: "is_granted('ROLE_ADMIN')")] // seul un admin peut modifier ce champ
     #[ORM\Column]
     private array $roles = [];
 
@@ -85,6 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank()]
     private ?string $accentColor = null;
 
+    #[ApiProperty(securityPostDenormalize: "is_granted('ROLE_ADMIN')")] // seul un admin peut modifier ce champ
     #[ORM\Column]
     private ?bool $isActive = true;  //pour éviter qu'un utilisateur qui vient d'être créé soit désactivé par défaut, je le mets à true
 
@@ -127,6 +129,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinTable(name: 'favori_coach')] // association « favori_coach » du MCD (users 0,n — coach 0,n)
     private Collection $favoriCoachs;
 
+    #[ApiProperty(securityPostDenormalize: "is_granted('ROLE_ADMIN')")] // seul un admin peut modifier ce champ
     #[ORM\Column]
     private ?bool $isVerified = false; // un nouvel utilisateur n'a pas encore confirmé son email
 
