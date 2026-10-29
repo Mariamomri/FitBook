@@ -1,0 +1,22 @@
+<h1>Mes réservations</h1>
+
+@if (erreur()) {
+  <p class="erreur">{{ erreur() }}</p>
+}
+
+@for (reservation of reservations(); track reservation.id) {
+  <div>
+    <h2>{{ reservation.cours }}</h2>
+    <p>Salle : {{ reservation.salle }}</p>
+    <p>Le {{ reservation.dateDebut }} → {{ reservation.dateFin }}</p>
+    <p>Numéro : {{ reservation.numero }}</p>
+
+    @if (reservation.statut === 'annulee') {
+      <p>Statut : annulée</p>
+    } @else {
+      <p>Statut : confirmée</p>
+    }
+  </div>
+} @empty {
+  <p>Aucune réservation.</p>
+}

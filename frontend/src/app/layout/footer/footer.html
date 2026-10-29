@@ -1,0 +1,51 @@
+<footer class="footer">
+  <div class="colonnes">
+    <!-- Logo + présentation -->
+    <div class="presentation">
+      <a routerLink="/" class="logo"
+        ><span class="logo-f">F</span> FIT<span class="logo-book">BOOK</span></a
+      >
+      <p>
+        La plateforme qui connecte les sportifs bruxellois aux meilleures salles, cours et coachs.
+      </p>
+    </div>
+
+    <div>
+      <h4>FitBook</h4>
+      <a href="#">À propos</a>
+      <a href="#">Contact</a>
+      <a href="#">Devenir partenaire</a>
+    </div>
+
+    <div>
+      <h4>Aide</h4>
+      <a href="#">FAQ</a>
+      <a href="#">Mentions légales</a>
+      <a href="#">Confidentialité</a>
+    </div>
+
+    <div>
+      <h4>Suivez-nous</h4>
+      <div class="reseaux">
+        <a href="https://www.facebook.com" target="_blank" aria-label="Facebook"
+          ><i class="fab fa-facebook-f"></i
+        ></a>
+        <a href="https://x.com" target="_blank" aria-label="X"><i class="fab fa-x-twitter"></i></a>
+        <a href="https://www.instagram.com" target="_blank" aria-label="Instagram"
+          ><i class="fab fa-instagram"></i
+        ></a>
+        <a href="https://www.tiktok.com" target="_blank" aria-label="TikTok"
+          ><i class="fab fa-tiktok"></i
+        ></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bas du footer -->
+  <div class="bas">
+    <span>© 2026 Cfitech · Mariam Omri</span>
+    <span class="date"
+      >{{ maintenant | date: 'HH:mm' }}<br />{{ maintenant | date: 'dd/MM/yyyy' }}</span
+    >
+  </div>
+</footer>
