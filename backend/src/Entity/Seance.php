@@ -152,4 +152,31 @@ class Seance
 
         return $this->cours->getCapacite() - $confirmees;
     }
+
+    // Infos du cours de la séance, exposées dans l'API (page Activités)
+    public function getPrix(): ?string
+    {
+        return $this->cours?->getPrix();
+    }
+
+    public function getCoachNom(): ?string
+    {
+        return $this->cours?->getCoachNom();
+    }
+
+    public function getActiviteNom(): ?string
+    {
+        return $this->cours?->getActiviteNom();
+    }
+
+    public function getVille(): ?string
+    {
+        return $this->cours?->getSalle()?->getVille();
+    }
+
+    // Id du cours : pour le lien vers la fiche détail
+    public function getCoursId(): ?int
+    {
+        return $this->cours?->getId();
+    }
 }
