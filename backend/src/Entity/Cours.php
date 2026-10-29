@@ -227,4 +227,22 @@ class Cours
 
         return $this;
     }
+
+    // Nom de la salle, exposé dans l'API
+    public function getSalleNom(): ?string
+    {
+        return $this->salle?->getNom();
+    }
+
+    // Nom de l'activité, exposé dans l'API
+    public function getActiviteNom(): ?string
+    {
+        return $this->activite?->getNom();
+    }
+
+    // Nom du coach (null si le cours n'a pas de coach)
+    public function getCoachNom(): ?string
+    {
+        return $this->coach?->getNomComplet();
+    }
 }

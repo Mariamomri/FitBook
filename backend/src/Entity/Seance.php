@@ -7,10 +7,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource; //pour exposer l'entité via l'API Platform
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: SeanceRepository::class)]
 #[ORM\Table(name: 'seances')]
 #[ApiResource]
+#[ApiFilter(SearchFilter::class, properties: ['cours' => 'exact'])] // filtre : /api/seances?cours=2001
 class Seance
 {
     #[ORM\Id]
