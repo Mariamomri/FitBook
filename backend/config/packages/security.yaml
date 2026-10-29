@@ -54,6 +54,7 @@ security:
         - { path: ^/api/contexts, roles: PUBLIC_ACCESS }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/users, roles: PUBLIC_ACCESS, methods: [POST] }
+        - { path: ^/api/contact, roles: PUBLIC_ACCESS, methods: [POST] }
         - {
               path: ^/api/(activites|salles|coaches|horaires|seances|cours),
               roles: PUBLIC_ACCESS,

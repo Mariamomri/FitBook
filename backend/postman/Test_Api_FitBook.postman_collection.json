@@ -85,6 +85,96 @@
       "response": []
     },
     {
+      "name": "Contact formulaire invalide",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status contact refusé (JSON Schema)\", function() {\r\n    pm.response.to.have.status(422);\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"sujet\": \"partenaire\",\r\n  \"nom\": \"Karim Benali\",\r\n  \"email\": \"karim@exemple\",\r\n  \"profil\": \"coach\",\r\n  \"message\": \"Bonjour\",\r\n  \"rgpd\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/contact",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "contact"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Contact formulaire valide",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status contact accepté\", function() {\r\n    pm.response.to.have.status(200);\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"sujet\": \"partenaire\",\r\n  \"nom\": \"Karim Benali\",\r\n  \"email\": \"karim@exemple.be\",\r\n  \"profil\": \"coach\",\r\n  \"message\": \"Bonjour, je suis coach de CrossFit et je souhaite proposer mes cours.\",\r\n  \"rgpd\": true\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/contact",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "contact"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "Connexion erreur",
       "event": [
         {
@@ -790,6 +880,105 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "Login User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "   pm.test(\"Status Connecté\", function() {\r\n       if (pm.response.to.have.status(200)){\r\n           pm.environment.set(\"token\", pm.response.json().token);\r\n       }\r\n   })"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"emma.janssens@gmail.com\",\r\n  \"password\": \"julien123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://127.0.0.1:8000/api/login_check",
+          "protocol": "https",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "login_check"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Mes réservations (utilisateur connecté)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status mes réservations\", function() {\r\n    pm.response.to.have.status(200);\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://127.0.0.1:8000/api/me/reservations",
+          "protocol": "https",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "me",
+            "reservations"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "json_web_token_05ee",
+      "secret": true
     }
   ]
 }
