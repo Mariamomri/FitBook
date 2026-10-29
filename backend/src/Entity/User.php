@@ -26,15 +26,13 @@ use App\State\UserPasswordHasher;
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'Un compte existe déjà avec cet email')]
 
-#[ApiResource(
-    operations: [
-        new GetCollection(),
-        new Get(),
-        new Post(processor: UserPasswordHasher::class),  // inscription : hash + mail de confirmation
-        new Patch(processor: UserPasswordHasher::class), // modification : hash si nouveau mot de passe
-        new Delete(),
-    ]
-)] //pour exposer l'entité via API Platform
+#[ApiResource(operations: [
+    new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+    new Get(security: "is_granted('ROLE_ADMIN') or object == user"),
+    new Post(processor: UserPasswordHasher::class),
+    new Patch(security: "is_granted('ROLE_ADMIN') or object == user", processor: UserPasswordHasher::class),
+    new Delete(security: "is_granted('ROLE_ADMIN')")
+])] //pour exposer l'entité via API Platform
 
 #[ORM\HasLifecycleCallbacks] // dit à Doctrine de lire les PrePersist et PreUpdate de cette classe. Sans cette ligne, les dates ne se remplissent pas.
 #[ORM\Table(name: "users")]
@@ -207,7 +205,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-        public function getPlainPassword(): ?string
+    public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }
