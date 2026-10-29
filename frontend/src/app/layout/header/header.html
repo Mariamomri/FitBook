@@ -1,15 +1,28 @@
-<nav>
-  <a routerLink="" routerLinkActive="actif" [routerLinkActiveOptions]="{ exact: true }">Accueil</a>
-  <a routerLink="activites" routerLinkActive="actif">Activités</a>
-  <a routerLink="salles" routerLinkActive="actif">Salles</a>
-  <a routerLink="coach" routerLinkActive="actif">Coachs</a>
+<nav class="navbar">
+  <!-- Logo comme sur la maquette : carré vert + FITBOOK -->
+  <a routerLink="" class="logo"
+    ><span class="logo-f">F</span> FIT<span class="logo-book">BOOK</span></a
+  >
 
-  @if (authService.connecte()) {
-    <a routerLink="dashboard" routerLinkActive="actif">Dashboard</a>
-    <a routerLink="profil" routerLinkActive="actif">Profil</a>
-    <button (click)="deconnexion()">Se déconnecter</button>
-  } @else {
-    <a routerLink="login" routerLinkActive="actif">Connexion</a>
-    <a routerLink="inscription" routerLinkActive="actif">Inscription</a>
-  }
+  <div class="liens">
+    <a routerLink="" routerLinkActive="actif" [routerLinkActiveOptions]="{ exact: true }"
+      >Accueil</a
+    >
+    <a routerLink="activites" routerLinkActive="actif">Activités</a>
+    <a routerLink="salles" routerLinkActive="actif">Salles</a>
+    <a routerLink="coach" routerLinkActive="actif">Coachs</a>
+    @if (authService.connecte()) {
+      <a routerLink="dashboard" routerLinkActive="actif">Dashboard</a>
+      <a routerLink="profil" routerLinkActive="actif">Profil</a>
+    }
+  </div>
+
+  <div class="actions">
+    @if (authService.connecte()) {
+      <button class="btn btn-outline pill" (click)="deconnexion()">Se déconnecter</button>
+    } @else {
+      <a routerLink="login" class="btn btn-outline pill">Connexion</a>
+      <a routerLink="inscription" class="btn pill">Inscription</a>
+    }
+  </div>
 </nav>
