@@ -2,6 +2,22 @@
 <section class="bandeau">
   <p class="fil"><a routerLink="/">Accueil</a> › <span>Recherche</span></p>
   <h1>Recherche <span class="vert">activités</span></h1>
+
+  <!-- Barre de recherche (les champs sont liés aux mêmes filtres que le panneau) -->
+  <div class="recherche">
+    <div>
+      <label for="recherche">Activité</label>
+      <input id="recherche" type="text" [(ngModel)]="recherche" placeholder="Yoga, boxe, salle, coach..." />
+    </div>
+    <div>
+      <label for="ville-haut">Ville</label>
+      <input id="ville-haut" type="text" [(ngModel)]="ville" placeholder="Bruxelles" />
+    </div>
+    <div>
+      <label for="date-haut">Date</label>
+      <input id="date-haut" type="date" [(ngModel)]="date" />
+    </div>
+  </div>
 </section>
 
 <div class="mise-en-page">
@@ -23,6 +39,9 @@
 
     <label>Ville</label>
     <input type="text" [(ngModel)]="ville" placeholder="Bruxelles" />
+
+    <label>Date</label>
+    <input type="date" [(ngModel)]="date" />
 
     <label>Prix max : {{ prixMax() }} €</label>
     <input type="range" min="5" max="30" [(ngModel)]="prixMax" />

@@ -1,7 +1,7 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SeanceService } from '../seances/seance-service';
 import { SeanceInterface } from '../seances/seance-interface';
 import { ActiviteService } from './activite-service';
@@ -17,6 +17,7 @@ import { AuthService } from '../auth/auth-service';
 export class Activites implements OnInit {
   private seanceService = inject(SeanceService);
   private activiteService = inject(ActiviteService);
+  private route = inject(ActivatedRoute);
   authService = inject(AuthService);
 
   seances = signal<SeanceInterface[]>([]);
@@ -26,7 +27,9 @@ export class Activites implements OnInit {
 
   // Filtres (panneau de gauche)
   activitesChoisies = signal<string[]>([]);
+  recherche = signal('');
   ville = signal('');
+  date = signal('');
   prixMax = signal(30);
   placesLibres = signal(false);
 
@@ -36,13 +39,21 @@ export class Activites implements OnInit {
       (s) =>
         s.statut !== 'terminee' &&
         (this.activitesChoisies().length === 0 || this.activitesChoisies().includes(s.activiteNom)) &&
+        this.correspondRecherche(s) &&
         s.ville.toLowerCase().includes(this.ville().toLowerCase()) &&
+        (!this.date() || s.dateDebut.startsWith(this.date())) &&
         Number(s.prix) <= this.prixMax() &&
         (!this.placesLibres() || s.placesRestantes > 0),
     ),
   );
 
   ngOnInit(): void {
+    // Recherche envoyée depuis l'accueil : /activites?quoi=boxe&ou=Liège&quand=2026-11-06
+    const parametres = this.route.snapshot.queryParamMap;
+    this.recherche.set(parametres.get('quoi') ?? '');
+    this.ville.set(parametres.get('ou') ?? '');
+    this.date.set(parametres.get('quand') ?? '');
+
     this.chargerSeances();
     this.activiteService.getActivites().subscribe((reponse) => {
       this.activites.set(reponse.member);
@@ -54,6 +65,14 @@ export class Activites implements OnInit {
     this.seanceService.getSeances().subscribe((reponse) => {
       this.seances.set(reponse.member);
     });
+  }
+
+  // Le texte recherché est dans le titre, l'activité, la salle ou le coach
+  correspondRecherche(seance: SeanceInterface): boolean {
+    const texte = this.recherche().toLowerCase();
+    return [seance.coursTitre, seance.activiteNom, seance.salleNom, seance.coachNom ?? ''].some((valeur) =>
+      valeur.toLowerCase().includes(texte),
+    );
   }
 
   // Coche / décoche une activité dans les filtres

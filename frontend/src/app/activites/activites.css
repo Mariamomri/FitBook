@@ -1,4 +1,4 @@
-/* ---------- Bandeau du haut ---------- */
+/* Bandeau du haut */
 .bandeau {
   padding: 2.5rem 2rem;
   margin-bottom: 2rem;
@@ -10,7 +10,33 @@
 .fil span { color: var(--accent); }
 .vert { color: var(--accent); }
 
-/* ---------- Deux colonnes : filtres + résultats ---------- */
+/* Barre de recherche dans le bandeau */
+.recherche {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 0.8rem 1rem;
+  background: var(--nav);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+@media (min-width: 800px) {
+  .recherche { grid-template-columns: 1.4fr 1fr 1fr; }
+}
+.recherche label {
+  margin: 0 0 0.2rem;
+  font-size: 0.6rem;
+  color: var(--accent);
+}
+.recherche input {
+  padding: 0.3rem 0;
+  background: transparent;
+  border: none;
+  color-scheme: dark;
+}
+
+/* Deux colonnes : filtres + résultats */
 .mise-en-page {
   display: grid;
   grid-template-columns: 1fr;
@@ -20,7 +46,7 @@
   .mise-en-page { grid-template-columns: 240px 1fr; }
 }
 
-/* ---------- Filtres ---------- */
+/* Filtres */
 .filtres {
   align-self: start;
   background: var(--card);
@@ -41,7 +67,8 @@
   margin: 0.5rem 0;
   font-weight: 400;
 }
-.filtres input[type='text'] {
+.filtres input[type='text'],
+.filtres input[type='date'] {
   width: 100%;
   padding: 0.6rem;
   background: var(--bg);
@@ -53,7 +80,7 @@
 .filtres input[type='checkbox'] { accent-color: var(--accent); }
 .filtres input[type='range'] { width: 100%; }
 
-/* ---------- Une ligne par séance ---------- */
+/* Une ligne par séance */
 .ligne {
   display: grid;
   grid-template-columns: 1fr;
