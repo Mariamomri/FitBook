@@ -7,7 +7,7 @@
   /* Dégradé sombre à gauche pour lire le titre, photo à droite */
   background:
     linear-gradient(90deg, #151518 35%, rgba(21, 21, 24, 0.3)),
-    url('/img/hero.jpg') right center / cover;
+    url('/img/yoga.jpg') center 40% / cover;
 }
 .bandeau h1 {
   @apply relative m-0 text-6xl;
