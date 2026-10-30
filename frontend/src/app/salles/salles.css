@@ -1,0 +1,66 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../styles.css";
+
+/* Bandeau avec la recherche */
+.bandeau {
+  @apply mb-6 rounded-lg border border-bordure bg-carte p-8;
+}
+
+.bandeau h1 {
+  @apply mb-4;
+}
+
+.vert {
+  @apply text-accent;
+}
+
+.recherche {
+  @apply w-full max-w-md;
+}
+
+.compteur {
+  @apply mb-3 text-sm;
+}
+
+/* Grille : 1 colonne sur mobile, 2 sur tablette, 3 sur grand écran */
+.grille {
+  @apply grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3;
+}
+
+/* Carte d'une salle */
+.carte {
+  @apply flex flex-col gap-2 rounded-lg border border-bordure bg-carte p-5 transition-colors;
+}
+
+.carte:hover {
+  @apply border-accent;
+}
+
+.carte h2 {
+  @apply m-0 text-2xl;
+}
+
+.ville {
+  @apply self-start rounded bg-accent px-2 py-0.5 text-xs font-bold uppercase text-sur-accent;
+}
+
+.adresse {
+  @apply m-0 text-sm text-gris;
+}
+
+.description {
+  @apply m-0 text-sm;
+}
+
+.equipements {
+  @apply m-0 text-xs italic text-gris;
+}
+
+/* Capacité et téléphone sur une ligne */
+.infos {
+  @apply mt-auto flex justify-between border-t border-bordure pt-3 text-sm text-gris;
+}
+
+.carte .btn {
+  @apply text-center;
+}

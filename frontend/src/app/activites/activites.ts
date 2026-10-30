@@ -1,6 +1,5 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SeanceService } from '../seances/seance-service';
 import { SeanceInterface } from '../seances/seance-interface';
@@ -10,7 +9,7 @@ import { AuthService } from '../auth/auth-service';
 
 @Component({
   selector: 'app-activites',
-  imports: [DatePipe, FormsModule, RouterLink],
+  imports: [DatePipe, RouterLink],
   templateUrl: './activites.html',
   styleUrl: './activites.css',
 })
@@ -43,7 +42,7 @@ export class Activites implements OnInit {
         s.ville.toLowerCase().includes(this.ville().toLowerCase()) &&
         (!this.date() || s.dateDebut.startsWith(this.date())) &&
         Number(s.prix) <= this.prixMax() &&
-        (!this.placesLibres() || s.placesRestantes > 0),
+        (!this.placesLibres() || (s.statut === 'ouverte' && s.placesRestantes > 0)),
     ),
   );
 

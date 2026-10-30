@@ -1,18 +1,41 @@
-<h1>Salles</h1>
+<section class="bandeau">
+  <p class="eyebrow">Nos partenaires</p>
+  <h1>Trouve ta <span class="vert">salle.</span></h1>
+  <input
+    #champ
+    class="recherche"
+    type="search"
+    placeholder="Nom de la salle ou ville"
+    [value]="recherche()"
+    (input)="recherche.set(champ.value)"
+  />
+</section>
 
-@for (salle of salles(); track salle.id) {
-  <div>
-    <h2>{{ salle.nom }}</h2>
-    <p>{{ salle.adresse }}, {{ salle.codePostal }} {{ salle.ville }}</p>
-    <p>{{ salle.description }}</p>
-    <p>Téléphone : {{ salle.telephone }}</p>
-    <p>Capacité : {{ salle.capacite }} personnes</p>
+<p class="muted compteur">{{ sallesFiltrees().length }} salle(s)</p>
 
-    <!-- equipements peut être vide (nullable dans Symfony) -->
-    @if (salle.equipements) {
-      <p>Équipements : {{ salle.equipements }}</p>
-    }
-  </div>
-} @empty {
-  <p>Aucune salle.</p>
-}
+<div class="grille">
+  @for (salle of sallesFiltrees(); track salle.id) {
+    <article class="carte">
+      <span class="ville">{{ salle.ville }}</span>
+      <h2>{{ salle.nom }}</h2>
+      <p class="adresse">{{ salle.adresse }}, {{ salle.codePostal }} {{ salle.ville }}</p>
+      <p class="description">{{ salle.description }}</p>
+
+      <!-- equipements peut être vide (nullable dans Symfony) -->
+      @if (salle.equipements) {
+        <p class="equipements">{{ salle.equipements }}</p>
+      }
+
+      <div class="infos">
+        <span>{{ salle.capacite }} pers.</span>
+        <span>{{ salle.telephone }}</span>
+      </div>
+
+      <a class="btn" routerLink="/activites" [queryParams]="{ ou: salle.ville }"
+        >Voir les séances</a
+      >
+    </article>
+  } @empty {
+    <p class="muted">Aucune salle trouvée.</p>
+  }
+</div>

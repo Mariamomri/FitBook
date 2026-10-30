@@ -7,15 +7,18 @@
   <div class="recherche">
     <div>
       <label for="recherche">Activité</label>
-      <input id="recherche" type="text" [(ngModel)]="recherche" placeholder="Yoga, boxe, salle, coach..." />
+      <input #rechercheHaut id="recherche" type="text" placeholder="Yoga, boxe, salle, coach..."
+        [value]="recherche()" (input)="recherche.set(rechercheHaut.value)" />
     </div>
     <div>
       <label for="ville-haut">Ville</label>
-      <input id="ville-haut" type="text" [(ngModel)]="ville" placeholder="Bruxelles" />
+      <input #villeHaut id="ville-haut" type="text" placeholder="Bruxelles"
+        [value]="ville()" (input)="ville.set(villeHaut.value)" />
     </div>
     <div>
       <label for="date-haut">Date</label>
-      <input id="date-haut" type="date" [(ngModel)]="date" />
+      <input #dateHaut id="date-haut" type="date"
+        [value]="date()" (input)="date.set(dateHaut.value)" />
     </div>
   </div>
 </section>
@@ -38,16 +41,21 @@
     }
 
     <label>Ville</label>
-    <input type="text" [(ngModel)]="ville" placeholder="Bruxelles" />
+    <input #villeFiltre type="text" placeholder="Bruxelles"
+      [value]="ville()" (input)="ville.set(villeFiltre.value)" />
 
     <label>Date</label>
-    <input type="date" [(ngModel)]="date" />
+    <input #dateFiltre type="date"
+      [value]="date()" (input)="date.set(dateFiltre.value)" />
 
     <label>Prix max : {{ prixMax() }} €</label>
-    <input type="range" min="5" max="30" [(ngModel)]="prixMax" />
+    <!-- valueAsNumber : value est toujours une chaîne de caractères -->
+    <input #prix type="range" min="5" max="30"
+      [value]="prixMax()" (input)="prixMax.set(prix.valueAsNumber)" />
 
     <label class="case">
-      <input type="checkbox" [(ngModel)]="placesLibres" />
+      <input #libres type="checkbox"
+        [checked]="placesLibres()" (change)="placesLibres.set(libres.checked)" />
       Places libres uniquement
     </label>
   </aside>
