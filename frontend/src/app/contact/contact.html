@@ -1,8 +1,12 @@
 <!-- Bandeau du haut -->
 <section class="bandeau">
-  <span class="etiquette">Une question ?</span>
-  <h1>Contactez-<span class="vert">nous</span></h1>
-  <p class="muted">Sportif, coach ou salle : notre équipe vous répond sous 48 heures.</p>
+  <span class="points"></span>
+  <span class="rayures"></span>
+  <p class="fil"><a routerLink="/">Accueil</a> › <span>Contact</span></p>
+  <h1>Contactez-<span class="vert">nous.</span></h1>
+  <p class="muted">
+    Une question, un problème de réservation, ou vous souhaitez proposer vos cours sur FitBook ?
+  </p>
 </section>
 
 <div class="contact">
@@ -55,14 +59,24 @@
     <!-- Spécialité : seulement pour un coach ou une salle -->
     @if (contactForm.value.profil !== 'sportif') {
       <label for="specialite">Spécialité (facultatif)</label>
-      <input id="specialite" type="text" formControlName="specialite" placeholder="Yoga, CrossFit, boxe..." />
+      <input
+        id="specialite"
+        type="text"
+        formControlName="specialite"
+        placeholder="Yoga, CrossFit, boxe..."
+      />
       @if (invalide('specialite')) {
         <p class="champ-erreur">100 caractères maximum</p>
       }
     }
 
     <label for="message">Message</label>
-    <textarea id="message" rows="6" formControlName="message" placeholder="Votre message (20 caractères minimum)"></textarea>
+    <textarea
+      id="message"
+      rows="6"
+      formControlName="message"
+      placeholder="Votre message (20 caractères minimum)"
+    ></textarea>
     <p class="muted mini">{{ contactForm.value.message?.length ?? 0 }} / 1000</p>
     @if (invalide('message')) {
       <p class="champ-erreur">Entre 20 et 1000 caractères</p>
@@ -83,7 +97,7 @@
       <p class="champ-erreur">{{ erreursServeur()['formulaire'] }}</p>
     }
     @if (erreur()) {
-      <p class="alerte">⚠ {{ erreur() }}</p>
+      <p class="alerte">"inserisco icona errore" {{ erreur() }}</p>
     }
     @if (succes()) {
       <p class="alerte-ok">{{ succes() }}</p>
@@ -93,18 +107,29 @@
   </form>
 
   <!-- Colonne de droite : coordonnées + bloc partenaire -->
+  <!-- Colonne de droite : bloc partenaire + coordonnées + plan -->
   <aside>
-    <div class="carte">
-      <h3>Nos coordonnées</h3>
-      <p><i class="fa-solid fa-envelope vert"></i> contact&#64;fitbook.be</p>
-      <p><i class="fa-solid fa-location-dot vert"></i> Bruxelles, Belgique</p>
-      <p><i class="fa-solid fa-clock vert"></i> Lundi au vendredi, 9h - 18h</p>
+    <div class="carte partenaire">
+      <span class="points petits"></span>
+      <h2>Vous êtes coach ou<br /><span class="vert">gérant de salle ?</span></h2>
+      <p class="muted">
+        Choisissez le sujet « Devenir partenaire ». Notre équipe vérifie votre activité puis crée
+        votre compte professionnel sous 48 h.
+      </p>
+      <p class="eyebrow">Email</p>
+      <p class="info">contact&#64;fitbook.be</p>
+      <p class="eyebrow">Adresse</p>
+      <p class="info">Rue Royale 1, 1000 Bruxelles</p>
+      <p class="eyebrow">Réponse</p>
+      <p class="info">sous 48 h ouvrées</p>
     </div>
 
-    <div class="carte partenaire">
-      <span class="etiquette">Partenaires</span>
-      <h3>Vous êtes une salle ou un coach ?</h3>
-      <p class="muted">Rejoignez FitBook et remplissez vos cours. Choisissez « Devenir partenaire » dans le sujet du formulaire.</p>
-    </div>
+    <!-- Plan OpenStreetMap (gratuit, sans clé API) -->
+    <iframe
+      class="plan"
+      title="Plan d'accès FitBook"
+      src="https://www.openstreetmap.org/export/embed.html?bbox=4.3560%2C50.8430%2C4.3700%2C50.8500&layer=mapnik&marker=50.8466%2C4.3630"
+      loading="lazy"
+    ></iframe>
   </aside>
 </div>

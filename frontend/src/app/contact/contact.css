@@ -1,11 +1,58 @@
-/* Bandeau du haut */
+/* Bandeau du haut : bordure verte, points et rayures */
 .bandeau {
-  padding: 2rem 0 2.5rem;
-  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  padding: 2.5rem 2rem;
   margin-bottom: 2.5rem;
+  border: 2px solid var(--accent);
+  background: linear-gradient(90deg, #151518 45%, #2a2a30);
 }
-.bandeau h1 { font-size: 3.5rem; margin: 0.4rem 0; text-transform: uppercase; }
-.vert { color: var(--accent); }
+
+.bandeau h1 {
+  position: relative;
+  font-size: 4rem;
+  margin: 0 0 0.6rem;
+}
+
+.bandeau p {
+  position: relative;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.fil {
+  font-size: 0.75rem !important;
+  margin-bottom: 0.8rem !important;
+}
+
+.fil a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.fil span {
+  color: var(--accent);
+}
+
+.points {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 35%;
+  height: 100%;
+  background-image: radial-gradient(var(--accent) 2px, transparent 2px);
+  background-size: 12px 12px;
+  opacity: 0.6;
+}
+
+.rayures {
+  position: absolute;
+  right: 2rem;
+  bottom: 1.5rem;
+  width: 120px;
+  height: 22px;
+  background: repeating-linear-gradient(-60deg, var(--accent) 0 6px, transparent 6px 14px);
+}
 
 /* Formulaire à gauche, informations à droite */
 .contact {
@@ -13,8 +60,11 @@
   grid-template-columns: 1fr;
   gap: 2rem;
 }
+
 @media (min-width: 900px) {
-  .contact { grid-template-columns: 2fr 1fr; }
+  .contact {
+    grid-template-columns: 2fr 1fr;
+  }
 }
 
 /* Encadrés */
@@ -24,10 +74,62 @@
   border: 1px solid var(--border);
   border-radius: 8px;
 }
-aside { display: flex; flex-direction: column; gap: 1.5rem; }
-aside p { font-size: 0.85rem; display: flex; gap: 0.7rem; align-items: center; }
-.partenaire { border-left: 3px solid var(--accent); }
-.partenaire p { display: block; }
+
+aside {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+aside p {
+  font-size: 0.85rem;
+}
+
+/* Bloc partenaire (maquette) */
+.partenaire {
+  position: relative;
+  overflow: hidden;
+}
+
+.partenaire h2,
+.partenaire p {
+  position: relative;
+  display: block;
+}
+
+.partenaire h2 {
+  font-size: 1.8rem;
+}
+
+.partenaire .muted {
+  font-size: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+
+.partenaire .eyebrow {
+  margin: 0.8rem 0 0.1rem;
+  font-size: 0.6rem;
+}
+
+.info {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.points.petits {
+  width: 50%;
+  height: 120px;
+  opacity: 0.5;
+}
+
+/* Plan sombre pour suivre le thème */
+.plan {
+  width: 100%;
+  height: 240px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
 
 /* Nom et email côte à côte */
 .deux-colonnes {
@@ -35,12 +137,17 @@ aside p { font-size: 0.85rem; display: flex; gap: 0.7rem; align-items: center; }
   grid-template-columns: 1fr;
   gap: 0 1rem;
 }
+
 @media (min-width: 600px) {
-  .deux-colonnes { grid-template-columns: 1fr 1fr; }
+  .deux-colonnes {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 /* La zone de texte peut être agrandie seulement en hauteur */
-textarea { resize: vertical; }
+textarea {
+  resize: vertical;
+}
 
 /* Choix du profil */
 .profils {
@@ -48,6 +155,7 @@ textarea { resize: vertical; }
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
 }
+
 .profil {
   margin: 0;
   padding: 0.7rem;
@@ -56,8 +164,15 @@ textarea { resize: vertical; }
   border-radius: 6px;
   cursor: pointer;
 }
-.profil input { display: none; }
-.profil.choisi { border-color: var(--accent); color: var(--accent); }
+
+.profil input {
+  display: none;
+}
+
+.profil.choisi {
+  border-color: var(--accent);
+  color: var(--accent);
+}
 
 /* Case RGPD */
 .case {
@@ -70,4 +185,9 @@ textarea { resize: vertical; }
   font-weight: 400;
   font-size: 0.8rem;
 }
-.mini { font-size: 0.7rem; margin: 0.3rem 0 0; text-align: right; }
+
+.mini {
+  font-size: 0.7rem;
+  margin: 0.3rem 0 0;
+  text-align: right;
+}
