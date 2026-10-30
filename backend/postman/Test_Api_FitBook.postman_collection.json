@@ -829,14 +829,14 @@
       "response": []
     },
     {
-      "name": "Créer séance",
+      "name": "Créer séance interdit (sportif)",
       "event": [
         {
           "listen": "test",
           "script": {
             "type": "text/javascript",
             "exec": [
-              "  pm.test(\"Statut création séance + sauvegarde idLastSeance\", function() {\r\n      if (pm.response.to.have.status(201)){\r\n          pm.environment.set(\"idLastSeance\", pm.response.json().id);\r\n      }\r\n  })"
+              "pm.test(\"Status création séance refusée (sportif)\", function() {\r\n    pm.response.to.have.status(403);\r\n})"
             ]
           }
         }
@@ -848,6 +848,58 @@
             {
               "key": "token",
               "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/ld+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "  {\r\n    \"dateDebut\": \"2026-11-05T09:00:00+01:00\",\r\n    \"dateFin\": \"2026-11-05T10:00:00+01:00\",\r\n    \"statut\": \"ouverte\",\r\n    \"cours\": \"/api/cours/{{idCours}}\"\r\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/seances",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "seances"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Créer séance",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Statut création séance + sauvegarde idLastSeance\", function() {\r\n    if (pm.response.to.have.status(201)){\r\n        pm.environment.set(\"idLastSeance\", pm.response.json().id);\r\n    }\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
               "type": "string"
             }
           ]
@@ -899,7 +951,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "{{token}}",
+              "value": "{{adminToken}}",
               "type": "string"
             }
           ]
@@ -952,7 +1004,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "{{token}}",
+              "value": "{{adminToken}}",
               "type": "string"
             }
           ]
