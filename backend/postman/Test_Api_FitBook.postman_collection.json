@@ -1078,6 +1078,131 @@
       "response": []
     },
     {
+      "name": "Réserver une séance (admin)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status réservation créée + sauvegarde idReservation\", function() {\r\n    if (pm.response.to.have.status(201)){\r\n        pm.environment.set(\"idReservation\", pm.response.json().id);\r\n    }\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/ld+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"seance\": \"/api/seances/2005\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/reservations",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "reservations"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Annuler ma réservation",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status réservation annulée\", function() {\r\n    pm.response.to.have.status(200);\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "{{url}}api/me/reservations/{{idReservation}}/annuler",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "me",
+            "reservations",
+            "{{idReservation}}",
+            "annuler"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Annuler deux fois impossible",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status annulation refusée (déjà annulée)\", function() {\r\n    pm.response.to.have.status(422);\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    },
+    {
       "name": "Login User",
       "event": [
         {
