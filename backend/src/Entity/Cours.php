@@ -9,11 +9,24 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\Timestampable;
 use ApiPlatform\Metadata\ApiResource; //pour exposer l'entité via l'API Platform
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 
 #[ORM\Entity(repositoryClass: CoursRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'courses')]
-#[ApiResource]
+//pour exposer l'entité via l'API Platform
+// Lecture publique ; l'admin, le gestionnaire de la salle et le coach du cours gèrent le cours
+#[ApiResource(operations: [
+    new GetCollection(),
+    new Get(),
+    new Post(securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getSalle()?.getGestionnaire() == user or object.getCoach()?.getUser() == user"),
+    new Patch(security: "is_granted('ROLE_ADMIN') or object.getSalle()?.getGestionnaire() == user or object.getCoach()?.getUser() == user", securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getSalle()?.getGestionnaire() == user or object.getCoach()?.getUser() == user"),
+    new Delete(security: "is_granted('ROLE_ADMIN') or object.getSalle()?.getGestionnaire() == user or object.getCoach()?.getUser() == user")
+])]
 class Cours
 {
     #[ORM\Id]
@@ -226,5 +239,23 @@ class Cours
         }
 
         return $this;
+    }
+
+    // Nom de la salle, exposé dans l'API
+    public function getSalleNom(): ?string
+    {
+        return $this->salle?->getNom();
+    }
+
+    // Nom de l'activité, exposé dans l'API
+    public function getActiviteNom(): ?string
+    {
+        return $this->activite?->getNom();
+    }
+
+    // Nom du coach (null si le cours n'a pas de coach)
+    public function getCoachNom(): ?string
+    {
+        return $this->coach?->getNomComplet();
     }
 }

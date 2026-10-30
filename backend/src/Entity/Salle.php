@@ -9,11 +9,24 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\Timestampable;
 use ApiPlatform\Metadata\ApiResource; //pour exposer l'entité via l'API Platform
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 
 #[ORM\Entity(repositoryClass: SalleRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'salles')]
-#[ApiResource]
+//pour exposer l'entité via l'API Platform
+// Lecture publique ; le gestionnaire ne gère que ses propres salles, l'admin gère tout
+#[ApiResource(operations: [
+    new GetCollection(),
+    new Get(),
+    new Post(securityPostDenormalize: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_SALLE') and object.getGestionnaire() == user)"),
+    new Patch(security: "is_granted('ROLE_ADMIN') or object.getGestionnaire() == user", securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getGestionnaire() == user"),
+    new Delete(security: "is_granted('ROLE_ADMIN') or object.getGestionnaire() == user")
+])]
 class Salle
 {
     #[ORM\Id]

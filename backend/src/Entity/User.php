@@ -26,15 +26,13 @@ use App\State\UserPasswordHasher;
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'Un compte existe déjà avec cet email')]
 
-#[ApiResource(
-    operations: [
-        new GetCollection(),
-        new Get(),
-        new Post(processor: UserPasswordHasher::class),  // inscription : hash + mail de confirmation
-        new Patch(processor: UserPasswordHasher::class), // modification : hash si nouveau mot de passe
-        new Delete(),
-    ]
-)] //pour exposer l'entité via API Platform
+#[ApiResource(operations: [
+    new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+    new Get(security: "is_granted('ROLE_ADMIN') or object == user"),
+    new Post(processor: UserPasswordHasher::class),
+    new Patch(security: "is_granted('ROLE_ADMIN') or object == user", processor: UserPasswordHasher::class),
+    new Delete(security: "is_granted('ROLE_ADMIN')")
+])] //pour exposer l'entité via API Platform
 
 #[ORM\HasLifecycleCallbacks] // dit à Doctrine de lire les PrePersist et PreUpdate de cette classe. Sans cette ligne, les dates ne se remplissent pas.
 #[ORM\Table(name: "users")]
@@ -54,6 +52,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var list<string> The user roles
      */
+    #[ApiProperty(securityPostDenormalize: "is_granted('ROLE_ADMIN')")] // seul un admin peut modifier ce champ
     #[ORM\Column]
     private array $roles = [];
 
@@ -87,6 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank()]
     private ?string $accentColor = null;
 
+    #[ApiProperty(securityPostDenormalize: "is_granted('ROLE_ADMIN')")] // seul un admin peut modifier ce champ
     #[ORM\Column]
     private ?bool $isActive = true;  //pour éviter qu'un utilisateur qui vient d'être créé soit désactivé par défaut, je le mets à true
 
@@ -129,6 +129,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinTable(name: 'favori_coach')] // association « favori_coach » du MCD (users 0,n — coach 0,n)
     private Collection $favoriCoachs;
 
+    #[ApiProperty(securityPostDenormalize: "is_granted('ROLE_ADMIN')")] // seul un admin peut modifier ce champ
     #[ORM\Column]
     private ?bool $isVerified = false; // un nouvel utilisateur n'a pas encore confirmé son email
 
@@ -207,7 +208,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-        public function getPlainPassword(): ?string
+    public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }

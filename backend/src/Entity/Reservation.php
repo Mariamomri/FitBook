@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\ApiProperty;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -23,16 +24,18 @@ use App\State\ReservationProcessor;
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'reservations')]
+// Liste complète : admin ; une réservation : admin ou son propriétaire ; modification et suppression : admin
+// (le sportif annule sa réservation avec la route /api/me/reservations/{id}/annuler)
 #[ApiResource(operations: [
-    new GetCollection(),
-    new Get(),
+    new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+    new Get(security: "is_granted('ROLE_ADMIN') or object.getUser() == user"),
     new Post(
         processor: ReservationProcessor::class,
         security: "is_granted('ROLE_USER') and user.isVerified()",
         securityMessage: 'Veuillez confirmer votre email avant de réserver.'
     ),
-    new Patch(),
-    new Delete()
+    new Patch(security: "is_granted('ROLE_ADMIN')"),
+    new Delete(security: "is_granted('ROLE_ADMIN')")
 ])]
 class Reservation
 {
@@ -42,16 +45,18 @@ class Reservation
     private ?int $id = null;
 
     #[ORM\Column(length: 20, unique: true)] // numéro de réservation affiché à l'utilisateur (ex. FB-2026-00123)
+    #[ApiProperty(writable: false)] // généré automatiquement dans le constructeur
     #[Assert\NotBlank(message: 'Le numéro est obligatoire')]
     private ?string $numero = null;
 
     #[ORM\Column(length: 20)]
+    #[ApiProperty(writable: false)] // confirmee à la création, annulee après une annulation
     #[Assert\NotBlank(message: 'Le statut est obligatoire')]
-    private ?string $statut = null;
+    private ?string $statut = 'confirmee';
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotNull(message: 'L\'utilisateur est obligatoire')]
+    #[ApiProperty(writable: false)] // l'utilisateur connecté est ajouté par le ReservationProcessor
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
@@ -70,6 +75,8 @@ class Reservation
     public function __construct()
     {
         $this->avis = new ArrayCollection();
+        // Numéro unique lisible, ex. FB-2026-A1B2C3
+        $this->numero = 'FB-' . date('Y') . '-' . strtoupper(bin2hex(random_bytes(3)));
     }
 
     public function getId(): ?int

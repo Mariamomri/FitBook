@@ -9,9 +9,23 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource; //pour exposer l'entité via l'API Platform
 
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+
 #[ORM\Entity(repositoryClass: ActiviteRepository::class)]
 #[ORM\Table(name: 'activites')]
-#[ApiResource] //pour exposer l'entité via l'API Platform
+//pour exposer l'entité via l'API Platform
+// Lecture publique ; création, modification et suppression : admin ou gestionnaire de salle
+#[ApiResource(operations: [
+    new GetCollection(),
+    new Get(),
+    new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SALLE')"),
+    new Patch(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SALLE')"),
+    new Delete(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SALLE')")
+])]
 class Activite
 {
     #[ORM\Id]

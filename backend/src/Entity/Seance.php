@@ -7,10 +7,26 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource; //pour exposer l'entité via l'API Platform
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: SeanceRepository::class)]
 #[ORM\Table(name: 'seances')]
-#[ApiResource]
+//pour exposer l'entité via l'API Platform
+// Lecture publique ; l'admin, le gestionnaire de la salle du cours et le coach du cours gèrent la séance
+#[ApiResource(operations: [
+    new GetCollection(),
+    new Get(),
+    new Post(securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getCours()?.getSalle()?.getGestionnaire() == user or object.getCours()?.getCoach()?.getUser() == user"),
+    new Patch(security: "is_granted('ROLE_ADMIN') or object.getCours()?.getSalle()?.getGestionnaire() == user or object.getCours()?.getCoach()?.getUser() == user", securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getCours()?.getSalle()?.getGestionnaire() == user or object.getCours()?.getCoach()?.getUser() == user"),
+    new Delete(security: "is_granted('ROLE_ADMIN') or object.getCours()?.getSalle()?.getGestionnaire() == user or object.getCours()?.getCoach()?.getUser() == user")
+])]
+#[ApiFilter(SearchFilter::class, properties: ['cours' => 'exact'])] // filtre : /api/seances?cours=2001
 class Seance
 {
     #[ORM\Id]
@@ -123,5 +139,57 @@ class Seance
         }
 
         return $this;
+    }
+
+    // Titre du cours de la séance, exposé dans l'API
+    public function getCoursTitre(): ?string
+    {
+        return $this->cours?->getTitre();
+    }
+
+    // Nom de la salle (séance → cours → salle), exposé dans l'API
+    public function getSalleNom(): ?string
+    {
+        return $this->cours?->getSalle()?->getNom();
+    }
+
+    // Places restantes = capacité du cours − réservations confirmées (donnée calculée, pas stockée)
+    public function getPlacesRestantes(): int
+    {
+        $confirmees = 0;
+        foreach ($this->reservations as $reservation) {
+            if ($reservation->getStatut() === 'confirmee') {
+                $confirmees++;
+            }
+        }
+
+        return $this->cours->getCapacite() - $confirmees;
+    }
+
+    // Infos du cours de la séance, exposées dans l'API (page Activités)
+    public function getPrix(): ?string
+    {
+        return $this->cours?->getPrix();
+    }
+
+    public function getCoachNom(): ?string
+    {
+        return $this->cours?->getCoachNom();
+    }
+
+    public function getActiviteNom(): ?string
+    {
+        return $this->cours?->getActiviteNom();
+    }
+
+    public function getVille(): ?string
+    {
+        return $this->cours?->getSalle()?->getVille();
+    }
+
+    // Id du cours : pour le lien vers la fiche détail
+    public function getCoursId(): ?int
+    {
+        return $this->cours?->getId();
     }
 }

@@ -10,15 +10,19 @@ import { Reservations } from './reservations/reservations';
 import { Profil } from './profil/profil';
 import { Dashboard } from './dashboard/dashboard';
 import { authGuard } from './auth/auth-guard';
+import { Seances } from './seances/seances';
+import { CoursDetail } from './cours/cours-detail/cours-detail';
 
 export const routes: Routes = [
   { path: '', component: Accueil },
   { path: 'login', component: Login },
   { path: 'inscription', component: Inscription },
   { path: 'activites', component: Activites },
+  { path: 'activites/:id', component: CoursDetail },
   { path: 'salles', component: Salles },
   { path: 'cours', component: Cours },
   { path: 'coach', component: Coach },
+  { path: 'seances', component: Seances },
   { path: 'reservations', component: Reservations, canActivate: [authGuard] },
   { path: 'profil', component: Profil, canActivate: [authGuard] },
   { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },

@@ -1,18 +1,22 @@
 import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../auth-service';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   erreur = signal('');
+
+  // Symfony redirige vers /login?verified=1 après la confirmation de l'email
+  emailConfirme = this.route.snapshot.queryParamMap.get('verified') === '1';
 
   // Le formulaire est créé dans le TypeScript, avec ses règles de validation
   loginForm = new FormGroup({

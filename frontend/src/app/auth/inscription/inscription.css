@@ -1,0 +1,182 @@
+/* Page en deux parties : visuel collé au bord gauche + formulaire */
+.auth {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  /* sort du conteneur centré pour toucher les bords de la page */
+  width: 100vw;
+  margin: -2rem 0 0 calc(50% - 50vw);
+}
+@media (min-width: 900px) {
+  .auth { grid-template-columns: 40% 1fr; }
+}
+
+/* Panneau de gauche : dégradé sombre + points verts */
+.auth-visuel {
+  position: relative;
+  align-self: start;
+  display: flex;
+  align-items: flex-end;
+  min-height: 620px;
+  padding: 3rem;
+  overflow: hidden;
+  background: linear-gradient(160deg, #3a3a40, #0f0f11 75%);
+}
+.points {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 45%;
+  height: 160px;
+  background-image: radial-gradient(var(--accent) 2px, transparent 2px);
+  background-size: 12px 12px;
+  opacity: 0.8;
+}
+.rayures {
+  display: block;
+  width: 110px;
+  height: 22px;
+  margin-bottom: 1rem;
+  background: repeating-linear-gradient(-60deg, var(--accent) 0 6px, transparent 6px 14px);
+}
+.auth-texte { position: relative; }
+.auth-texte h1 { font-size: 3.8rem; margin-bottom: 1rem; }
+.auth-texte p { margin: 0; font-size: 0.85rem; }
+.vert { color: var(--accent); }
+
+/* Formulaire de droite */
+.auth-form {
+  max-width: 420px;
+  padding: 3rem 1rem 2rem;
+}
+.auth-form h1 { font-size: 3rem; margin-bottom: 0.4rem; }
+.auth-form a { font-weight: 600; text-decoration: none; }
+.petit { font-size: 0.8rem; }
+.mini { font-size: 0.7rem; margin: 0.3rem 0 0; }
+
+/* Photo de profil : rond + bouton */
+.photo { display: flex; align-items: center; gap: 1rem; }
+.photo-rond {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  color: var(--accent);
+  font-size: 1.5rem;
+  overflow: hidden;
+}
+.photo-rond img { width: 100%; height: 100%; object-fit: cover; }
+.petit-btn {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  font-size: 0.65rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Prénom et nom côte à côte */
+.deux-colonnes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Champ mot de passe avec le bouton œil */
+.champ-mdp { position: relative; }
+.champ-mdp input { padding-right: 2.8rem; }
+.oeil {
+  position: absolute;
+  top: 50%;
+  right: 0.8rem;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+/* Barre de force : 4 segments */
+.force {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+.force span {
+  height: 3px;
+  background: var(--border);
+}
+.force span.rempli { background: var(--accent); }
+
+/* Choix de la couleur du site : 3 par ligne */
+.couleurs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+.couleur {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.6rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.65rem;
+  cursor: pointer;
+}
+.couleur input { display: none; }
+.couleur.choisie { border-color: var(--accent); }
+.pastille {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  color: #080809;
+  font-size: 0.55rem;
+}
+
+/* Case CGU */
+.case {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.2rem;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
+.centre { text-align: center; margin-top: 1rem; }
+
+/* Encadré d'information */
+.info {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding: 0.9rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  background: var(--card);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+}
+
+/* Flèches décoratives en bas à droite */
+.fleches {
+  text-align: right;
+  color: var(--accent);
+  font-size: 1.6rem;
+  font-weight: 900;
+  letter-spacing: -0.15em;
+  margin: 1rem 0 0;
+}

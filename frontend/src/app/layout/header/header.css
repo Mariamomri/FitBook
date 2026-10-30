@@ -1,0 +1,67 @@
+/* Barre de navigation (maquette : fond #080809, hauteur 84 px) */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: 84px;
+  padding: 0 2rem;
+  background: var(--nav);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Logo : carré vert avec un F + FITBOOK */
+.logo {
+  font-family: var(--font-title);
+  font-weight: 900;
+  font-style: italic;
+  font-size: 1.6rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.logo-f {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--on-accent);
+  padding: 0 0.35rem;
+  border-radius: 4px;
+}
+
+.logo-book {
+  color: var(--accent);
+}
+
+/* Liens au centre */
+.liens {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.liens a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+}
+
+/* Page actuelle : pastille de la couleur d'accent */
+.liens a.actif {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Boutons arrondis de la nav (Connexion / Inscription) */
+.pill {
+  border-radius: 999px;
+}

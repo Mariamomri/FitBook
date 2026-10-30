@@ -14,4 +14,10 @@ export class CoursService {
   getCours(): Observable<{ member: CoursInterface[] }> {
     return this.http.get<{ member: CoursInterface[] }>(this.api);
   }
+
+    // Un seul cours par son id
+  getUnCours(id: number): Observable<CoursInterface> {
+    return this.http.get<CoursInterface>(`${this.api}/${id}`);
+  }
+
 }

@@ -5,4 +5,7 @@ export interface CoursInterface {
   niveau: string;
   capacite: number;
   prix: string;
+  salleNom: string;
+  activiteNom: string;
+  coachNom?: string; // un cours peut ne pas avoir de coach
 }

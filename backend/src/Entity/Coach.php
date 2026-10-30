@@ -8,10 +8,23 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 
 #[ORM\Entity(repositoryClass: CoachRepository::class)]
 #[ORM\Table(name: 'coaches')]
-#[ApiResource] //pour exposer l'entité via l'API Platform
+//pour exposer l'entité via l'API Platform
+// Lecture publique ; l'admin crée et supprime les profils, le coach modifie le sien
+#[ApiResource(operations: [
+    new GetCollection(),
+    new Get(),
+    new Post(security: "is_granted('ROLE_ADMIN')"),
+    new Patch(security: "is_granted('ROLE_ADMIN') or object.getUser() == user"),
+    new Delete(security: "is_granted('ROLE_ADMIN')")
+])]
 class Coach
 {
     #[ORM\Id]
