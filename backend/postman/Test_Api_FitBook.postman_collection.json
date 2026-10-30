@@ -373,6 +373,150 @@
       "response": []
     },
     {
+      "name": "Liste users interdite (sportif)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status liste users refusée (pas admin)\", function() {\r\n    pm.response.to.have.status(403);\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}api/users",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Modifier autre user interdit",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status modification d'un autre user refusée\", function() {\r\n    pm.response.to.have.status(403);\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/merge-patch+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"firstname\": \"Pirate\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/users/1000",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "users",
+            "1000"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Se donner ROLE_ADMIN impossible",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status ROLE_ADMIN ignoré\", function() {\r\n    pm.response.to.have.status(200);\r\n    pm.expect(pm.response.json().roles).to.not.include(\"ROLE_ADMIN\");\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/merge-patch+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"roles\": [\"ROLE_ADMIN\"] }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/users/{{id}}",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "users",
+            "{{id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "Réserver non vérifié",
       "event": [
         {
