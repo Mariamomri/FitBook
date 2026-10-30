@@ -1,0 +1,15 @@
+<h1>Votre réservation est confirmée !</h1>
+
+<p>Bonjour {{ reservation.user.firstname }},</p>
+
+<p>Votre réservation <strong>{{ reservation.numero }}</strong> est bien enregistrée :</p>
+
+<ul>
+    <li>Cours : {{ reservation.seance.cours.titre }}</li>
+    <li>Salle : {{ reservation.seance.cours.salle.nom }}</li>
+    <li>Date : {{ reservation.seance.dateDebut|date('d/m/Y') }} de {{ reservation.seance.dateDebut|date('H:i') }} à {{ reservation.seance.dateFin|date('H:i') }}</li>
+</ul>
+
+<p>Vous pouvez annuler votre réservation depuis votre espace « Mes réservations » tant que la séance n'a pas commencé.</p>
+
+<p>À bientôt sur FitBook !</p>

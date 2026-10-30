@@ -19,15 +19,19 @@ use ApiPlatform\Metadata\Post;
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'avis_notes')]
 //pour exposer l'entité via l'API Platform
+// Lecture publique (notes affichées sur les fiches) ; on ne note que ses propres réservations ;
+// modification par l'auteur ou l'admin, suppression (modération) par l'auteur ou l'admin
 #[ApiResource(operations: [
     new GetCollection(),
     new Get(),
     new Post(
         security: "is_granted('ROLE_USER') and user.isVerified()",
-        securityMessage: 'Veuillez confirmer votre email avant de laisser un avis.'
+        securityMessage: 'Veuillez confirmer votre email avant de laisser un avis.',
+        securityPostDenormalize: "object.getReservation()?.getUser() == user",
+        securityPostDenormalizeMessage: 'Vous ne pouvez donner un avis que sur vos propres réservations.'
     ),
-    new Patch(),
-    new Delete()
+    new Patch(security: "is_granted('ROLE_ADMIN') or object.getReservation()?.getUser() == user"),
+    new Delete(security: "is_granted('ROLE_ADMIN') or object.getReservation()?.getUser() == user")
 ])]
 class Avis
 {
