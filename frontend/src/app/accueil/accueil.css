@@ -233,7 +233,7 @@
   font-weight: 700;
 }
 
-/* Bloc coachs : rond vert + texte */
+/* Bloc coachs : coach détouré devant un rond vert + texte */
 .coachs {
   display: grid;
   grid-template-columns: 1fr;
@@ -243,18 +243,103 @@
 @media (min-width: 900px) {
   .coachs { grid-template-columns: 1fr 1fr; }
 }
+
+/* Zone du visuel : tout est placé par rapport à elle */
+.coachs-visuel {
+  position: relative;
+  height: 440px;
+  max-width: 460px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Grand rond de la couleur d'accent, en bas */
 .coachs-rond {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 340px;
+  height: 340px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* Carré de points derrière le rond, à gauche */
+.coachs-points {
+  position: absolute;
+  left: 0;
+  top: 40%;
+  width: 140px;
+  height: 160px;
+  background-image: radial-gradient(var(--accent) 2px, transparent 2px);
+  background-size: 12px 12px;
+  opacity: 0.7;
+}
+
+/* Photo sans fond : la tête dépasse au-dessus du rond */
+.coachs-photo {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+.coachs-etoile {
+  position: absolute;
+  top: 2rem;
+  right: 1.5rem;
+  color: var(--text);
+  font-size: 1.4rem;
+}
+
+/* Petite carte en bas à gauche */
+.coachs-badge {
+  position: absolute;
+  left: 0;
+  bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  padding: 0.6rem 0.9rem;
+  background: var(--nav);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.7rem;
+}
+.coachs-badge strong {
+  font-family: var(--font-title);
+  font-style: italic;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+.coachs-badge span { color: var(--muted); }
+
+/* Liste avec coches */
+.coachs-liste {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  font-size: 0.85rem;
+}
+.coachs-liste li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+.coachs-liste i {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 260px;
-  height: 260px;
-  margin: 0 auto;
-  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
   background: var(--accent);
   color: var(--on-accent);
-  font-size: 5rem;
+  font-size: 0.65rem;
 }
+
 .coachs h2 { font-size: 3rem; }
 .coachs p { max-width: 420px; font-size: 0.85rem; margin-bottom: 1.5rem; }
 
