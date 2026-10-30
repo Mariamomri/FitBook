@@ -1,26 +1,57 @@
-<h1>Mes réservations</h1>
+<!-- Bandeau du haut -->
+<section class="bandeau">
+  <h1>Mes réservations</h1>
+  <p class="muted">Tes séances réservées. Tu peux annuler une réservation confirmée.</p>
+</section>
 
 @if (erreur()) {
-  <p class="erreur">{{ erreur() }}</p>
+  <p class="alerte">⚠ {{ erreur() }}</p>
 }
 @if (succes()) {
   <p class="alerte-ok">{{ succes() }}</p>
 }
 
-@for (reservation of reservations(); track reservation.id) {
-  <div>
-    <h2>{{ reservation.cours }}</h2>
-    <p>Salle : {{ reservation.salle }}</p>
-    <p>Le {{ reservation.dateDebut }} → {{ reservation.dateFin }}</p>
-    <p>Numéro : {{ reservation.numero }}</p>
-
-    @if (reservation.statut === 'annulee') {
-      <p>Statut : annulée</p>
-    } @else {
-      <p>Statut : confirmée</p>
-      <button class="btn btn-outline" (click)="annuler(reservation)">Annuler</button>
-    }
-  </div>
-} @empty {
-  <p>Aucune réservation.</p>
-}
+<!-- Tableau des réservations -->
+<div class="tableau">
+  <table>
+    <thead>
+      <tr>
+        <th>Séance</th>
+        <th>Salle</th>
+        <th>Date</th>
+        <th>Statut</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (reservation of reservations(); track reservation.id) {
+        <tr>
+          <td>
+            <strong>{{ reservation.cours }}</strong>
+            <span class="numero">{{ reservation.numero }}</span>
+          </td>
+          <td class="muted">{{ reservation.salle }}</td>
+          <td>{{ reservation.dateDebut }} → {{ reservation.dateFin }}</td>
+          <td>
+            @if (reservation.statut === 'annulee') {
+              <span class="statut annulee">Annulée</span>
+            } @else {
+              <span class="statut confirmee">Confirmée</span>
+            }
+          </td>
+          <td>
+            @if (reservation.statut !== 'annulee') {
+              <button class="btn-annuler" (click)="annuler(reservation)">Annuler</button>
+            } @else {
+              <span class="muted">—</span>
+            }
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="5" class="muted vide">Aucune réservation pour le moment.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

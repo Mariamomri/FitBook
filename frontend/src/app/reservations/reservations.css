@@ -1,0 +1,99 @@
+/* Bandeau du haut */
+.bandeau {
+  padding: 2.5rem 2rem;
+  margin-bottom: 1.5rem;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #151518 40%, #3a2a30);
+}
+
+.bandeau h1 {
+  margin-bottom: 0.4rem;
+}
+
+.bandeau p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Tableau (défile horizontalement sur mobile) */
+.tableau {
+  overflow-x: auto;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+th {
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* Numéro de réservation sous le nom de la séance */
+.numero {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+/* Pastilles de statut */
+.statut {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.confirmee {
+  color: var(--accent);
+  background: rgba(166, 255, 0, 0.12);
+}
+
+.annulee {
+  color: var(--danger);
+  background: rgba(255, 92, 92, 0.12);
+}
+
+/* Bouton Annuler : contour rouge */
+.btn-annuler {
+  padding: 0.4rem 0.9rem;
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.btn-annuler:hover {
+  background: rgba(255, 92, 92, 0.12);
+}
+
+.vide {
+  text-align: center;
+  padding: 2rem;
+}
