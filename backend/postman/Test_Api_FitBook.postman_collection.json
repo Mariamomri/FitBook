@@ -85,6 +85,34 @@
       "response": []
     },
     {
+      "name": "Liste avis publique",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status liste avis publique\", function() {\r\n    pm.response.to.have.status(200);\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}api/avis",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "avis"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "Contact formulaire invalide",
       "event": [
         {
@@ -1197,7 +1225,16 @@
         "method": "PATCH",
         "header": [],
         "url": {
-          "raw": ""
+          "raw": "{{url}}api/me/reservations/{{idReservation}}/annuler",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "me",
+            "reservations",
+            "{{idReservation}}",
+            "annuler"
+          ]
         }
       },
       "response": []
