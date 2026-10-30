@@ -1,0 +1,29 @@
+<nav class="navbar">
+  <!-- Logo comme sur la maquette : carré vert + FITBOOK -->
+  <a routerLink="" class="logo"
+    ><span class="logo-f">F</span> FIT<span class="logo-book">BOOK</span></a
+  >
+
+  <div class="liens">
+    <a routerLink="" routerLinkActive="actif" [routerLinkActiveOptions]="{ exact: true }"
+      >Accueil</a
+    >
+    <a routerLink="activites" routerLinkActive="actif">Activités</a>
+    <a routerLink="salles" routerLinkActive="actif">Salles</a>
+    <a routerLink="coach" routerLinkActive="actif">Coach</a>
+    <a routerLink="contact" routerLinkActive="actif">Contact</a>
+    @if (authService.connecte()) {
+      <a routerLink="dashboard" routerLinkActive="actif">Dashboard</a>
+      <a routerLink="profil" routerLinkActive="actif">Profil</a>
+    }
+  </div>
+
+  <div class="actions">
+    @if (authService.connecte()) {
+      <button class="btn btn-outline pill" (click)="deconnexion()">Se déconnecter</button>
+    } @else {
+      <a routerLink="login" class="btn btn-outline pill">Connexion</a>
+      <a routerLink="inscription" class="btn pill">Inscription</a>
+    }
+  </div>
+</nav>

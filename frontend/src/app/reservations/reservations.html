@@ -1,0 +1,58 @@
+<!-- Bandeau du haut -->
+<section class="bandeau">
+  <h1>Mes réservations</h1>
+  <p class="muted">Tes séances réservées. Tu peux annuler une réservation confirmée.</p>
+  <a class="btn" routerLink="/calendrier">Voir mon calendrier</a>
+</section>
+
+@if (erreur()) {
+  <p class="alerte">⚠ {{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
+}
+
+<!-- Tableau des réservations -->
+<div class="tableau">
+  <table>
+    <thead>
+      <tr>
+        <th>Séance</th>
+        <th>Salle</th>
+        <th>Date</th>
+        <th>Statut</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (reservation of reservations(); track reservation.id) {
+        <tr>
+          <td>
+            <strong>{{ reservation.cours }}</strong>
+            <span class="numero">{{ reservation.numero }}</span>
+          </td>
+          <td class="muted">{{ reservation.salle }}</td>
+          <td>{{ reservation.dateDebut }} → {{ reservation.dateFin }}</td>
+          <td>
+            @if (reservation.statut === 'annulee') {
+              <span class="statut annulee">Annulée</span>
+            } @else {
+              <span class="statut confirmee">Confirmée</span>
+            }
+          </td>
+          <td>
+            @if (reservation.statut !== 'annulee') {
+              <button class="btn-annuler" (click)="annuler(reservation)">Annuler</button>
+            } @else {
+              <span class="muted">—</span>
+            }
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="5" class="muted vide">Aucune réservation pour le moment.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

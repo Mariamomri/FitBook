@@ -85,6 +85,124 @@
       "response": []
     },
     {
+      "name": "Liste avis publique",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status liste avis publique\", function() {\r\n    pm.response.to.have.status(200);\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}api/avis",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "avis"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Contact formulaire invalide",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status contact refusé (JSON Schema)\", function() {\r\n    pm.response.to.have.status(422);\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"sujet\": \"partenaire\",\r\n  \"nom\": \"Karim Benali\",\r\n  \"email\": \"karim@exemple\",\r\n  \"profil\": \"coach\",\r\n  \"message\": \"Bonjour\",\r\n  \"rgpd\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/contact",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "contact"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Contact formulaire valide",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status contact accepté\", function() {\r\n    pm.response.to.have.status(200);\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"sujet\": \"partenaire\",\r\n  \"nom\": \"Karim Benali\",\r\n  \"email\": \"karim@exemple.be\",\r\n  \"profil\": \"coach\",\r\n  \"message\": \"Bonjour, je suis coach de CrossFit et je souhaite proposer mes cours.\",\r\n  \"rgpd\": true\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/contact",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "contact"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "Connexion erreur",
       "event": [
         {
@@ -283,6 +401,150 @@
       "response": []
     },
     {
+      "name": "Liste users interdite (sportif)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status liste users refusée (pas admin)\", function() {\r\n    pm.response.to.have.status(403);\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}api/users",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Modifier autre user interdit",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status modification d'un autre user refusée\", function() {\r\n    pm.response.to.have.status(403);\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/merge-patch+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"firstname\": \"Pirate\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/users/1000",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "users",
+            "1000"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Se donner ROLE_ADMIN impossible",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status ROLE_ADMIN ignoré\", function() {\r\n    pm.response.to.have.status(200);\r\n    pm.expect(pm.response.json().roles).to.not.include(\"ROLE_ADMIN\");\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/merge-patch+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"roles\": [\"ROLE_ADMIN\"] }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/users/{{id}}",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "users",
+            "{{id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "Réserver non vérifié",
       "event": [
         {
@@ -316,6 +578,58 @@
         "body": {
           "mode": "raw",
           "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/reservations",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "reservations"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Réserver séance complète",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "   pm.test(\"Status réservation refusée (séance complète)\", function() {\r\n      pm.response.to.have.status(422);\r\n  })"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/ld+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"numero\": \"FB-2026-T0001\",\r\n  \"statut\": \"confirmee\",\r\n  \"user\": \"/api/users/1000\",\r\n  \"seance\": \"/api/seances/2011\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -543,14 +857,14 @@
       "response": []
     },
     {
-      "name": "Créer séance",
+      "name": "Créer séance interdit (sportif)",
       "event": [
         {
           "listen": "test",
           "script": {
             "type": "text/javascript",
             "exec": [
-              "  pm.test(\"Statut création séance + sauvegarde idLastSeance\", function() {\r\n      if (pm.response.to.have.status(201)){\r\n          pm.environment.set(\"idLastSeance\", pm.response.json().id);\r\n      }\r\n  })"
+              "pm.test(\"Status création séance refusée (sportif)\", function() {\r\n    pm.response.to.have.status(403);\r\n})"
             ]
           }
         }
@@ -562,6 +876,58 @@
             {
               "key": "token",
               "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/ld+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "  {\r\n    \"dateDebut\": \"2026-11-05T09:00:00+01:00\",\r\n    \"dateFin\": \"2026-11-05T10:00:00+01:00\",\r\n    \"statut\": \"ouverte\",\r\n    \"cours\": \"/api/cours/{{idCours}}\"\r\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/seances",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "seances"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Créer séance",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Statut création séance + sauvegarde idLastSeance\", function() {\r\n    if (pm.response.to.have.status(201)){\r\n        pm.environment.set(\"idLastSeance\", pm.response.json().id);\r\n    }\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
               "type": "string"
             }
           ]
@@ -613,7 +979,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "{{token}}",
+              "value": "{{adminToken}}",
               "type": "string"
             }
           ]
@@ -666,7 +1032,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "{{token}}",
+              "value": "{{adminToken}}",
               "type": "string"
             }
           ]
@@ -738,6 +1104,227 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "Réserver une séance (admin)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status réservation créée + sauvegarde idReservation\", function() {\r\n    if (pm.response.to.have.status(201)){\r\n        pm.environment.set(\"idReservation\", pm.response.json().id);\r\n    }\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/ld+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"seance\": \"/api/seances/2005\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/reservations",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "reservations"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Annuler ma réservation",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status réservation annulée\", function() {\r\n    pm.response.to.have.status(200);\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "{{url}}api/me/reservations/{{idReservation}}/annuler",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "me",
+            "reservations",
+            "{{idReservation}}",
+            "annuler"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Annuler deux fois impossible",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status annulation refusée (déjà annulée)\", function() {\r\n    pm.response.to.have.status(422);\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "{{url}}api/me/reservations/{{idReservation}}/annuler",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "me",
+            "reservations",
+            "{{idReservation}}",
+            "annuler"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "   pm.test(\"Status Connecté\", function() {\r\n       if (pm.response.to.have.status(200)){\r\n           pm.environment.set(\"token\", pm.response.json().token);\r\n       }\r\n   })"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"emma.janssens@gmail.com\",\r\n  \"password\": \"julien123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/login_check",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "login_check"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Mes réservations (utilisateur connecté)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status mes réservations\", function() {\r\n    pm.response.to.have.status(200);\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}api/me/reservations",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "me",
+            "reservations"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "json_web_token_05ee",
+      "secret": true
     }
   ]
 }

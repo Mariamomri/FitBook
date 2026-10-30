@@ -1,0 +1,76 @@
+@if (cours(); as c) {
+  <!-- Bandeau du haut (image plus tard) -->
+  <section class="bandeau">
+    <p class="fil">
+      <a routerLink="/">Accueil</a> › <a routerLink="/activites">Recherche</a> › <span>{{ c.titre }}</span>
+    </p>
+    <span class="niveau">Niveau {{ c.niveau }}</span>
+    <h1>{{ debutTitre(c.titre) }} <span class="vert">{{ finTitre(c.titre) }}.</span></h1>
+    <p class="sous-titre">{{ c.activiteNom }} · {{ c.salleNom }}</p>
+  </section>
+
+  <div class="mise-en-page">
+    <!-- Colonne de gauche -->
+    <div class="contenu">
+      @if (c.coachNom) {
+        <div class="carte-coach">
+          <span class="avatar">{{ c.coachNom.charAt(0) }}</span>
+          <p><strong>{{ c.coachNom }}</strong> · Coach</p>
+          <a routerLink="/coach">Voir le profil →</a>
+        </div>
+      }
+
+      <h2>Description</h2>
+      <p class="muted">{{ c.description }}</p>
+
+      <h2>Autres créneaux</h2>
+      <div class="creneaux">
+        @for (seance of autresCreneaux(); track seance.id) {
+          <button class="creneau" (click)="choisir(seance.id)">
+            <!-- 'UTC' : afficher l'heure enregistrée en base sans décalage horaire -->
+            {{ seance.dateDebut | date: 'EEE d MMM · HH:mm' : 'UTC' : 'fr' }}
+          </button>
+        } @empty {
+          <p class="muted">Aucun autre créneau.</p>
+        }
+      </div>
+    </div>
+
+    <!-- Carte de réservation (droite) -->
+    <aside class="carte-resa">
+      <p class="prix">{{ c.prix }} €</p>
+      <p class="muted petit">par séance</p>
+
+      @if (seanceAffichee(); as s) {
+        <p class="date">
+          {{ s.dateDebut | date: 'EEE d MMM · HH:mm' : 'UTC' : 'fr' }} – {{ s.dateFin | date: 'HH:mm' : 'UTC' }}
+        </p>
+        <p class="petit"><strong>{{ s.placesRestantes }} places restantes</strong> <span class="muted">sur {{ c.capacite }}</span></p>
+        <div class="barre"><div class="barre-remplie" [style.width.%]="pourcentage(s, c.capacite)"></div></div>
+
+        @if (message()) {
+          <p class="succes">{{ message() }}</p>
+        }
+        @if (erreur()) {
+          <p class="erreur">{{ erreur() }}</p>
+        }
+
+        @if (s.statut === 'ouverte' && s.placesRestantes > 0) {
+          @if (authService.connecte()) {
+            <button class="btn bloc" (click)="reserver(s.id)">Réserver →</button>
+          } @else {
+            <a class="btn bloc" routerLink="/login">Réserver →</a>
+          }
+        } @else {
+          <button class="btn btn-outline bloc" disabled>Complet</button>
+        }
+      } @else {
+        <p class="muted">Aucune séance prévue.</p>
+      }
+
+      <button class="btn btn-outline bloc">♡ Ajouter aux favoris</button>
+    </aside>
+  </div>
+} @else {
+  <p>Chargement...</p>
+}

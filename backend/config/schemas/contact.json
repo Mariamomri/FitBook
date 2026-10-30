@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$commentaire": "Règles de validation du formulaire de contact : champs obligatoires, format de l'email, sujet et profil dans une liste, message de 20 à 1000 caractères, RGPD accepté",
+  "type": "object",
+  "properties": {
+    "sujet": {
+      "type": "string",
+      "enum": ["question", "reservation", "partenaire"]
+    },
+      
+    "nom": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 100,
+      "description": "Le nom complet de la personne"
+    },
+      
+    "email": {
+      "type": "string",
+      "format": "email",
+      "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+      "description": "adresse mail de la personne"
+    },
+      
+    "profil": {
+      "type": "string",
+      "enum": ["sportif", "coach", "salle"]
+    },
+      
+    "specialite": {
+      "type": "string",
+      "maxLength": 100
+    },
+      
+    "message": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 1000
+    },
+      
+    "rgpd": {
+      "type": "boolean",
+      "const": true
+    }
+  },
+  "required": ["sujet", "nom", "email", "profil", "message", "rgpd"],
+  "additionalProperties": false
+}

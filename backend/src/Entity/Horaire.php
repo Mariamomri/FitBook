@@ -6,10 +6,23 @@ use App\Repository\HoraireRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource; //pour exposer l'entité via l'API Platform
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 
 #[ORM\Entity(repositoryClass: HoraireRepository::class)]
 #[ORM\Table(name: 'horaires')]
-#[ApiResource]
+//pour exposer l'entité via l'API Platform
+// Lecture publique ; seuls l'admin et le gestionnaire de la salle gèrent ses horaires
+#[ApiResource(operations: [
+    new GetCollection(),
+    new Get(),
+    new Post(securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getSalle()?.getGestionnaire() == user"),
+    new Patch(security: "is_granted('ROLE_ADMIN') or object.getSalle()?.getGestionnaire() == user", securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getSalle()?.getGestionnaire() == user"),
+    new Delete(security: "is_granted('ROLE_ADMIN') or object.getSalle()?.getGestionnaire() == user")
+])]
 class Horaire
 {
     #[ORM\Id]

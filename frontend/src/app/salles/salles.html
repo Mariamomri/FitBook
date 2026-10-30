@@ -1,0 +1,84 @@
+<!-- Bandeau du haut -->
+<section class="bandeau">
+  <p class="fil"><a routerLink="/">Accueil</a> › <span>Salles</span></p>
+  <h1>Trouvez une salle<br /><span class="vert">près de chez vous.</span></h1>
+  <p class="muted">Filtrez par nom ou par ville, puis réservez directement.</p>
+</section>
+
+<!-- Barre de recherche -->
+<div class="recherche">
+  <div>
+    <label for="recherche">Recherche</label>
+    <input
+      #champ
+      id="recherche"
+      type="text"
+      placeholder="Salle, cours..."
+      [value]="recherche()"
+      (input)="recherche.set(champ.value)"
+    />
+  </div>
+  <div>
+    <label for="ville">Ville</label>
+    <input
+      #champVille
+      id="ville"
+      type="text"
+      placeholder="Bruxelles"
+      [value]="ville()"
+      (input)="ville.set(champVille.value)"
+    />
+  </div>
+  <div>
+    <label for="tri">Trier par</label>
+    <select #choixTri id="tri" [value]="tri()" (change)="tri.set(choixTri.value)">
+      <option value="nom">Nom</option>
+      <option value="capacite">Capacité</option>
+    </select>
+  </div>
+</div>
+
+<div class="mise-en-page">
+  <!-- Liste des salles (gauche) -->
+  <section>
+    <p class="compteur">
+      <span class="vert">{{ sallesFiltrees().length }} salles</span> trouvées
+    </p>
+
+    @for (salle of sallesFiltrees(); track salle.id; let numero = $index) {
+      <article class="ligne" [class.active]="salle === salleSurCarte()" (click)="salleChoisie.set(salle)">
+        <!-- Emplacement de la photo, avec le numéro de la salle -->
+        <div class="photo">
+          <img [src]="photo(numero)" [alt]="salle.nom" />
+          <span class="numero">{{ numero + 1 }}</span>
+        </div>
+
+        <div class="infos">
+          <h3>{{ salle.nom }}</h3>
+          <p class="muted">{{ salle.adresse }}, {{ salle.codePostal }} {{ salle.ville }}</p>
+          <p class="muted">{{ salle.capacite }} personnes · {{ salle.telephone }}</p>
+
+          <!-- equipements peut être vide (nullable dans Symfony) -->
+          @if (salle.equipements) {
+            <p class="equipements">{{ salle.equipements }}</p>
+          }
+          <span class="ouvert">● Ouvert</span>
+        </div>
+
+        <div class="droite">
+          <a class="btn" routerLink="/activites" [queryParams]="{ quoi: salle.nom }">Voir la salle</a>
+        </div>
+      </article>
+    } @empty {
+      <p class="muted">Aucune salle trouvée.</p>
+    }
+  </section>
+
+  <!-- Carte (droite) : montre la salle cliquée dans la liste -->
+  <aside class="carte">
+    @if (salleSurCarte(); as salle) {
+      <p class="legende"><span class="vert">{{ salle.nom }}</span> · {{ salle.ville }}</p>
+    }
+    <iframe [src]="carteUrl()" title="Plan de la salle" loading="lazy"></iframe>
+  </aside>
+</div>

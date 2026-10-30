@@ -1,0 +1,173 @@
+<!-- Section avec la vidéo -->
+<section class="hero">
+  <video
+    class="hero-video"
+    src="videos/hero-accueil.mp4"
+    autoplay
+    loop
+    [muted]="true"
+    playsinline
+  ></video>
+  <span class="points"></span>
+
+  <div class="hero-contenu">
+    <span class="etiquette">Le sport, près de chez vous</span>
+    <h1>Trouvez votre lieu.<br /><span class="vert">Gardez l'élan.</span></h1>
+    <p class="intro">
+      Salles, cours et coachs à Bruxelles. Choisissez votre séance, réservez en 30 secondes.
+    </p>
+
+    <!-- Barre de recherche -->
+    <form class="recherche" [formGroup]="rechercheForm" (ngSubmit)="rechercher()">
+      <div class="recherche-champ">
+        <label for="quoi">Quoi ?</label>
+        <input
+          id="quoi"
+          type="text"
+          formControlName="quoi"
+          placeholder="Activité, salle, coach..."
+        />
+      </div>
+      <div class="recherche-champ">
+        <label for="ou">Où ?</label>
+        <input id="ou" type="text" formControlName="ou" placeholder="Bruxelles" />
+      </div>
+      <div class="recherche-champ">
+        <label for="quand">Quand ?</label>
+        <input id="quand" type="date" formControlName="quand" />
+      </div>
+      <button type="submit" class="btn">Rechercher →</button>
+    </form>
+
+    <!-- Chiffres -->
+    <div class="chiffres">
+      <p>
+        <strong>{{ salles().length }}</strong> salles partenaires
+      </p>
+      <p>
+        <strong>{{ seances().length }}</strong> séances
+      </p>
+      <p>
+        <strong>{{ prochainesSeances().length }}+</strong> à venir
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Bande défilante -->
+<div class="bande">
+  <div class="bande-texte">
+    @for (tour of [1, 2]; track tour) {
+      @for (activite of activitesDefilantes; track activite) {
+        <span>{{ activite }}</span
+        ><span class="etoile">✦</span>
+      }
+    }
+  </div>
+</div>
+
+<!-- Activités à venir -->
+<section class="section">
+  <div class="section-titre">
+    <div>
+      <p class="eyebrow">— Cours & séances</p>
+      <h2>Activités à venir</h2>
+    </div>
+    <a routerLink="/activites">Voir tout →</a>
+  </div>
+
+  <div class="grille-4">
+    @for (seance of prochainesSeances(); track seance.id) {
+      <article class="carte">
+        <div class="carte-image">
+          <span class="tag">{{ seance.activiteNom }}</span>
+          <span class="prix">{{ seance.prix }}€</span>
+        </div>
+        <div class="carte-corps">
+          <h3>{{ seance.coursTitre }}</h3>
+          <p class="muted">{{ seance.salleNom }} · {{ seance.ville }}</p>
+          <!-- 'UTC' : afficher l'heure enregistrée en base sans décalage horaire -->
+          <p class="muted">{{ seance.dateDebut | date: 'EEE d MMM · HH:mm' : 'UTC' : 'fr' }}</p>
+        </div>
+        <div class="carte-pied">
+          <span class="places">{{ seance.placesRestantes }} places restantes</span>
+          <a class="btn petit-btn" [routerLink]="['/activites', seance.coursId]">Réserver</a>
+        </div>
+      </article>
+    } @empty {
+      <p class="muted">Aucune séance à venir.</p>
+    }
+  </div>
+</section>
+
+<!-- Salles populaires -->
+<section class="section">
+  <div class="section-titre">
+    <div>
+      <p class="eyebrow">— Où s'entraîner</p>
+      <h2>Salles populaires</h2>
+    </div>
+    <a routerLink="/salles">Voir toutes les salles →</a>
+  </div>
+
+  @if (salleVedette(); as vedette) {
+    <div class="salles">
+      <article class="salle-vedette">
+        <span class="tag">★ Top de la semaine</span>
+        <h3>{{ vedette.nom }}</h3>
+        <p class="muted">{{ vedette.ville }} · {{ vedette.equipements }}</p>
+        <a class="btn petit-btn" routerLink="/salles">Voir la salle</a>
+      </article>
+
+      <div class="salles-petites">
+        @for (salle of autresSalles(); track salle.id) {
+          <article class="salle-petite">
+            <h3>{{ salle.nom }}</h3>
+            <p class="muted">{{ salle.ville }}</p>
+            <a routerLink="/salles">→</a>
+          </article>
+        }
+      </div>
+    </div>
+  }
+</section>
+
+<!-- Coachs -->
+<section class="section coachs">
+  <!-- Visuel : rond vert, points et coach détouré qui dépasse du rond -->
+  <div class="coachs-visuel">
+    <span class="coachs-points"></span>
+    <span class="coachs-rond"></span>
+    <img class="coachs-photo" src="img/coach-detoure.webp" alt="Coach FitBook" />
+    <i class="fa-solid fa-star coachs-etoile"></i>
+    <div class="coachs-badge">
+      <strong>Coachs certifiés</strong>
+      <span>Force · Cardio · Yoga</span>
+    </div>
+  </div>
+
+  <div>
+    <p class="eyebrow">— Nos coachs</p>
+    <h2>Des coachs qui<br />vous poussent <span class="vert">plus loin.</span></h2>
+    <p class="muted">
+      Des professionnels certifiés, en salle ou en extérieur. Choisissez votre coach selon votre
+      objectif : force, cardio, perte de poids ou remise en forme.
+    </p>
+    <ul class="coachs-liste">
+      <li><i class="fa-solid fa-check"></i> Coachs diplômés et certifiés</li>
+      <li><i class="fa-solid fa-check"></i> Séances en petit groupe</li>
+      <li><i class="fa-solid fa-check"></i> Annulation gratuite avant la séance</li>
+    </ul>
+    <a class="btn" routerLink="/coach">Trouver mon coach →</a>
+  </div>
+</section>
+
+<!-- Appel à l'action -->
+<section class="cta">
+  <h2>Prêt à transpirer ?</h2>
+  @if (authService.connecte()) {
+    <a class="btn btn-noir" routerLink="/activites">Réserver une séance →</a>
+  } @else {
+    <a class="btn btn-noir" routerLink="/inscription">Créer mon compte →</a>
+  }
+</section>

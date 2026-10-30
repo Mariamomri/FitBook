@@ -1,0 +1,135 @@
+<div class="auth">
+  <!-- Panneau de gauche (photo plus tard) -->
+  <div class="auth-visuel">
+    <span class="points"></span>
+    <div class="auth-texte">
+      <span class="rayures"></span>
+      <h1>Rejoins le <span class="vert">mouvement.</span></h1>
+      <p>Un compte, toutes les salles de Bruxelles.</p>
+    </div>
+  </div>
+
+  <!-- Formulaire -->
+  <div class="auth-form">
+    <span class="etiquette">Nouveau membre</span>
+    <h1>Créer un compte</h1>
+    <p class="muted petit">Rejoins FitBook pour réserver tes séances de sport.</p>
+
+    <form [formGroup]="inscriptionForm" (ngSubmit)="inscription()">
+      <!-- Photo de profil (aperçu seulement pour l'instant) -->
+      <label>Photo de profil (facultatif)</label>
+      <div class="photo">
+        <span class="photo-rond">
+          @if (apercuPhoto()) {
+            <img [src]="apercuPhoto()" alt="Aperçu de la photo de profil" />
+          } @else {
+            +
+          }
+        </span>
+        <div>
+          <label for="photo" class="btn btn-outline petit-btn">Choisir un fichier</label>
+          <input id="photo" type="file" accept="image/png, image/jpeg" (change)="choisirPhoto($event)" hidden />
+          <p class="muted mini">PNG, JPG, JPEG · 2 Mo max · modifiable plus tard</p>
+        </div>
+      </div>
+
+      <!-- Prénom et nom sur la même ligne -->
+      <div class="deux-colonnes">
+        <div>
+          <label for="firstname">Prénom</label>
+          <input id="firstname" type="text" formControlName="firstname" placeholder="Mariam" />
+          @if (inscriptionForm.controls.firstname.touched && inscriptionForm.controls.firstname.invalid) {
+            <p class="champ-erreur">2 caractères minimum</p>
+          }
+        </div>
+        <div>
+          <label for="lastname">Nom</label>
+          <input id="lastname" type="text" formControlName="lastname" placeholder="Omri" />
+          @if (inscriptionForm.controls.lastname.touched && inscriptionForm.controls.lastname.invalid) {
+            <p class="champ-erreur">2 caractères minimum</p>
+          }
+        </div>
+      </div>
+
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" placeholder="mariam@exemple.be" />
+      @if (inscriptionForm.controls.email.touched && inscriptionForm.controls.email.invalid) {
+        <p class="champ-erreur">Email invalide</p>
+      }
+
+      <label for="plainPassword">Mot de passe</label>
+      <div class="champ-mdp">
+        <input id="plainPassword" [type]="voirMotDePasse() ? 'text' : 'password'" formControlName="plainPassword" />
+        <button type="button" class="oeil" (click)="voirMotDePasse.set(!voirMotDePasse())" aria-label="Afficher le mot de passe">
+          <i class="fa-solid" [class.fa-eye]="!voirMotDePasse()" [class.fa-eye-slash]="voirMotDePasse()"></i>
+        </button>
+      </div>
+      <!-- Barre de force du mot de passe (4 segments) -->
+      <div class="force">
+        @for (n of [1, 2, 3, 4]; track n) {
+          <span [class.rempli]="force() >= n"></span>
+        }
+      </div>
+      <p class="muted mini">
+        @if (libelleForce()) { {{ libelleForce() }} · }8 caractères min., 1 majuscule, 1 chiffre
+      </p>
+      @if (inscriptionForm.controls.plainPassword.touched && inscriptionForm.controls.plainPassword.invalid) {
+        <p class="champ-erreur">6 caractères minimum</p>
+      }
+
+      <label for="confirmation">Confirmer le mot de passe</label>
+      <div class="champ-mdp">
+        <input id="confirmation" [type]="voirConfirmation() ? 'text' : 'password'" formControlName="confirmation" />
+        <button type="button" class="oeil" (click)="voirConfirmation.set(!voirConfirmation())" aria-label="Afficher la confirmation">
+          <i class="fa-solid" [class.fa-eye]="!voirConfirmation()" [class.fa-eye-slash]="voirConfirmation()"></i>
+        </button>
+      </div>
+      @if (inscriptionForm.controls.confirmation.touched && inscriptionForm.hasError('differents')) {
+        <p class="champ-erreur">Les mots de passe ne sont pas identiques</p>
+      }
+
+      <!-- Choix de la couleur du site -->
+      <label>Couleur du site</label>
+      <div class="couleurs">
+        @for (couleur of couleurs; track couleur.nom) {
+          <label class="couleur" [class.choisie]="inscriptionForm.value.accentColor === couleur.nom">
+            <input type="radio" formControlName="accentColor" [value]="couleur.nom" />
+            <span class="pastille" [style.background]="couleur.code">
+              @if (inscriptionForm.value.accentColor === couleur.nom) {
+                <i class="fa-solid fa-check"></i>
+              }
+            </span>
+            {{ couleur.libelle }}
+          </label>
+        }
+      </div>
+      <p class="muted mini">La couleur choisie s'applique aux boutons, liens et accents du site.</p>
+
+      <label class="case">
+        <input type="checkbox" formControlName="cgu" />
+        <span>J'accepte les <a href="#">CGU</a> et la <a href="#">politique de confidentialité (RGPD)</a></span>
+      </label>
+      @if (inscriptionForm.controls.cgu.touched && inscriptionForm.controls.cgu.invalid) {
+        <p class="champ-erreur">Vous devez accepter les conditions</p>
+      }
+
+      @if (erreur()) {
+        <p class="alerte">⚠ {{ erreur() }}</p>
+      }
+      @if (succes()) {
+        <p class="alerte-ok">{{ succes() }}</p>
+      }
+
+      <button type="submit" class="btn bloc">Créer mon compte →</button>
+    </form>
+
+    <p class="muted centre petit">Déjà un compte ? <a routerLink="/login">Se connecter</a></p>
+
+    <p class="info">
+      <i class="fa-solid fa-envelope"></i>
+      Un email de confirmation sera envoyé. Le compte est activé après clic sur le lien.
+    </p>
+
+    <p class="fleches">»»»»</p>
+  </div>
+</div>
