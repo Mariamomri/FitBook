@@ -1,0 +1,73 @@
+/* Bandeau du haut */
+.bandeau {
+  padding: 2rem 0 2.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+.bandeau h1 { font-size: 3.5rem; margin: 0.4rem 0; text-transform: uppercase; }
+.vert { color: var(--accent); }
+
+/* Formulaire à gauche, informations à droite */
+.contact {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+@media (min-width: 900px) {
+  .contact { grid-template-columns: 2fr 1fr; }
+}
+
+/* Encadrés */
+.carte {
+  padding: 1.5rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+aside { display: flex; flex-direction: column; gap: 1.5rem; }
+aside p { font-size: 0.85rem; display: flex; gap: 0.7rem; align-items: center; }
+.partenaire { border-left: 3px solid var(--accent); }
+.partenaire p { display: block; }
+
+/* Nom et email côte à côte */
+.deux-colonnes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0 1rem;
+}
+@media (min-width: 600px) {
+  .deux-colonnes { grid-template-columns: 1fr 1fr; }
+}
+
+/* La zone de texte peut être agrandie seulement en hauteur */
+textarea { resize: vertical; }
+
+/* Choix du profil */
+.profils {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+.profil {
+  margin: 0;
+  padding: 0.7rem;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.profil input { display: none; }
+.profil.choisi { border-color: var(--accent); color: var(--accent); }
+
+/* Case RGPD */
+.case {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.2rem;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+.mini { font-size: 0.7rem; margin: 0.3rem 0 0; text-align: right; }

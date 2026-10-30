@@ -12,6 +12,7 @@ import { Dashboard } from './dashboard/dashboard';
 import { authGuard } from './auth/auth-guard';
 import { Seances } from './seances/seances';
 import { CoursDetail } from './cours/cours-detail/cours-detail';
+import { Contact } from './contact/contact';
 
 export const routes: Routes = [
   { path: '', component: Accueil },
@@ -23,6 +24,7 @@ export const routes: Routes = [
   { path: 'cours', component: Cours },
   { path: 'coach', component: Coach },
   { path: 'seances', component: Seances },
+  { path: 'contact', component: Contact },
   { path: 'reservations', component: Reservations, canActivate: [authGuard] },
   { path: 'profil', component: Profil, canActivate: [authGuard] },
   { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },

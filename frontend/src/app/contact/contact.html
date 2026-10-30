@@ -1,0 +1,110 @@
+<!-- Bandeau du haut -->
+<section class="bandeau">
+  <span class="etiquette">Une question ?</span>
+  <h1>Contactez-<span class="vert">nous</span></h1>
+  <p class="muted">Sportif, coach ou salle : notre équipe vous répond sous 48 heures.</p>
+</section>
+
+<div class="contact">
+  <!-- Formulaire -->
+  <form [formGroup]="contactForm" (ngSubmit)="envoyer()" class="carte">
+    <label for="sujet">Sujet</label>
+    <select id="sujet" formControlName="sujet">
+      <option value="question">Question générale</option>
+      <option value="reservation">Problème de réservation</option>
+      <option value="partenaire">Devenir partenaire</option>
+    </select>
+
+    <div class="deux-colonnes">
+      <div>
+        <label for="nom">Nom complet</label>
+        <input id="nom" type="text" formControlName="nom" placeholder="Mariam Omri" />
+        @if (invalide('nom')) {
+          <p class="champ-erreur">Commence par une majuscule, lettres uniquement</p>
+        }
+        @if (erreursServeur()['nom']) {
+          <p class="champ-erreur">{{ erreursServeur()['nom'] }}</p>
+        }
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" placeholder="mariam@exemple.be" />
+        @if (invalide('email')) {
+          <p class="champ-erreur">Email invalide</p>
+        }
+        @if (erreursServeur()['email']) {
+          <p class="champ-erreur">{{ erreursServeur()['email'] }}</p>
+        }
+      </div>
+    </div>
+
+    <!-- Profil : boutons radio -->
+    <label>Vous êtes</label>
+    <div class="profils">
+      <label class="profil" [class.choisi]="contactForm.value.profil === 'sportif'">
+        <input type="radio" formControlName="profil" value="sportif" /> Sportif
+      </label>
+      <label class="profil" [class.choisi]="contactForm.value.profil === 'coach'">
+        <input type="radio" formControlName="profil" value="coach" /> Coach
+      </label>
+      <label class="profil" [class.choisi]="contactForm.value.profil === 'salle'">
+        <input type="radio" formControlName="profil" value="salle" /> Salle
+      </label>
+    </div>
+
+    <!-- Spécialité : seulement pour un coach ou une salle -->
+    @if (contactForm.value.profil !== 'sportif') {
+      <label for="specialite">Spécialité (facultatif)</label>
+      <input id="specialite" type="text" formControlName="specialite" placeholder="Yoga, CrossFit, boxe..." />
+      @if (invalide('specialite')) {
+        <p class="champ-erreur">100 caractères maximum</p>
+      }
+    }
+
+    <label for="message">Message</label>
+    <textarea id="message" rows="6" formControlName="message" placeholder="Votre message (20 caractères minimum)"></textarea>
+    <p class="muted mini">{{ contactForm.value.message?.length ?? 0 }} / 1000</p>
+    @if (invalide('message')) {
+      <p class="champ-erreur">Entre 20 et 1000 caractères</p>
+    }
+    @if (erreursServeur()['message']) {
+      <p class="champ-erreur">{{ erreursServeur()['message'] }}</p>
+    }
+
+    <label class="case">
+      <input type="checkbox" formControlName="rgpd" />
+      <span>J'accepte que mes données soient utilisées pour répondre à ma demande (RGPD)</span>
+    </label>
+    @if (invalide('rgpd') || erreursServeur()['rgpd']) {
+      <p class="champ-erreur">Vous devez accepter le traitement de vos données</p>
+    }
+
+    @if (erreursServeur()['formulaire']) {
+      <p class="champ-erreur">{{ erreursServeur()['formulaire'] }}</p>
+    }
+    @if (erreur()) {
+      <p class="alerte">⚠ {{ erreur() }}</p>
+    }
+    @if (succes()) {
+      <p class="alerte-ok">{{ succes() }}</p>
+    }
+
+    <button type="submit" class="btn bloc">Envoyer le message →</button>
+  </form>
+
+  <!-- Colonne de droite : coordonnées + bloc partenaire -->
+  <aside>
+    <div class="carte">
+      <h3>Nos coordonnées</h3>
+      <p><i class="fa-solid fa-envelope vert"></i> contact&#64;fitbook.be</p>
+      <p><i class="fa-solid fa-location-dot vert"></i> Bruxelles, Belgique</p>
+      <p><i class="fa-solid fa-clock vert"></i> Lundi au vendredi, 9h - 18h</p>
+    </div>
+
+    <div class="carte partenaire">
+      <span class="etiquette">Partenaires</span>
+      <h3>Vous êtes une salle ou un coach ?</h3>
+      <p class="muted">Rejoignez FitBook et remplissez vos cours. Choisissez « Devenir partenaire » dans le sujet du formulaire.</p>
+    </div>
+  </aside>
+</div>
