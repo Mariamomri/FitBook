@@ -74,6 +74,21 @@ export class Activites implements OnInit {
     );
   }
 
+  // Photo de la séance selon son activité (images dans public/img)
+  photoActivite(nom: string): string {
+    const photos: Record<string, string> = {
+      musculation: 'img/barbell.jpg',
+      'hatha yoga': 'img/yoga.jpg',
+      yoga: 'img/yoga.jpg',
+      pilates: 'img/stretch.jpg',
+      crossfit: 'img/crossfit.jpg',
+      boxe: 'img/boxing.jpg',
+      zumba: 'img/cardio.jpg',
+    };
+    // toLowerCase : "Hatha Yoga" et "Hatha yoga" donnent la même photo
+    return photos[nom.toLowerCase()] ?? 'img/gym1.jpg';
+  }
+
   // Coche / décoche une activité dans les filtres
   basculerActivite(nom: string): void {
     if (this.activitesChoisies().includes(nom)) {

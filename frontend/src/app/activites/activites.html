@@ -75,8 +75,7 @@
 
     @for (seance of seancesFiltrees(); track seance.id) {
       <article class="ligne">
-        <!-- Emplacement de l'image (plus tard) -->
-        <div class="ligne-image"></div>
+        <img class="ligne-image" [src]="photoActivite(seance.activiteNom)" [alt]="seance.activiteNom" />
 
         <div class="ligne-infos">
           <h3>
