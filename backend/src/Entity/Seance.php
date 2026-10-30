@@ -7,12 +7,25 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource; //pour exposer l'entité via l'API Platform
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: SeanceRepository::class)]
 #[ORM\Table(name: 'seances')]
-#[ApiResource]
+//pour exposer l'entité via l'API Platform
+// Lecture publique ; l'admin, le gestionnaire de la salle du cours et le coach du cours gèrent la séance
+#[ApiResource(operations: [
+    new GetCollection(),
+    new Get(),
+    new Post(securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getCours()?.getSalle()?.getGestionnaire() == user or object.getCours()?.getCoach()?.getUser() == user"),
+    new Patch(security: "is_granted('ROLE_ADMIN') or object.getCours()?.getSalle()?.getGestionnaire() == user or object.getCours()?.getCoach()?.getUser() == user", securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getCours()?.getSalle()?.getGestionnaire() == user or object.getCours()?.getCoach()?.getUser() == user"),
+    new Delete(security: "is_granted('ROLE_ADMIN') or object.getCours()?.getSalle()?.getGestionnaire() == user or object.getCours()?.getCoach()?.getUser() == user")
+])]
 #[ApiFilter(SearchFilter::class, properties: ['cours' => 'exact'])] // filtre : /api/seances?cours=2001
 class Seance
 {
