@@ -1056,17 +1056,11 @@
           }
         },
         "url": {
-          "raw": "https://127.0.0.1:8000/api/login_check",
-          "protocol": "https",
+          "raw": "{{url}}api/login_check",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{url}}api"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "login_check"
           ]
         }
@@ -1100,17 +1094,11 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "https://127.0.0.1:8000/api/me/reservations",
-          "protocol": "https",
+          "raw": "{{url}}api/me/reservations",
           "host": [
-            "127",
-            "0",
-            "0",
-            "1"
+            "{{url}}api"
           ],
-          "port": "8000",
           "path": [
-            "api",
             "me",
             "reservations"
           ]
