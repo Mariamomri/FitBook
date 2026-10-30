@@ -14,4 +14,9 @@ export class ReservationService {
   getMesReservations(): Observable<ReservationInterface[]> {
     return this.http.get<ReservationInterface[]>(this.api);
   }
+
+  // Annule une de mes réservations : Symfony passe le statut à annulee
+  annuler(id: number): Observable<{ message: string; statut: string }> {
+    return this.http.patch<{ message: string; statut: string }>(this.api + '/' + id + '/annuler', {});
+  }
 }

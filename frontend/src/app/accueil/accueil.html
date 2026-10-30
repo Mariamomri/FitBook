@@ -18,24 +18,23 @@
     </p>
 
     <!-- Barre de recherche -->
-    <form class="recherche" (ngSubmit)="rechercher()">
+    <form class="recherche" [formGroup]="rechercheForm" (ngSubmit)="rechercher()">
       <div class="recherche-champ">
         <label for="quoi">Quoi ?</label>
         <input
           id="quoi"
           type="text"
-          name="quoi"
-          [(ngModel)]="quoi"
+          formControlName="quoi"
           placeholder="Activité, salle, coach..."
         />
       </div>
       <div class="recherche-champ">
         <label for="ou">Où ?</label>
-        <input id="ou" type="text" name="ou" [(ngModel)]="ou" placeholder="Bruxelles" />
+        <input id="ou" type="text" formControlName="ou" placeholder="Bruxelles" />
       </div>
       <div class="recherche-champ">
         <label for="quand">Quand ?</label>
-        <input id="quand" type="date" name="quand" [(ngModel)]="quand" />
+        <input id="quand" type="date" formControlName="quand" />
       </div>
       <button type="submit" class="btn">Rechercher →</button>
     </form>
@@ -135,7 +134,18 @@
 
 <!-- Coachs -->
 <section class="section coachs">
-  <div class="coachs-rond"><i class="fa-solid fa-dumbbell"></i></div>
+  <!-- Visuel : rond vert, points et coach détouré qui dépasse du rond -->
+  <div class="coachs-visuel">
+    <span class="coachs-points"></span>
+    <span class="coachs-rond"></span>
+    <img class="coachs-photo" src="img/coach-detoure.webp" alt="Coach FitBook" />
+    <i class="fa-solid fa-star coachs-etoile"></i>
+    <div class="coachs-badge">
+      <strong>Coachs certifiés</strong>
+      <span>Force · Cardio · Yoga</span>
+    </div>
+  </div>
+
   <div>
     <p class="eyebrow">— Nos coachs</p>
     <h2>Des coachs qui<br />vous poussent <span class="vert">plus loin.</span></h2>
@@ -143,7 +153,12 @@
       Des professionnels certifiés, en salle ou en extérieur. Choisissez votre coach selon votre
       objectif : force, cardio, perte de poids ou remise en forme.
     </p>
-    <a class="btn" routerLink="/coach">Voir les coachs →</a>
+    <ul class="coachs-liste">
+      <li><i class="fa-solid fa-check"></i> Coachs diplômés et certifiés</li>
+      <li><i class="fa-solid fa-check"></i> Séances en petit groupe</li>
+      <li><i class="fa-solid fa-check"></i> Annulation gratuite avant la séance</li>
+    </ul>
+    <a class="btn" routerLink="/coach">Trouver mon coach →</a>
   </div>
 </section>
 

@@ -1,6 +1,5 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SeanceService } from '../seances/seance-service';
 import { SeanceInterface } from '../seances/seance-interface';
@@ -10,7 +9,7 @@ import { AuthService } from '../auth/auth-service';
 
 @Component({
   selector: 'app-activites',
-  imports: [DatePipe, FormsModule, RouterLink],
+  imports: [DatePipe, RouterLink],
   templateUrl: './activites.html',
   styleUrl: './activites.css',
 })
@@ -43,7 +42,7 @@ export class Activites implements OnInit {
         s.ville.toLowerCase().includes(this.ville().toLowerCase()) &&
         (!this.date() || s.dateDebut.startsWith(this.date())) &&
         Number(s.prix) <= this.prixMax() &&
-        (!this.placesLibres() || s.placesRestantes > 0),
+        (!this.placesLibres() || (s.statut === 'ouverte' && s.placesRestantes > 0)),
     ),
   );
 
@@ -73,6 +72,21 @@ export class Activites implements OnInit {
     return [seance.coursTitre, seance.activiteNom, seance.salleNom, seance.coachNom ?? ''].some((valeur) =>
       valeur.toLowerCase().includes(texte),
     );
+  }
+
+  // Photo de la séance selon son activité (images dans public/img)
+  photoActivite(nom: string): string {
+    const photos: Record<string, string> = {
+      musculation: 'img/barbell.jpg',
+      'hatha yoga': 'img/yoga.jpg',
+      yoga: 'img/yoga.jpg',
+      pilates: 'img/stretch.jpg',
+      crossfit: 'img/crossfit.jpg',
+      boxe: 'img/boxing.jpg',
+      zumba: 'img/cardio.jpg',
+    };
+    // toLowerCase : "Hatha Yoga" et "Hatha yoga" donnent la même photo
+    return photos[nom.toLowerCase()] ?? 'img/gym1.jpg';
   }
 
   // Coche / décoche une activité dans les filtres

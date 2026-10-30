@@ -1,8 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
+/* Tailwind sans le reset (preflight) : le CSS existant du site ne change pas */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* Couleurs du site utilisables avec @apply (ex. bg-carte, text-accent) */
+@theme inline {
+  --color-accent: var(--accent);
+  --color-sur-accent: var(--on-accent);
+  --color-fond: var(--bg);
+  --color-nav: var(--nav);
+  --color-carte: var(--card);
+  --color-bordure: var(--border);
+  --color-texte: var(--text);
+  --color-gris: var(--muted);
+  --color-danger: var(--danger);
+  --font-titre: var(--font-title);
+  --font-corps: var(--font-body);
+}
+
 /* Styles globaux de FitBook : variables de couleur, polices, boutons.
    Chaque composant a ensuite son propre fichier CSS. */
 
-/* Variables (valeurs de la maquette) */
+/* Variables*/
 :root {
   --bg: #0f0f11;
   /* fond des pages */
@@ -36,7 +55,7 @@
 }
 
 :root[data-accent='bleu'] {
-  --accent: #2e86de;
+  --accent: cyan;
   --on-accent: #ffffff;
 }
 
@@ -71,7 +90,8 @@ body {
   color: var(--text);
   font-family: var(--font-body);
   line-height: 1.5;
-  overflow-x: hidden; /* évite une barre de défilement horizontale (pages en pleine largeur) */
+  overflow-x: hidden;
+  /* évite une barre de défilement horizontale (pages en pleine largeur) */
 }
 
 a {
@@ -170,6 +190,7 @@ label {
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
+
 input[type='text'],
 input[type='email'],
 input[type='password'],
@@ -185,14 +206,18 @@ textarea {
   font-family: var(--font-body);
   font-size: 0.9rem;
 }
+
 input:focus,
 select:focus,
 textarea:focus {
   outline: none;
   border-color: var(--accent);
 }
+
 input[type='checkbox'],
-input[type='radio'] { accent-color: var(--accent); }
+input[type='radio'] {
+  accent-color: var(--accent);
+}
 
 /* Petit message rouge sous un champ */
 .champ-erreur {
@@ -209,11 +234,13 @@ input[type='radio'] { accent-color: var(--accent); }
   font-size: 0.85rem;
   margin: 1rem 0;
 }
+
 .alerte {
   color: var(--danger);
   background: rgba(255, 92, 92, 0.1);
   border: 1px solid var(--danger);
 }
+
 .alerte-ok {
   color: var(--accent);
   background: rgba(166, 255, 0, 0.08);
