@@ -5,6 +5,7 @@ namespace App\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Entity\Reservation;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
@@ -12,11 +13,15 @@ final class ReservationProcessor implements ProcessorInterface
 {
   public function __construct(
     #[Autowire(service: 'api_platform.doctrine.orm.state.persist_processor')]
-    private ProcessorInterface $persistProcessor
+    private ProcessorInterface $persistProcessor,
+    private Security $security
   ) {}
 
   public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): Reservation
   {
+    // Le propriétaire de la réservation est toujours l'utilisateur connecté
+    $data->setUser($this->security->getUser());
+
     $seance = $data->getSeance();
     $capacite = $seance->getCours()->getCapacite();
 
