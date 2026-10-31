@@ -3,7 +3,9 @@
   padding: 2.5rem 2rem;
   margin-bottom: 1.5rem;
   border-radius: 10px;
-  background: linear-gradient(90deg, #151518 40%, #3a2a30);
+  background:
+    linear-gradient(90deg, #151518 40%, rgba(21, 21, 24, 0.4)),
+    url('/img/cardio.jpg') center / cover;
 }
 
 .bandeau h1 {
@@ -96,4 +98,4 @@ tr:last-child td {
 .vide {
   text-align: center;
   padding: 2rem;
-}
+}
