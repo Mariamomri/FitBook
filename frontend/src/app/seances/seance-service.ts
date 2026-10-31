@@ -21,9 +21,19 @@ export class SeanceService {
   }
 
   // Réserver : on envoie seulement la séance, Symfony ajoute l'utilisateur connecté
-  reserver(idSeance: number): Observable<unknown> {
+  // Symfony renvoie la réservation créée (avec son numéro, ex. FB-2026-000123)
+  reserver(idSeance: number): Observable<{ id: number; numero: string }> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/ld+json' });
-    return this.http.post(`${this.api}/reservations`, { seance: `/api/seances/${idSeance}` }, { headers });
+    return this.http.post<{ id: number; numero: string }>(
+      `${this.api}/reservations`,
+      { seance: `/api/seances/${idSeance}` },
+      { headers },
+    );
+  }
+
+  // Une séance par son id (page de confirmation)
+  getUneSeance(id: number): Observable<SeanceInterface> {
+    return this.http.get<SeanceInterface>(`${this.api}/seances/${id}`);
   }
 
   // Ajouter une séance à un cours (admin, gestionnaire de la salle ou coach du cours)

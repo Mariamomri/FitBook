@@ -1,0 +1,57 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+/* Fond avec photo, comme les autres pages */
+.fond {
+  @apply rounded-[10px] px-6 py-8;
+  background:
+    linear-gradient(180deg, rgba(15, 15, 17, 0.6), #0f0f11 70%),
+    url('/img/gym2.jpg') center top / cover;
+}
+.fil {
+  @apply mb-4 text-xs;
+}
+.fil a {
+  @apply text-gris no-underline;
+}
+.fil span {
+  @apply text-accent;
+}
+
+/* Carte de confirmation */
+.carte {
+  @apply max-w-2xl rounded-[10px] border border-bordure border-t-4 border-t-accent bg-carte p-6;
+}
+.titre {
+  @apply mb-5 flex items-center gap-4;
+}
+.coche {
+  @apply flex h-12 w-12 items-center justify-center rounded-full bg-accent text-xl text-sur-accent;
+}
+.titre h1 {
+  @apply m-0 text-4xl;
+}
+.numero {
+  @apply m-0 text-sm font-bold text-accent;
+}
+.details {
+  @apply my-4 border-t border-bordure pt-3 text-sm;
+}
+.details div {
+  @apply flex justify-between gap-4 py-1;
+}
+.details dt {
+  @apply text-gris;
+}
+.details dd {
+  @apply m-0 text-right font-semibold;
+}
+.info {
+  @apply rounded-md border-l-4 border-accent bg-nav px-4 py-3 text-sm;
+}
+.boutons {
+  @apply mt-5 flex flex-wrap gap-3;
+}
+.petit {
+  @apply mt-4 text-xs;
+}

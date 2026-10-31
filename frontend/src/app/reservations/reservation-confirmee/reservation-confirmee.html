@@ -1,0 +1,39 @@
+<section class="fond">
+  <p class="fil"><a routerLink="/">Accueil</a> › <a routerLink="/activites">Activités</a> › <span>Confirmation</span></p>
+
+  <article class="carte">
+    <div class="titre">
+      <span class="coche"><i class="fa-solid fa-check"></i></span>
+      <div>
+        <h1>Réservation confirmée !</h1>
+        <p class="numero">N° {{ numero }}</p>
+      </div>
+    </div>
+
+    @if (seance(); as s) {
+      <dl class="details">
+        <div><dt>Séance</dt><dd>{{ s.coursTitre }} · {{ s.activiteNom }}</dd></div>
+        @if (s.coachNom) {
+          <div><dt>Coach</dt><dd>{{ s.coachNom }}</dd></div>
+        }
+        <div><dt>Lieu</dt><dd>{{ s.salleNom }} · {{ s.ville }}</dd></div>
+        <!-- 'UTC' : afficher l'heure enregistrée en base sans décalage horaire -->
+        <div>
+          <dt>Date</dt>
+          <dd>{{ s.dateDebut | date: 'EEE d MMM yyyy · HH:mm' : 'UTC' : 'fr' }} – {{ s.dateFin | date: 'HH:mm' : 'UTC' }}</dd>
+        </div>
+        <div><dt>Places</dt><dd>1 place</dd></div>
+        <div><dt>Prix</dt><dd>{{ s.prix }} €</dd></div>
+      </dl>
+    }
+
+    <p class="info"><i class="fa-solid fa-envelope"></i> Un email de confirmation vient de vous être envoyé.</p>
+
+    <div class="boutons">
+      <a class="btn" routerLink="/reservations">Voir mes réservations</a>
+      <a class="btn btn-outline" routerLink="/calendrier"><i class="fa-solid fa-calendar-days"></i> Mon calendrier</a>
+    </div>
+  </article>
+
+  <p class="muted petit">Vous pouvez annuler depuis « Mes réservations » tant que la séance n'a pas commencé : la place est alors libérée.</p>
+</section>

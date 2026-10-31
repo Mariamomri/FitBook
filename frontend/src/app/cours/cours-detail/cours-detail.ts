@@ -1,6 +1,6 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CoursService } from '../cours-service';
 import { CoursInterface } from '../cours-interface';
 import { SeanceService } from '../../seances/seance-service';
@@ -18,6 +18,7 @@ import { AvisInterface } from '../../avis/avis-interface';
 })
 export class CoursDetail implements OnInit {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private coursService = inject(CoursService);
   private seanceService = inject(SeanceService);
   authService = inject(AuthService);
@@ -93,14 +94,19 @@ export class CoursDetail implements OnInit {
     return ((capacite - seance.placesRestantes) / capacite) * 100;
   }
 
+  // "/api/coaches/12" → 12
+  idCoach(lien: string | null | undefined): string {
+    return lien?.split('/').pop() ?? '';
+  }
+
   reserver(idSeance: number): void {
     this.message.set('');
     this.erreur.set('');
 
     this.seanceService.reserver(idSeance).subscribe({
-      next: () => {
-        this.message.set('Réservation confirmée !');
-        this.chargerSeances(); // met à jour les places restantes
+      next: (reponse) => {
+        // On affiche la page de confirmation avec le numéro de réservation
+        this.router.navigate(['/reservation-confirmee'], { queryParams: { numero: reponse.numero, seance: idSeance } });
       },
       error: (err) => {
         // 422 : séance complète ou déjà réservée / 403 : email non confirmé

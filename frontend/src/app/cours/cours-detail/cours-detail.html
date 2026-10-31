@@ -16,7 +16,7 @@
         <div class="carte-coach">
           <span class="avatar">{{ c.coachNom.charAt(0) }}</span>
           <p><strong>{{ c.coachNom }}</strong> · Coach</p>
-          <a routerLink="/coach">Voir le profil →</a>
+          <a [routerLink]="['/coach', idCoach(c.coach)]">Voir le profil →</a>
         </div>
       }
 
