@@ -38,6 +38,21 @@
         <app-gestion-cours [moi]="user" />
       </section>
 
+      <!-- Activités proposées sur FitBook (le gestionnaire peut en ajouter) -->
+      <section class="bloc-carte" id="activites">
+        <h2>Activités</h2>
+        <app-onglet-activites />
+      </section>
+
+      <section class="bloc-carte" id="horaires">
+        <app-gestion-horaires [moi]="user" />
+      </section>
+
+      <!-- Calendrier, séances, capacités et places disponibles -->
+      <section class="bloc-carte" id="calendrier">
+        <app-gestion-seances [moi]="user" />
+      </section>
+
       <!-- Avis publiés sur ses salles -->
       <section class="bloc-carte" id="avis">
         <h2>Avis sur mes salles</h2>

@@ -25,4 +25,20 @@ export class SeanceService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/ld+json' });
     return this.http.post(`${this.api}/reservations`, { seance: `/api/seances/${idSeance}` }, { headers });
   }
+
+  // Ajouter une séance à un cours (admin, gestionnaire de la salle ou coach du cours)
+  creerSeance(seance: { cours: string; dateDebut: string; dateFin: string; statut: string }): Observable<SeanceInterface> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/ld+json' });
+    return this.http.post<SeanceInterface>(`${this.api}/seances`, seance, { headers });
+  }
+
+  // Modifier une séance (par exemple la passer en « annulee »)
+  modifierSeance(id: number, seance: Partial<SeanceInterface>): Observable<SeanceInterface> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/merge-patch+json' });
+    return this.http.patch<SeanceInterface>(`${this.api}/seances/${id}`, seance, { headers });
+  }
+
+  supprimerSeance(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.api}/seances/${id}`);
+  }
 }

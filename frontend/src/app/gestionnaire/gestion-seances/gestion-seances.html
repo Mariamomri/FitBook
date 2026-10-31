@@ -1,0 +1,150 @@
+<div class="titre-bloc">
+  <h2>Calendrier &amp; séances</h2>
+  <button class="btn petit-btn" (click)="formulaireOuvert.set(true)" [disabled]="mesCours().length === 0">
+    + Ajouter une séance
+  </button>
+</div>
+
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
+}
+
+<!-- Nouvelle séance : un cours + une date + un créneau -->
+@if (formulaireOuvert()) {
+  <form class="formulaire" [formGroup]="seanceForm" (ngSubmit)="ajouter()">
+    <h3>Nouvelle séance</h3>
+    <div class="grille-champs">
+      <div class="large">
+        <label for="cours">Cours</label>
+        <select id="cours" formControlName="cours">
+          <option value="">Choisir un cours...</option>
+          @for (unCours of mesCours(); track unCours.id) {
+            <option [value]="'/api/cours/' + unCours.id">
+              {{ unCours.titre }} · {{ unCours.salleNom }} ({{ unCours.capacite }} places)
+            </option>
+          }
+        </select>
+      </div>
+      <div class="large">
+        <label for="date">Date</label>
+        <input id="date" type="date" formControlName="date" />
+      </div>
+      <div>
+        <label for="heureDebut">Début</label>
+        <input id="heureDebut" type="time" formControlName="heureDebut" />
+      </div>
+      <div>
+        <label for="heureFin">Fin</label>
+        <input id="heureFin" type="time" formControlName="heureFin" />
+      </div>
+    </div>
+    <div class="boutons">
+      <button type="submit" class="btn">Ajouter</button>
+      <button type="button" class="btn btn-outline" (click)="formulaireOuvert.set(false)">Annuler</button>
+    </div>
+  </form>
+}
+
+<div class="deux-colonnes">
+  <!-- Calendrier du mois -->
+  <div class="calendrier">
+    <div class="entete">
+      <button class="fleche" (click)="moisPrecedent()" aria-label="Mois précédent">‹</button>
+      <h3>{{ moisAffiche() | date: 'MMMM yyyy' : '' : 'fr' }}</h3>
+      <button class="fleche" (click)="moisSuivant()" aria-label="Mois suivant">›</button>
+    </div>
+    <div class="grille">
+      @for (nom of joursSemaine; track nom) {
+        <span class="nom-jour">{{ nom }}</span>
+      }
+      @for (case of cases(); track $index) {
+        @if (case.jour) {
+          <div class="jour" [class.aujourdhui]="estAujourdhui(case.jour)" [class.occupe]="case.seances.length > 0">
+            {{ case.jour }}
+            @if (case.seances.length > 0) {
+              <span class="point" [title]="case.seances.length + ' séance(s)'"></span>
+            }
+          </div>
+        } @else {
+          <span></span>
+        }
+      }
+    </div>
+    <p class="muted legende"><span class="point"></span> Séance planifiée</p>
+  </div>
+
+  <!-- Liste des séances avec capacité et places disponibles -->
+  <div class="tableau">
+    <table>
+      <thead>
+        <tr>
+          <th>Séance</th>
+          <th>Date</th>
+          <th>Places</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (seance of mesSeances(); track seance.id) {
+          <tr>
+            <td>
+              <strong>{{ seance.coursTitre }}</strong>
+              <span class="detail">{{ seance.salleNom }}{{ seance.coachNom ? ' · ' + seance.coachNom : '' }}</span>
+            </td>
+            <td class="muted">
+              {{ seance.dateDebut | date: 'EEE d MMM · HH:mm' : 'UTC' : 'fr' }}
+            </td>
+            <td>
+              <!-- Places prises / capacité du cours -->
+              <span class="places" [class.complet]="seance.placesRestantes === 0">
+                {{ capacite(seance) - seance.placesRestantes }}/{{ capacite(seance) }}
+              </span>
+            </td>
+            <td>
+              @switch (seance.statut) {
+                @case ('ouverte') {
+                  <span class="statut ok">Ouverte</span>
+                }
+                @case ('annulee') {
+                  <span class="statut ko">Annulée</span>
+                }
+                @default {
+                  <span class="statut attente">{{ seance.statut }}</span>
+                }
+              }
+            </td>
+            <td>
+              <div class="actions">
+                @if (seance.statut === 'ouverte') {
+                  <button class="btn-petit" (click)="annuler(seance)">Annuler</button>
+                }
+                <button class="btn-petit danger" (click)="aSupprimer.set(seance)">Supprimer</button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="muted vide">Aucune séance pour vos cours.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+@if (aSupprimer(); as seance) {
+  <div class="fond-modale" (click)="aSupprimer.set(null)">
+    <div class="modale" (click)="$event.stopPropagation()">
+      <h3>Supprimer cette séance ?</h3>
+      <p class="muted">{{ seance.coursTitre }} et ses réservations seront supprimées définitivement.</p>
+      <div class="boutons">
+        <button class="btn btn-outline" (click)="aSupprimer.set(null)">Annuler</button>
+        <button class="btn bouton-danger" (click)="confirmerSuppression()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+}

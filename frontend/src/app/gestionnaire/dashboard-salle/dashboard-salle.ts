@@ -10,10 +10,13 @@ import { AvisInterface } from '../../avis/avis-interface';
 import { SidebarSportif } from '../../layout/sidebar-sportif/sidebar-sportif';
 import { GestionSalles } from '../gestion-salles/gestion-salles';
 import { GestionCours } from '../gestion-cours/gestion-cours';
+import { GestionHoraires } from '../gestion-horaires/gestion-horaires';
+import { GestionSeances } from '../gestion-seances/gestion-seances';
+import { OngletActivites } from '../../admin/onglet-activites/onglet-activites';
 
 @Component({
   selector: 'app-dashboard-salle',
-  imports: [SidebarSportif, GestionSalles, GestionCours],
+  imports: [SidebarSportif, GestionSalles, GestionCours, GestionHoraires, GestionSeances, OngletActivites],
   templateUrl: './dashboard-salle.html',
   styleUrl: './dashboard-salle.css',
 })

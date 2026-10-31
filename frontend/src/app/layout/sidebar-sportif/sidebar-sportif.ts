@@ -34,7 +34,10 @@ export class SidebarSportif implements OnInit {
   // Liens du gestionnaire : chacun descend vers une partie de sa dashboard (#mes-salles...)
   liensGestionnaire = [
     { fragment: 'mes-salles', libelle: 'Mes salles', icone: 'fa-house' },
-    { fragment: 'cours', libelle: 'Cours & activités', icone: 'fa-list' },
+    { fragment: 'cours', libelle: 'Cours', icone: 'fa-list' },
+    { fragment: 'activites', libelle: 'Activités', icone: 'fa-dumbbell' },
+    { fragment: 'horaires', libelle: 'Horaires', icone: 'fa-clock' },
+    { fragment: 'calendrier', libelle: 'Calendrier & séances', icone: 'fa-calendar-days' },
     { fragment: 'avis', libelle: 'Avis', icone: 'fa-star' },
   ];
 
