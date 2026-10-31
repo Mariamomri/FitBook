@@ -5,7 +5,19 @@
   <p class="alerte-ok">{{ succes() }}</p>
 }
 
-<!-- Recherche, filtres et ajout -->
+<!-- Une liste par rôle : sportifs, coachs, gestionnaires de salle, admins -->
+<div class="filtres-role">
+  <button [class.actif]="roleFiltre() === 'tous'" (click)="roleFiltre.set('tous')">
+    Tous <span>{{ nombreParRole('tous') }}</span>
+  </button>
+  @for (role of adminService.roles; track role.valeur) {
+    <button [class.actif]="roleFiltre() === role.valeur" (click)="roleFiltre.set(role.valeur)">
+      {{ role.libelle }}s <span>{{ nombreParRole(role.valeur) }}</span>
+    </button>
+  }
+</div>
+
+<!-- Recherche, statut et ajout -->
 <div class="barre">
   <input
     #champ
@@ -14,12 +26,6 @@
     [value]="recherche()"
     (input)="recherche.set(champ.value)"
   />
-  <select #choixRole [value]="roleFiltre()" (change)="roleFiltre.set(choixRole.value)">
-    <option value="tous">Rôle : Tous</option>
-    @for (role of adminService.roles; track role.valeur) {
-      <option [value]="role.valeur">{{ role.libelle }}</option>
-    }
-  </select>
   <select #choixStatut [value]="statutFiltre()" (change)="statutFiltre.set(choixStatut.value)">
     <option value="tous">Statut : Tous</option>
     <option value="actif">Actif</option>

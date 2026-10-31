@@ -39,6 +39,14 @@ export class OngletUtilisateurs implements OnInit {
     );
   });
 
+  // Nombre de comptes par rôle (affiché sur les boutons de filtre)
+  nombreParRole(role: string): number {
+    if (role === 'tous') {
+      return this.utilisateurs().length;
+    }
+    return this.utilisateurs().filter((u) => this.adminService.roleDe(u) === role).length;
+  }
+
   ngOnInit(): void {
     this.adminService.liste<UserInterface>('users').subscribe({
       next: (reponse) => this.utilisateurs.set(reponse.member),

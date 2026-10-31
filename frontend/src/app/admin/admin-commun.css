@@ -97,3 +97,17 @@ td {
 .etoiles {
   @apply whitespace-nowrap text-yellow-400;
 }
+
+/* Boutons de filtre par rôle avec le nombre de comptes */
+.filtres-role {
+  @apply mb-3 flex flex-wrap gap-2;
+}
+.filtres-role button {
+  @apply flex cursor-pointer items-center gap-2 rounded-md border border-bordure bg-nav px-3 py-1.5 text-xs font-bold text-texte;
+}
+.filtres-role button span {
+  @apply rounded-full bg-carte px-2 text-gris;
+}
+.filtres-role button.actif {
+  @apply border-accent text-accent;
+}
