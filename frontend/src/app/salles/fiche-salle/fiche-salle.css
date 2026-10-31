@@ -79,34 +79,19 @@ h2 {
 .coach img {
   @apply h-16 w-16 rounded-full border-2 border-accent object-cover object-top;
 }
+.initiales {
+  @apply flex h-16 w-16 items-center justify-center rounded-full bg-carte font-titre text-xl font-black text-accent;
+}
 
-/* Avis */
-.resume-avis {
-  @apply mb-4 flex items-center gap-6;
+/* Ouvert / fermé aujourd'hui */
+.etat {
+  @apply mt-2 inline-block rounded-full px-2 py-0.5 text-xs font-bold;
 }
-.grosse-note {
-  @apply flex flex-col;
+.etat.ouvert {
+  @apply bg-accent/15 text-accent;
 }
-.grosse-note strong {
-  @apply font-titre text-6xl font-black italic leading-none;
-}
-.barres {
-  @apply flex-1;
-}
-.barre-note {
-  @apply flex items-center gap-2 text-xs text-gris;
-}
-.barre {
-  @apply h-1.5 flex-1 rounded bg-bordure;
-}
-.barre div {
-  @apply h-full rounded bg-accent;
-}
-.avis {
-  @apply border-b border-bordure py-3;
-}
-.avis p {
-  @apply mt-1 mb-0 text-sm;
+.etat.ferme {
+  @apply bg-danger/15 text-danger;
 }
 
 /* Colonne de droite */

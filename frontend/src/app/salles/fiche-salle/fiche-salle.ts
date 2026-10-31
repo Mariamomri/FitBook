@@ -16,10 +16,11 @@ import { HoraireService } from '../../horaires/horaire-service';
 import { HoraireInterface } from '../../horaires/horaire-interface';
 import { FavoriService } from '../../favoris/favori-service';
 import { AuthService } from '../../auth/auth-service';
+import { DonnerAvis } from '../../avis/donner-avis/donner-avis';
 
 @Component({
   selector: 'app-fiche-salle',
-  imports: [DatePipe, RouterLink],
+  imports: [DatePipe, RouterLink, DonnerAvis],
   templateUrl: './fiche-salle.html',
   styleUrl: './fiche-salle.css',
 })
@@ -80,6 +81,22 @@ export class FicheSalle implements OnInit {
       .sort((a, b) => this.jours.indexOf(a.jour) - this.jours.indexOf(b.jour)),
   );
 
+  // Horaire d'aujourd'hui (getDay : 0 = dimanche, 1 = lundi...)
+  horaireDuJour = computed(() => {
+    const jour = this.jours[(new Date().getDay() + 6) % 7];
+    return this.horairesDeLaSalle().find((h) => h.jour === jour) ?? null;
+  });
+
+  // Ouvert maintenant ? On compare les heures au format "HH:mm"
+  estOuverte = computed(() => {
+    const horaire = this.horaireDuJour();
+    if (!horaire) {
+      return false;
+    }
+    const maintenant = new Date().toTimeString().slice(0, 5);
+    return maintenant >= this.heure(horaire.heureOuverture) && maintenant < this.heure(horaire.heureFermeture);
+  });
+
   // "Vestiaires, douches" → ["Vestiaires", "douches"]
   equipements = computed(() =>
     (this.salle()?.equipements ?? '')
@@ -115,10 +132,14 @@ export class FicheSalle implements OnInit {
     this.favoriService.charger();
   }
 
-  // Pourcentage d'avis pour une note (barres 5★ ... 1★)
-  partNote(note: number): number {
-    const liste = this.avisDeLaSalle();
-    return liste.length === 0 ? 0 : (liste.filter((a) => a.note === note).length / liste.length) * 100;
+
+  // "Lucas Dubois" → "LD"
+  initiales(nom: string): string {
+    return nom
+      .split(' ')
+      .map((mot) => mot.charAt(0))
+      .join('')
+      .toUpperCase();
   }
 
   heure(valeur: string): string {

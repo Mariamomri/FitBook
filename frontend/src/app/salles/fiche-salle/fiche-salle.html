@@ -15,6 +15,15 @@
       @if (avisDeLaSalle().length > 0) {
         <p class="note"><span class="etoiles">{{ avisService.etoiles(noteArrondie()) }}</span> {{ noteMoyenne() }} · {{ avisDeLaSalle().length }} avis</p>
       }
+      @if (horaireDuJour(); as h) {
+        @if (estOuverte()) {
+          <span class="etat ouvert">● Ouvert · ferme à {{ heure(h.heureFermeture) }}</span>
+        } @else {
+          <span class="etat ferme">● Fermé · horaires {{ heure(h.heureOuverture) }} – {{ heure(h.heureFermeture) }}</span>
+        }
+      } @else if (horairesDeLaSalle().length > 0) {
+        <span class="etat ferme">● Fermé aujourd'hui</span>
+      }
     </div>
     <div class="actions">
       @if (authService.connecte()) {
@@ -58,7 +67,11 @@
       <div class="coachs">
         @for (coach of coachesDeLaSalle(); track coach.id) {
           <a class="coach" [routerLink]="['/coach', coach.id]">
-            <img [src]="coachService.photo(coach)" [alt]="coach.nomComplet" />
+            @if (coach.imageName) {
+              <img [src]="coachService.photo(coach)" [alt]="coach.nomComplet" />
+            } @else {
+              <span class="initiales">{{ initiales(coach.nomComplet) }}</span>
+            }
             <span>{{ coach.nomComplet }}</span>
           </a>
         } @empty {
@@ -66,31 +79,7 @@
         }
       </div>
 
-      <h2>Avis ({{ avisDeLaSalle().length }})</h2>
-      @if (avisDeLaSalle().length > 0) {
-        <div class="resume-avis">
-          <div class="grosse-note">
-            <strong>{{ noteMoyenne() }}</strong>
-            <span class="etoiles">{{ avisService.etoiles(noteArrondie()) }}</span>
-          </div>
-          <div class="barres">
-            @for (n of [5, 4, 3, 2, 1]; track n) {
-              <div class="barre-note">
-                <span>{{ n }}★</span>
-                <div class="barre"><div [style.width.%]="partNote(n)"></div></div>
-              </div>
-            }
-          </div>
-        </div>
-      }
-      @for (unAvis of avisDeLaSalle(); track unAvis.id) {
-        <div class="avis">
-          <span class="etoiles">{{ avisService.etoiles(unAvis.note) }}</span>
-          <p class="muted">« {{ unAvis.commentaire }} »</p>
-        </div>
-      } @empty {
-        <p class="muted">Pas encore d'avis. Les sportifs peuvent en laisser depuis leur historique.</p>
-      }
+      <app-donner-avis cible="salle" [lien]="lienSalle()" />
     </div>
 
     <!-- Colonne de droite -->
