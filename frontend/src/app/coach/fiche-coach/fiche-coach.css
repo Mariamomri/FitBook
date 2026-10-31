@@ -76,35 +76,6 @@ h2 {
   @apply px-3 py-1.5 text-xs;
 }
 
-/* Avis */
-.resume-avis {
-  @apply mb-4 flex items-center gap-6;
-}
-.grosse-note {
-  @apply flex flex-col;
-}
-.grosse-note strong {
-  @apply font-titre text-6xl font-black italic leading-none;
-}
-.barres {
-  @apply flex-1;
-}
-.barre-note {
-  @apply flex items-center gap-2 text-xs text-gris;
-}
-.barre {
-  @apply h-1.5 flex-1 rounded bg-bordure;
-}
-.barre div {
-  @apply h-full rounded bg-accent;
-}
-.avis {
-  @apply border-b border-bordure py-3;
-}
-.avis p {
-  @apply mt-1 mb-0 text-sm;
-}
-
 /* Colonne de droite */
 .ligne-info {
   @apply my-1 flex justify-between text-sm;

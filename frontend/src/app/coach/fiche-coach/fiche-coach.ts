@@ -13,10 +13,11 @@ import { DisponibiliteService } from '../../disponibilites/disponibilite-service
 import { DisponibiliteInterface } from '../../disponibilites/disponibilite-interface';
 import { FavoriService } from '../../favoris/favori-service';
 import { AuthService } from '../../auth/auth-service';
+import { DonnerAvis } from '../../avis/donner-avis/donner-avis';
 
 @Component({
   selector: 'app-fiche-coach',
-  imports: [DatePipe, RouterLink],
+  imports: [DatePipe, RouterLink, DonnerAvis],
   templateUrl: './fiche-coach.html',
   styleUrl: './fiche-coach.css',
 })
@@ -80,10 +81,6 @@ export class FicheCoach implements OnInit {
     this.favoriService.charger();
   }
 
-  partNote(note: number): number {
-    const liste = this.avisDuCoach();
-    return liste.length === 0 ? 0 : (liste.filter((a) => a.note === note).length / liste.length) * 100;
-  }
 
   heure(valeur: string): string {
     return valeur.slice(11, 16);
