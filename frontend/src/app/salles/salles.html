@@ -78,7 +78,7 @@
               {{ favoriService.estFavori('favoriSalles', lien) ? '♥' : '♡' }}
             </button>
           }
-          <a class="btn" routerLink="/activites" [queryParams]="{ quoi: salle.nom }">Voir la salle</a>
+          <a class="btn" [routerLink]="['/salles', salle.id]">Voir la salle</a>
         </div>
       </article>
     } @empty {
