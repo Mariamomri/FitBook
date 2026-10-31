@@ -13,11 +13,17 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\ApiProperty;
+use Symfony\Component\HttpFoundation\File\File; // fichier envoyé lors de l'upload
+use Vich\UploaderBundle\Mapping\Attribute as Vich; // pour l'upload des photos
 
 #[ORM\Entity(repositoryClass: CoachRepository::class)]
 #[ORM\Table(name: 'coaches')]
 //pour exposer l'entité via l'API Platform
 // Lecture publique ; l'admin crée et supprime les profils, le coach modifie le sien
+
+#[Vich\Uploadable]
+
 #[ApiResource(operations: [
     new GetCollection(),
     new Get(),
@@ -46,6 +52,27 @@ class Coach
 
     #[ORM\Column(length: 100)]
     private ?string $langues = null;
+
+
+    // fichier photo reçu (pas enregistré en base, utilisé seulement pendant l'upload)
+    #[Vich\UploadableField(mapping: 'coachs', fileNameProperty: 'imageName', size: 'imageSize')]
+    #[ApiProperty(readable: false, writable: false)]
+    private ?File $imageFile = null;
+
+    // nom du fichier enregistré dans public/images/coachs
+    #[ORM\Column(nullable: true)]
+    #[ApiProperty(writable: false)]
+    private ?string $imageName = null;
+
+    // taille du fichier en octets
+    #[ORM\Column(nullable: true)]
+    #[ApiProperty(writable: false)]
+    private ?int $imageSize = null;
+
+    // date du dernier changement de photo (permet à Doctrine de voir la modification)
+    #[ORM\Column(nullable: true)]
+    #[ApiProperty(writable: false)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToOne(inversedBy: 'coach', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
@@ -283,5 +310,46 @@ class Coach
         }
 
         return $this;
+    }
+
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    // quand une nouvelle photo arrive, on change updatedAt pour que Doctrine enregistre la modification
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if ($imageFile !== null) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageSize(): ?int
+    {
+        return $this->imageSize;
+    }
+
+    public function setImageSize(?int $imageSize): void
+    {
+        $this->imageSize = $imageSize;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
     }
 }
