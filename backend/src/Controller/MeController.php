@@ -29,6 +29,7 @@ final class MeController extends AbstractController
             'phone' => $user->getPhone(),
             'accentColor' => $user->getAccentColor(),
             'roles' => $user->getRoles(),
+            'imageName' => $user->getImageName(),
         ]);
     }
 
