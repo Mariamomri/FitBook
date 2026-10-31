@@ -1,0 +1,53 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../styles.css";
+
+/* Bandeau avec photo */
+.bandeau {
+  @apply mb-5 rounded-[10px] px-8 pt-10 pb-8;
+  background:
+    linear-gradient(90deg, #0f0f11 40%, rgba(15, 15, 17, 0.3)),
+    url('/img/yoga.jpg') center 40% / cover;
+}
+.bandeau h1 {
+  @apply m-0 text-5xl;
+}
+.bandeau p {
+  @apply mt-2 mb-0 text-sm;
+}
+
+/* Recherche + statut */
+.filtres {
+  @apply mb-4 grid grid-cols-1 gap-3 md:grid-cols-[2fr_1fr];
+}
+.filtres input,
+.filtres select {
+  @apply w-full rounded-md border border-bordure bg-carte px-3 py-2 text-texte;
+}
+
+/* Tableau */
+.tableau {
+  @apply overflow-x-auto rounded-[10px] border border-bordure bg-carte;
+}
+table {
+  @apply w-full border-collapse text-sm;
+}
+th {
+  @apply border-b border-bordure px-4 py-3 text-left text-xs font-bold text-gris uppercase;
+}
+td {
+  @apply border-b border-bordure px-4 py-3;
+}
+.vide {
+  @apply py-8 text-center;
+}
+
+/* Pastilles de statut */
+.statut {
+  @apply rounded-full px-2 py-0.5 text-xs font-bold;
+}
+.effectuee {
+  @apply bg-accent/15 text-accent;
+}
+.annulee {
+  @apply bg-danger/15 text-danger;
+}

@@ -1,0 +1,84 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../styles.css";
+
+/* Bandeau avec photo */
+.bandeau {
+  @apply mb-5 rounded-[10px] px-8 pt-10 pb-8;
+  background:
+    linear-gradient(90deg, #0f0f11 40%, rgba(15, 15, 17, 0.4)),
+    url('/img/barbell.jpg') center / cover;
+}
+.bandeau h1 {
+  @apply m-0 text-5xl;
+}
+.bandeau p {
+  @apply mt-2 mb-0 text-sm;
+}
+.vert {
+  @apply text-accent;
+}
+
+/* Quatre cartes de chiffres */
+.chiffres {
+  @apply mb-5 grid grid-cols-2 gap-3 md:grid-cols-4;
+}
+.chiffre {
+  @apply flex flex-col gap-3 rounded-[10px] border border-bordure bg-carte p-4;
+}
+.chiffre span {
+  @apply flex justify-between text-xs text-gris;
+}
+.chiffre span i {
+  @apply text-accent;
+}
+.chiffre strong {
+  @apply font-titre text-4xl font-black italic;
+}
+.mise-en-avant {
+  @apply border-accent bg-accent;
+}
+.mise-en-avant span,
+.mise-en-avant span i,
+.mise-en-avant strong {
+  @apply text-sur-accent;
+}
+
+/* Réservations + calendrier côte à côte sur grand écran */
+.deux-blocs {
+  @apply grid grid-cols-1 gap-5 xl:grid-cols-[1.3fr_1fr];
+}
+.bloc-carte {
+  @apply rounded-[10px] border border-bordure bg-carte p-4;
+}
+.titre-bloc {
+  @apply mb-4 flex items-center justify-between gap-3;
+}
+.titre-bloc h2 {
+  @apply m-0 text-2xl;
+}
+.petit-btn {
+  @apply px-3 py-2 text-xs;
+}
+
+/* Tableau */
+.tableau {
+  @apply overflow-x-auto;
+}
+table {
+  @apply w-full border-collapse text-sm;
+}
+th {
+  @apply border-b border-bordure px-2 py-2 text-left text-xs font-bold text-gris uppercase;
+}
+td {
+  @apply border-b border-bordure px-2 py-3;
+}
+.vide {
+  @apply py-6 text-center;
+}
+.btn-annuler {
+  @apply cursor-pointer rounded-md border border-danger bg-transparent px-3 py-1 text-xs font-bold text-danger uppercase;
+}
+.voir-tout {
+  @apply mt-3 inline-block text-sm font-semibold text-accent no-underline;
+}

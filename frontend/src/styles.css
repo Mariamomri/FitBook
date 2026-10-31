@@ -266,3 +266,15 @@ input[type='radio'] {
   text-align: center;
   margin-top: 1.5rem;
 }
+/* Espace membre : menu à gauche, contenu à droite */
+.espace {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+@media (min-width: 1000px) {
+  .espace { grid-template-columns: 220px 1fr; }
+}
+.espace-contenu {
+  min-width: 0;
+}

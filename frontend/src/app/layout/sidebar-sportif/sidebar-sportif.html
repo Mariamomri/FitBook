@@ -1,0 +1,26 @@
+<!-- Menu de l'espace sportif (le même sur toutes ses pages) -->
+<aside class="menu">
+  @if (moi(); as user) {
+    <div class="utilisateur">
+      <img [src]="profilService.photo(user.imageName)" [alt]="user.firstname" />
+      <div>
+        <strong>{{ user.firstname }} {{ user.lastname[0] }}.</strong>
+        <span>Espace {{ profilService.libelleRole(user.roles).toLowerCase() }}</span>
+      </div>
+    </div>
+  }
+
+  <nav>
+    <a routerLink="/dashboard" routerLinkActive="actif"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+    <a routerLink="/reservations" routerLinkActive="actif"><i class="fa-solid fa-ticket"></i> Mes réservations</a>
+    <a routerLink="/historique" routerLinkActive="actif"><i class="fa-solid fa-clock-rotate-left"></i> Historique</a>
+    <a routerLink="/calendrier" routerLinkActive="actif"><i class="fa-solid fa-calendar-days"></i> Calendrier</a>
+    <a routerLink="/profil" routerLinkActive="actif"><i class="fa-solid fa-user"></i> Mon profil</a>
+  </nav>
+
+  <span class="points"></span>
+
+  <button class="deconnexion" (click)="deconnexion()">
+    <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+  </button>
+</aside>

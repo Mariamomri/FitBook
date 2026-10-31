@@ -1,1 +1,83 @@
-<p>dashboard works!</p>
+<div class="espace">
+  <app-sidebar-sportif />
+
+  <div class="espace-contenu">
+    <!-- Bandeau du haut -->
+    <section class="bandeau">
+      <h1>Dashboard <span class="vert">sportif</span></h1>
+      @if (moi(); as user) {
+        <p class="muted">Bonjour {{ user.firstname }}, voici votre espace sportif.</p>
+      }
+    </section>
+
+    <!-- Chiffres -->
+    <div class="chiffres">
+      <article class="chiffre">
+        <span>Réservations à venir <i class="fa-solid fa-ticket"></i></span>
+        <strong>{{ aVenir().length }}</strong>
+      </article>
+      <article class="chiffre">
+        <span>Séances effectuées <i class="fa-solid fa-check"></i></span>
+        <strong>{{ effectuees().length }}</strong>
+      </article>
+      <article class="chiffre">
+        <span>Annulées <i class="fa-solid fa-xmark"></i></span>
+        <strong>{{ annulees().length }}</strong>
+      </article>
+      <article class="chiffre mise-en-avant">
+        <span>Total réservé <i class="fa-solid fa-star"></i></span>
+        <strong>{{ reservations().length }}</strong>
+      </article>
+    </div>
+
+    @if (erreur()) {
+      <p class="alerte">{{ erreur() }}</p>
+    }
+    @if (succes()) {
+      <p class="alerte-ok">{{ succes() }}</p>
+    }
+
+    <div class="deux-blocs">
+      <!-- Prochaines réservations -->
+      <section class="bloc-carte">
+        <div class="titre-bloc">
+          <h2>Mes réservations</h2>
+          <a class="btn petit-btn" routerLink="/activites">Réserver</a>
+        </div>
+
+        <div class="tableau">
+          <table>
+            <thead>
+              <tr>
+                <th>Séance</th>
+                <th>Salle</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (reservation of aVenir().slice(0, 5); track reservation.id) {
+                <tr>
+                  <td><strong>{{ reservation.cours }}</strong></td>
+                  <td class="muted">{{ reservation.salle }}</td>
+                  <td>{{ reservation.dateDebut }}</td>
+                  <td><button class="btn-annuler" (click)="annuler(reservation)">Annuler</button></td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="4" class="muted vide">Aucune séance à venir.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <a class="voir-tout" routerLink="/reservations">Voir toutes mes réservations →</a>
+      </section>
+
+      <!-- Calendrier (même composant que la page Calendrier, sans bandeau ni menu) -->
+      <section>
+        <app-calendrier [bandeau]="false" />
+      </section>
+    </div>
+  </div>
+</div>

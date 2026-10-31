@@ -15,8 +15,16 @@ export class ReservationService {
     return this.http.get<ReservationInterface[]>(this.api);
   }
 
+  // "30/10/2026 18:00" (format envoyé par Symfony) → objet Date, pour comparer avec maintenant
+  versDate(texte: string): Date {
+    const [date, heure] = texte.split(' ');
+    const [jour, mois, annee] = date.split('/').map(Number);
+    const [heures, minutes] = heure.split(':').map(Number);
+    return new Date(annee, mois - 1, jour, heures, minutes);
+  }
+
   // Annule une de mes réservations : Symfony passe le statut à annulee
   annuler(id: number): Observable<{ message: string; statut: string }> {
     return this.http.patch<{ message: string; statut: string }>(this.api + '/' + id + '/annuler', {});
   }
-}
+}

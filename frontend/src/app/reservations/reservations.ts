@@ -1,10 +1,12 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ReservationService } from './reservation-service';
 import { ReservationInterface } from './reservation-interface';
+import { RouterLink } from '@angular/router';
+import { SidebarSportif } from '../layout/sidebar-sportif/sidebar-sportif';
 
 @Component({
   selector: 'app-reservations',
-  imports: [],
+  imports: [RouterLink, SidebarSportif],
   templateUrl: './reservations.html',
   styleUrl: './reservations.css',
 })

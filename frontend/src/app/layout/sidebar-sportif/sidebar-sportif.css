@@ -1,0 +1,52 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+.menu {
+  @apply flex flex-col gap-4 self-start rounded-[10px] border border-bordure bg-nav p-4 lg:sticky lg:top-24;
+}
+
+/* Photo et nom de l'utilisateur */
+.utilisateur {
+  @apply flex items-center gap-3;
+}
+.utilisateur img {
+  @apply h-11 w-11 rounded-full border-2 border-accent object-cover;
+}
+.utilisateur strong {
+  @apply block text-sm;
+}
+.utilisateur span {
+  @apply text-xs text-gris;
+}
+
+/* Liens du menu */
+nav {
+  @apply flex flex-col gap-1;
+}
+nav a {
+  @apply flex items-center gap-3 rounded-full px-4 py-2 text-sm text-texte no-underline;
+}
+nav a i {
+  @apply w-4 text-accent;
+}
+nav a:hover {
+  @apply bg-carte;
+}
+nav a.actif {
+  @apply bg-accent font-bold text-sur-accent;
+}
+nav a.actif i {
+  @apply text-sur-accent;
+}
+
+/* Points décoratifs en bas, comme sur la maquette */
+.points {
+  @apply hidden h-24 lg:block;
+  background-image: radial-gradient(var(--accent) 2px, transparent 2px);
+  background-size: 12px 12px;
+  opacity: 0.4;
+}
+
+.deconnexion {
+  @apply flex cursor-pointer items-center gap-3 border-0 border-t border-solid border-bordure bg-transparent px-4 pt-4 text-left text-sm text-danger;
+}

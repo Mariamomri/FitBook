@@ -76,3 +76,12 @@
 .seance {
   @apply truncate rounded bg-accent px-1.5 py-0.5 text-xs font-semibold text-sur-accent no-underline;
 }
+
+/* Version plus petite dans le dashboard */
+.compact .jour,
+.compact .vide {
+  @apply min-h-14;
+}
+.compact .titre-mois {
+  @apply text-xl;
+}
