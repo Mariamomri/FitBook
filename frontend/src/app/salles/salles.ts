@@ -11,7 +11,7 @@ import { SalleInterface } from './salle-interface';
   styleUrl: './salles.css',
 })
 export class Salles implements OnInit {
-  private salleService = inject(SalleService);
+  salleService = inject(SalleService);
   private sanitizer = inject(DomSanitizer);
   salles = signal<SalleInterface[]>([]);
 
@@ -19,9 +19,6 @@ export class Salles implements OnInit {
   recherche = signal('');
   ville = signal('');
   tri = signal('nom');
-
-  // Photos des salles (dans public/img), en attendant les images du backend
-  photos = ['img/gym1.jpg', 'img/gym2.jpg', 'img/barbell.jpg', 'img/stretch.jpg', 'img/battle-ropes.jpg', 'img/crossfit.jpg'];
 
   // Salle mise en avant sur la carte
   salleChoisie = signal<SalleInterface | null>(null);
@@ -45,19 +42,23 @@ export class Salles implements OnInit {
   // Salle affichée sur la carte : celle choisie, sinon la première de la liste
   salleSurCarte = computed(() => this.salleChoisie() ?? this.sallesFiltrees()[0]);
 
-  // Lien de la carte à partir de l'adresse de la salle (pas de coordonnées dans la base)
+  // Carte OpenStreetMap centrée sur la latitude / longitude de la salle
   carteUrl = computed(() => {
     const s = this.salleSurCarte();
-    const adresse = s ? s.nom + ', ' + s.adresse + ', ' + s.codePostal + ' ' + s.ville : 'Belgique';
-    const url = 'https://maps.google.com/maps?q=' + encodeURIComponent(adresse) + '&z=15&output=embed';
+    // Sans coordonnées : on montre Bruxelles
+    const latitude = Number(s?.latitude ?? 50.8466);
+    const longitude = Number(s?.longitude ?? 4.3528);
+
+    // bbox = la zone visible autour du point (gauche, bas, droite, haut)
+    const zone = [longitude - 0.01, latitude - 0.005, longitude + 0.01, latitude + 0.005].join('%2C');
+    let url = 'https://www.openstreetmap.org/export/embed.html?bbox=' + zone + '&layer=mapnik';
+    if (s?.latitude && s?.longitude) {
+      url += '&marker=' + latitude + '%2C' + longitude;
+    }
+
     // Angular bloque les liens d'iframe construits dans le code : on lui dit que celui-ci est sûr
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   });
-
-  // Une photo par salle : on reprend la liste depuis le début quand elle est finie
-  photo(numero: number): string {
-    return this.photos[numero % this.photos.length];
-  }
 
   // Au chargement de la page, on récupère les salles depuis l'API
   ngOnInit(): void {

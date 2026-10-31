@@ -112,7 +112,10 @@
 
   @if (salleVedette(); as vedette) {
     <div class="salles">
-      <article class="salle-vedette">
+      <article
+        class="salle-vedette"
+        [style.background-image]="'linear-gradient(0deg, #080809 15%, rgba(8, 8, 9, 0.2)), url(' + salleService.photo(vedette) + ')'"
+      >
         <span class="tag">★ Top de la semaine</span>
         <h3>{{ vedette.nom }}</h3>
         <p class="muted">{{ vedette.ville }} · {{ vedette.equipements }}</p>

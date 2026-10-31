@@ -64,9 +64,9 @@
       <strong>{{ coachesFiltres().length }} coachs</strong> <span class="muted">trouvés</span>
     </p>
 
-    @for (coach of coachesFiltres(); track coach.id; let numero = $index) {
+    @for (coach of coachesFiltres(); track coach.id) {
       <article class="ligne">
-        <img class="photo" [src]="photo(numero)" [alt]="coach.nomComplet" />
+        <img class="photo" [src]="coachService.photo(coach)" [alt]="coach.nomComplet" />
 
         <div class="infos">
           <h3>{{ coach.nomComplet }}</h3>

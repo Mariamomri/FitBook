@@ -16,7 +16,7 @@ import { AuthService } from '../auth/auth-service';
 })
 export class Accueil implements OnInit {
   private seanceService = inject(SeanceService);
-  private salleService = inject(SalleService);
+  salleService = inject(SalleService);
   private router = inject(Router);
   authService = inject(AuthService);
 

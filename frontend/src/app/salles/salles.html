@@ -49,7 +49,7 @@
       <article class="ligne" [class.active]="salle === salleSurCarte()" (click)="salleChoisie.set(salle)">
         <!-- Emplacement de la photo, avec le numéro de la salle -->
         <div class="photo">
-          <img [src]="photo(numero)" [alt]="salle.nom" />
+          <img [src]="salleService.photo(salle)" [alt]="salle.nom" />
           <span class="numero">{{ numero + 1 }}</span>
         </div>
 

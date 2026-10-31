@@ -10,7 +10,7 @@ import { CoachInterface } from './coach-interface';
   styleUrl: './coach.css',
 })
 export class Coach implements OnInit {
-  private coachService = inject(CoachService);
+  coachService = inject(CoachService);
   coaches = signal<CoachInterface[]>([]);
 
   // Filtres
@@ -18,9 +18,6 @@ export class Coach implements OnInit {
   languesChoisies = signal<string[]>([]);
   tarifMax = signal(100);
   tri = signal('experience');
-
-  // Photos des coachs (dans public/img), en attendant les images du backend
-  photos = ['img/coach.jpg', 'img/boxing.jpg', 'img/yoga.jpg', 'img/cardio.jpg', 'img/strength.jpg', 'img/battle-ropes.jpg'];
 
   // Liste des langues parlées par les coachs, sans doublon
   langues = computed(() => {
@@ -58,10 +55,5 @@ export class Coach implements OnInit {
     } else {
       this.languesChoisies.set([...this.languesChoisies(), langue]);
     }
-  }
-
-  // Une photo par coach : on reprend la liste depuis le début quand elle est finie
-  photo(numero: number): string {
-    return this.photos[numero % this.photos.length];
   }
 }

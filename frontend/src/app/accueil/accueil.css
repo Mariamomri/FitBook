@@ -211,7 +211,9 @@
   min-height: 280px;
   padding: 1.5rem;
   border-radius: 10px;
-  background: linear-gradient(0deg, #080809 10%, #2a2a30);
+  background-color: #2a2a30;
+  background-size: cover;
+  background-position: center;
 }
 .salle-vedette h3 { font-size: 2.6rem; margin: 0.8rem 0 0.3rem; }
 .salle-vedette p { font-size: 0.75rem; }
