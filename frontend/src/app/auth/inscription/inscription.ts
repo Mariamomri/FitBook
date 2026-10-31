@@ -32,9 +32,6 @@ export class Inscription {
   voirMotDePasse = signal(false);
   voirConfirmation = signal(false);
 
-  // Aperçu de la photo choisie (l'envoi au serveur viendra avec VichUploader)
-  apercuPhoto = signal<string | null>(null);
-
   // Couleurs du site proposées (comme sur la maquette)
   couleurs = [
     { nom: 'vert', libelle: 'Vert', code: '#a6ff00' },
@@ -74,17 +71,6 @@ export class Inscription {
     return ['', 'Faible', 'Moyen', 'Bon', 'Fort'][this.force()];
   }
 
-  // Lit l'image choisie pour l'afficher dans le cercle
-  choisirPhoto(evenement: Event): void {
-    const fichier = (evenement.target as HTMLInputElement).files?.[0];
-    if (!fichier) {
-      return;
-    }
-    const lecteur = new FileReader();
-    lecteur.onload = () => this.apercuPhoto.set(lecteur.result as string);
-    lecteur.readAsDataURL(fichier);
-  }
-
   inscription() {
     this.erreur.set('');
     this.succes.set('');
@@ -109,7 +95,6 @@ export class Inscription {
         next: () => {
           this.succes.set('Compte créé ! Vérifiez votre email pour confirmer votre inscription.');
           this.inscriptionForm.reset({ accentColor: 'vert', cgu: false });
-          this.apercuPhoto.set(null);
         },
         error: (err) => {
           // 422 = validation Symfony (ex. email déjà utilisé)

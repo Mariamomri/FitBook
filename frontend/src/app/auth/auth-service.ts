@@ -33,9 +33,14 @@ export class AuthService {
     this.connecte.set(false);
   }
 
-    // Inscription : POST /api/users (API Platform attend du JSON-LD)
+  // Utilisateur connecté (Symfony le retrouve grâce au token)
+  getMoi(): Observable<UserInterface> {
+    return this.http.get<UserInterface>('https://127.0.0.1:8000/api/me');
+  }
+
+  // Inscription : POST /api/users (API Platform attend du JSON-LD)
   inscription(user: UserInterface): Observable<UserInterface> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/ld+json' });
     return this.http.post<UserInterface>('https://127.0.0.1:8000/api/users', user, { headers });
   }
-}
+}

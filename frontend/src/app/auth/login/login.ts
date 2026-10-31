@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../auth-service';
+import { ThemeService } from '../../theme/theme-service';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ export class Login {
   private authService = inject(AuthService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private themeService = inject(ThemeService);
   erreur = signal('');
 
   // Symfony redirige vers /login?verified=1 après la confirmation de l'email
@@ -35,6 +37,8 @@ export class Login {
     this.authService.login(email!, password!).subscribe({
       next: (reponse) => {
         this.authService.saveToken(reponse.token);
+        // On applique tout de suite la couleur enregistrée dans son compte
+        this.authService.getMoi().subscribe((moi) => this.themeService.appliquer(moi.accentColor));
         this.router.navigate(['/dashboard']);
       },
       error: () => {
