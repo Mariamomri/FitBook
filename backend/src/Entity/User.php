@@ -89,6 +89,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 20)]
     #[Assert\NotBlank()]
     #[Assert\Choice(choices: ['vert', 'orange', 'jaune', 'bleu', 'rose', 'rouge'], message: 'Couleur non valide.')]
+    private ?string $accentColor = null;
 
 
     // fichier photo reçu (pas enregistré en base, utilisé seulement pendant l'upload)
