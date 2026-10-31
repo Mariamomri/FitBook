@@ -1,0 +1,123 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+h2 {
+  @apply mt-6 mb-3 text-2xl;
+}
+.etoiles {
+  @apply text-accent;
+}
+.petit {
+  @apply text-xs;
+}
+
+/* Résumé : grosse note + barres */
+.resume-avis {
+  @apply mb-4 flex items-center gap-6;
+}
+.grosse-note {
+  @apply flex flex-col;
+}
+.grosse-note strong {
+  @apply font-titre text-6xl font-black italic leading-none;
+}
+.barres {
+  @apply max-w-xs flex-1;
+}
+.barre-note {
+  @apply flex items-center gap-2 text-xs text-gris;
+}
+.barre {
+  @apply h-1.5 flex-1 rounded bg-bordure;
+}
+.barre div {
+  @apply h-full rounded bg-accent;
+}
+
+/* Bloc « Donner mon avis » */
+.donner-avis {
+  @apply my-5 rounded-[10px] border border-bordure bg-carte p-5;
+}
+.entete {
+  @apply mb-3 flex items-center justify-between;
+}
+.entete h3 {
+  @apply m-0 font-corps text-base font-bold not-italic normal-case;
+}
+.verifie {
+  @apply text-xs text-accent;
+}
+.donner-avis a {
+  @apply text-accent;
+}
+.ligne-note {
+  @apply mb-3 flex items-center gap-3 text-sm;
+}
+.etoiles-choix button {
+  @apply cursor-pointer border-0 bg-transparent p-0 text-2xl text-gris;
+}
+.etoiles-choix button.allumee {
+  @apply text-accent;
+}
+.zone-texte {
+  @apply relative;
+}
+textarea {
+  @apply w-full resize-y rounded-md border border-bordure bg-nav p-3 pb-6 font-corps text-sm text-texte;
+}
+textarea:focus {
+  @apply border-accent outline-none;
+}
+.compteur {
+  @apply absolute right-3 bottom-3 text-xs text-gris;
+}
+.erreur-champ {
+  @apply mt-1 mb-0 text-xs text-danger;
+}
+.boutons {
+  @apply mt-3 flex justify-end gap-3;
+}
+
+/* Un avis de la liste */
+.avis {
+  @apply flex gap-3 border-t border-bordure py-4;
+}
+.avatar {
+  @apply h-10 w-10 shrink-0 rounded-full object-cover;
+}
+.initiales {
+  @apply flex items-center justify-center bg-carte text-sm font-bold text-accent;
+}
+.avis-contenu {
+  @apply flex-1;
+}
+.avis-haut {
+  @apply flex flex-wrap items-center gap-2 text-sm;
+}
+.badge {
+  @apply rounded-full bg-accent px-2 py-0.5 text-xs font-bold text-sur-accent;
+}
+.statut {
+  @apply rounded-full bg-yellow-400/15 px-2 py-0.5 text-xs text-yellow-400;
+}
+.statut.refuse {
+  @apply bg-danger/15 text-danger;
+}
+.actions {
+  @apply ml-auto flex items-center gap-3 text-xs;
+}
+.avis-contenu p {
+  @apply my-1;
+}
+.commentaire {
+  @apply text-sm;
+}
+.lien {
+  @apply cursor-pointer border-0 bg-transparent p-0 text-xs font-bold text-accent;
+}
+.lien.danger {
+  @apply text-danger;
+}
+.voir-tout {
+  @apply mt-2 text-sm;
+}

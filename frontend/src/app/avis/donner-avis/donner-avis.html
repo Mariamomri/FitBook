@@ -1,0 +1,119 @@
+<h2>Avis ({{ avisPublies().length }})</h2>
+
+<!-- Résumé : grosse note + barres de 5★ à 1★ -->
+@if (avisPublies().length > 0) {
+  <div class="resume-avis">
+    <div class="grosse-note">
+      <strong>{{ noteMoyenne() }}</strong>
+      <span class="etoiles">{{ avisService.etoiles(noteArrondie()) }}</span>
+      <span class="muted petit">{{ avisPublies().length }} avis vérifiés</span>
+    </div>
+    <div class="barres">
+      @for (n of [5, 4, 3, 2, 1]; track n) {
+        <div class="barre-note">
+          <span>{{ n }}★</span>
+          <div class="barre"><div [style.width.%]="partNote(n)"></div></div>
+        </div>
+      }
+    </div>
+  </div>
+}
+
+<!-- Formulaire : nouvel avis ou modification du mien -->
+<div class="donner-avis">
+  <div class="entete">
+    <h3>{{ idEnModification() ? 'Modifier mon avis' : 'Donner mon avis' }}</h3>
+    @if (reservationLibre() || idEnModification()) {
+      <span class="verifie"><i class="fa-solid fa-check"></i> Participation vérifiée</span>
+    }
+  </div>
+
+  @if (succes()) {
+    <p class="alerte-ok">{{ succes() }}</p>
+  }
+  @if (erreur()) {
+    <p class="alerte">{{ erreur() }}</p>
+  }
+
+  @if (!authService.connecte()) {
+    <p class="muted"><a routerLink="/login">Connectez-vous</a> pour donner votre avis après une séance.</p>
+  } @else if (reservationLibre() || idEnModification()) {
+    <form [formGroup]="avisForm" (ngSubmit)="envoyer()">
+      <div class="ligne-note">
+        <span class="muted">Votre note</span>
+        <div class="etoiles-choix">
+          @for (n of [1, 2, 3, 4, 5]; track n) {
+            <button type="button" [class.allumee]="n <= note()" (click)="note.set(n)" [attr.aria-label]="n + ' étoiles'">★</button>
+          }
+        </div>
+        <span class="muted">{{ note() }}/5</span>
+      </div>
+
+      <div class="zone-texte">
+        <textarea formControlName="commentaire" rows="3" maxlength="500" placeholder="Partagez votre expérience : ambiance, coach, matériel..."></textarea>
+        <span class="compteur">{{ avisForm.value.commentaire?.length ?? 0 }} / 500</span>
+      </div>
+      @if (avisForm.controls.commentaire.touched && avisForm.controls.commentaire.invalid) {
+        <p class="erreur-champ">Écrivez un commentaire (3 caractères minimum).</p>
+      }
+
+      <div class="boutons">
+        @if (idEnModification()) {
+          <button class="btn btn-outline" type="button" (click)="annuler()">Annuler</button>
+        }
+        <button class="btn" type="submit">{{ idEnModification() ? 'Enregistrer' : "Publier l'avis" }}</button>
+      </div>
+    </form>
+  } @else if (reservationsLiees().length > 0) {
+    <p class="muted">Merci, vous avez déjà donné votre avis : vous pouvez le modifier ci-dessous.</p>
+  } @else {
+    <p class="muted">Vous pourrez donner votre avis après avoir participé à une séance.</p>
+  }
+</div>
+
+<!-- Liste des avis : mes avis ont les boutons Modifier / Supprimer -->
+@for (unAvis of avisVisibles(); track unAvis.id) {
+  <div class="avis">
+    @if (unAvis.auteurImage) {
+      <img class="avatar" [src]="profilService.photo(unAvis.auteurImage)" [alt]="unAvis.auteur" />
+    } @else {
+      <span class="avatar initiales">{{ initiales(unAvis.auteur) }}</span>
+    }
+    <div class="avis-contenu">
+      <div class="avis-haut">
+        <strong>{{ unAvis.auteur ?? 'Sportif FitBook' }}</strong>
+        @if (estAMoi(unAvis)) {
+          <span class="badge">Votre avis</span>
+          @if (unAvis.statut !== 'publie') {
+            <span class="statut" [class.refuse]="unAvis.statut === 'refuse'">{{ libelleStatut(unAvis.statut) }}</span>
+          }
+          <span class="actions">
+            @if (idASupprimer() === unAvis.id) {
+              <span class="muted">Supprimer ?</span>
+              <button type="button" class="lien danger" (click)="supprimer(unAvis)">Oui</button>
+              <button type="button" class="lien" (click)="idASupprimer.set(null)">Non</button>
+            } @else {
+              <button type="button" class="lien" (click)="modifier(unAvis)">Modifier</button>
+              <button type="button" class="lien danger" (click)="idASupprimer.set(unAvis.id!)">Supprimer</button>
+            }
+          </span>
+        }
+      </div>
+      <p class="petit">
+        <span class="etoiles">{{ avisService.etoiles(unAvis.note) }}</span>
+        @if (unAvis.createdAt) {
+          <span class="muted"> · {{ unAvis.createdAt | date: 'dd/MM/yyyy' }}</span>
+        }
+      </p>
+      <p class="commentaire">{{ unAvis.commentaire }}</p>
+    </div>
+  </div>
+} @empty {
+  <p class="muted">Pas encore d'avis.</p>
+}
+
+@if (avisAffiches().length > 3) {
+  <button type="button" class="lien voir-tout" (click)="toutAfficher.set(!toutAfficher())">
+    {{ toutAfficher() ? 'Voir moins' : 'Voir tous les avis →' }}
+  </button>
+}
