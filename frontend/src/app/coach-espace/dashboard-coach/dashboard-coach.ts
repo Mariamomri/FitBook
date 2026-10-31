@@ -13,10 +13,11 @@ import { SidebarSportif } from '../../layout/sidebar-sportif/sidebar-sportif';
 import { ProfilPro } from '../profil-pro/profil-pro';
 import { GestionDisponibilites } from '../gestion-disponibilites/gestion-disponibilites';
 import { GestionSeances } from '../../gestionnaire/gestion-seances/gestion-seances';
+import { ReservationsRecues } from '../../reservations/reservations-recues/reservations-recues';
 
 @Component({
   selector: 'app-dashboard-coach',
-  imports: [SidebarSportif, ProfilPro, GestionDisponibilites, GestionSeances],
+  imports: [SidebarSportif, ProfilPro, GestionDisponibilites, GestionSeances, ReservationsRecues],
   templateUrl: './dashboard-coach.html',
   styleUrl: './dashboard-coach.css',
 })

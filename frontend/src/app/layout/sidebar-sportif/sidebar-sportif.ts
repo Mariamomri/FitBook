@@ -40,6 +40,7 @@ export class SidebarSportif implements OnInit {
     { fragment: 'activites', libelle: 'Activités', icone: 'fa-dumbbell' },
     { fragment: 'horaires', libelle: 'Horaires', icone: 'fa-clock' },
     { fragment: 'calendrier', libelle: 'Calendrier & séances', icone: 'fa-calendar-days' },
+    { fragment: 'reservations', libelle: 'Réservations', icone: 'fa-ticket' },
     { fragment: 'avis', libelle: 'Avis', icone: 'fa-star' },
   ];
 
@@ -48,6 +49,7 @@ export class SidebarSportif implements OnInit {
     { fragment: 'profil-pro', libelle: 'Profil professionnel', icone: 'fa-id-card' },
     { fragment: 'seances', libelle: 'Séances & calendrier', icone: 'fa-calendar-days' },
     { fragment: 'disponibilites', libelle: 'Disponibilités', icone: 'fa-clock' },
+    { fragment: 'reservations', libelle: 'Réservations', icone: 'fa-ticket' },
     { fragment: 'avis', libelle: 'Avis', icone: 'fa-star' },
   ];
 

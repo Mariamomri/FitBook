@@ -43,6 +43,10 @@
           <app-gestion-disponibilites [coachLien]="lienFiche()" />
         </section>
 
+        <section class="bloc-carte" id="reservations">
+          <app-reservations-recues pour="coach" />
+        </section>
+
         <section class="bloc-carte" id="avis">
           <h2>Avis sur moi</h2>
           @for (unAvis of mesAvis(); track unAvis.id) {
