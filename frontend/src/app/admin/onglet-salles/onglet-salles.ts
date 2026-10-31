@@ -9,7 +9,7 @@ import { UserInterface } from '../../auth/user-interface';
   selector: 'app-onglet-salles',
   imports: [ReactiveFormsModule],
   templateUrl: './onglet-salles.html',
-  styleUrl: '../admin-commun.css',
+  styleUrls: ['../admin-commun.css', './onglet-salles.css'],
 })
 export class OngletSalles implements OnInit {
   adminService = inject(AdminService);
@@ -24,6 +24,10 @@ export class OngletSalles implements OnInit {
   // Formulaire ouvert ? (null = fermé, 0 = nouvelle salle, sinon id de la salle modifiée)
   idFormulaire = signal<number | null>(null);
   aSupprimer = signal<SalleInterface | null>(null);
+
+  // Photo choisie dans le formulaire (envoyée juste après l'enregistrement de la salle)
+  photoChoisie = signal<File | null>(null);
+  apercuPhoto = signal<string | null>(null);
 
   sallesFiltrees = computed(() => {
     const texte = this.recherche().toLowerCase();
@@ -67,6 +71,8 @@ export class OngletSalles implements OnInit {
 
   ouvrirAjout(): void {
     this.salleForm.reset();
+    this.photoChoisie.set(null);
+    this.apercuPhoto.set(null);
     this.idFormulaire.set(0);
   }
 
@@ -84,6 +90,8 @@ export class OngletSalles implements OnInit {
       longitude: salle.longitude ?? '',
       gestionnaire: salle.gestionnaire ?? '',
     });
+    this.photoChoisie.set(null);
+    this.apercuPhoto.set(null);
     this.idFormulaire.set(salle.id!);
   }
 
@@ -112,13 +120,41 @@ export class OngletSalles implements OnInit {
         : this.salleService.modifierSalle(id!, donnees);
 
     requete.subscribe({
-      next: () => {
-        this.succes.set(id === 0 ? 'Salle créée.' : 'Salle modifiée.');
-        this.idFormulaire.set(null);
-        this.charger();
-      },
+      next: (salle) => this.terminerEnregistrement(salle, id === 0 ? 'Salle créée.' : 'Salle modifiée.'),
       error: (err) => this.erreur.set(this.adminService.messageErreur(err)),
     });
+  }
+
+  // Garde le fichier choisi et affiche un aperçu avant l'envoi
+  choisirPhotoFormulaire(evenement: Event): void {
+    const fichier = (evenement.target as HTMLInputElement).files?.[0] ?? null;
+    this.photoChoisie.set(fichier);
+    this.apercuPhoto.set(fichier ? URL.createObjectURL(fichier) : null);
+  }
+
+  // Après l'enregistrement : envoie la photo s'il y en a une, puis recharge la liste
+  terminerEnregistrement(salle: SalleInterface, message: string): void {
+    const fichier = this.photoChoisie();
+    if (!fichier) {
+      this.finir(message);
+      return;
+    }
+    this.salleService.envoyerPhoto(salle.id!, fichier).subscribe({
+      next: () => this.finir(message + ' Photo enregistrée.'),
+      // La salle est enregistrée, seule la photo pose problème (format ou taille)
+      error: (err) => {
+        this.finir(message);
+        this.erreur.set(err.error?.message ?? "Erreur lors de l'envoi de la photo");
+      },
+    });
+  }
+
+  finir(message: string): void {
+    this.succes.set(message);
+    this.idFormulaire.set(null);
+    this.photoChoisie.set(null);
+    this.apercuPhoto.set(null);
+    this.charger();
   }
 
   confirmerSuppression(): void {

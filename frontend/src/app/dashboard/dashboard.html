@@ -1,5 +1,7 @@
 @if (estAdmin()) {
   <app-dashboard-admin />
+} @else if (estGestionnaire()) {
+  <app-dashboard-salle />
 } @else {
   <div class="espace">
     <app-sidebar-sportif />

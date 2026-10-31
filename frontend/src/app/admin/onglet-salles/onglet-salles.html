@@ -64,6 +64,23 @@
         <label for="description">Description</label>
         <textarea id="description" rows="3" formControlName="description"></textarea>
       </div>
+      <div class="large">
+        <label for="photo-formulaire">Photo de la salle (facultatif)</label>
+        <div class="choix-photo">
+          @if (apercuPhoto()) {
+            <img [src]="apercuPhoto()" alt="Aperçu de la photo" />
+          }
+          <label for="photo-formulaire" class="btn btn-outline petit-btn">Choisir une photo</label>
+          <input
+            id="photo-formulaire"
+            type="file"
+            accept="image/png, image/jpeg, image/webp"
+            (change)="choisirPhotoFormulaire($event)"
+            hidden
+          />
+          <span class="muted petit">PNG, JPG, WEBP · 2 Mo max</span>
+        </div>
+      </div>
     </div>
     <div class="boutons">
       <button type="submit" class="btn">Enregistrer</button>

@@ -1,4 +1,4 @@
-<!-- Menu de l'espace sportif (le même sur toutes ses pages) -->
+<!-- Menu de l'espace membre : les liens changent selon le rôle -->
 <aside class="menu">
   @if (moi(); as user) {
     <div class="utilisateur">
@@ -11,7 +11,7 @@
   }
 
   <nav>
-    <a routerLink="/dashboard" routerLinkActive="actif" [routerLinkActiveOptions]="optionsLienExact"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+    <a routerLink="/dashboard" routerLinkActive="actif" [routerLinkActiveOptions]="optionsLienExact"><i class="fa-solid fa-gauge"></i> {{ titreDashboard() }}</a>
     @if (estAdmin()) {
       <!-- Chaque lien ouvre l'onglet correspondant de la dashboard admin -->
       @for (lien of liensAdmin; track lien.onglet) {
@@ -25,9 +25,23 @@
       }
       <p class="separateur">Espace sportif</p>
     }
-    <a routerLink="/reservations" routerLinkActive="actif"><i class="fa-solid fa-ticket"></i> Mes réservations</a>
-    <a routerLink="/historique" routerLinkActive="actif"><i class="fa-solid fa-clock-rotate-left"></i> Historique</a>
-    <a routerLink="/calendrier" routerLinkActive="actif"><i class="fa-solid fa-calendar-days"></i> Calendrier</a>
+
+    @if (estGestionnaire()) {
+      <!-- Gestionnaire : liens vers les parties de sa dashboard -->
+      @for (lien of liensGestionnaire; track lien.fragment) {
+        <a
+          routerLink="/dashboard"
+          [fragment]="lien.fragment"
+          routerLinkActive="actif"
+          [routerLinkActiveOptions]="optionsLienExact"
+          ><i [class]="'fa-solid ' + lien.icone"></i> {{ lien.libelle }}</a
+        >
+      }
+    } @else {
+      <a routerLink="/reservations" routerLinkActive="actif"><i class="fa-solid fa-ticket"></i> Mes réservations</a>
+      <a routerLink="/historique" routerLinkActive="actif"><i class="fa-solid fa-clock-rotate-left"></i> Historique</a>
+      <a routerLink="/calendrier" routerLinkActive="actif"><i class="fa-solid fa-calendar-days"></i> Calendrier</a>
+    }
     <a routerLink="/profil" routerLinkActive="actif"><i class="fa-solid fa-user"></i> Mon profil</a>
   </nav>
 

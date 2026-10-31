@@ -35,4 +35,11 @@ export class SalleService {
   supprimerSalle(id: number): Observable<void> {
     return this.http.delete<void>(`${this.api}/${id}`);
   }
+
+  // Photo de la salle : FormData (multipart), la clé doit s'appeler imageFile comme dans Symfony
+  envoyerPhoto(id: number, fichier: File): Observable<{ message: string; imageName: string }> {
+    const formulaire = new FormData();
+    formulaire.append('imageFile', fichier);
+    return this.http.post<{ message: string; imageName: string }>(`${this.api}/${id}/image`, formulaire);
+  }
 }

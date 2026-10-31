@@ -5,7 +5,10 @@ export interface CoursInterface {
   niveau: string;
   capacite: number;
   prix: string;
-  salleNom: string;
-  activiteNom: string;
+  salleNom?: string;
+  activiteNom?: string;
   coachNom?: string; // un cours peut ne pas avoir de coach
+  salle?: string; // liens vers les autres entités, ex. "/api/salles/12"
+  activite?: string;
+  coach?: string | null;
 }

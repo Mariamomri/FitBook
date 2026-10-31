@@ -1,0 +1,58 @@
+<div class="espace">
+  <app-sidebar-sportif />
+
+  @if (moi(); as user) {
+    <div class="espace-contenu">
+      <!-- Bandeau du haut -->
+      <section class="bandeau">
+        <h1>Dashboard <span class="vert">salle</span></h1>
+        <p class="muted">Bonjour {{ user.firstname }}, voici l'espace de vos salles.</p>
+      </section>
+
+      <!-- Chiffres -->
+      <div class="chiffres">
+        <article class="chiffre">
+          <span>Mes salles <i class="fa-solid fa-house"></i></span>
+          <strong>{{ liensMesSalles().length }}</strong>
+        </article>
+        <article class="chiffre">
+          <span>Cours actifs <i class="fa-solid fa-list"></i></span>
+          <strong>{{ mesCours().length }}</strong>
+        </article>
+        <article class="chiffre">
+          <span>Avis publiés <i class="fa-solid fa-comment"></i></span>
+          <strong>{{ avisMesSalles().length }}</strong>
+        </article>
+        <article class="chiffre mise-en-avant">
+          <span>Note moyenne <i class="fa-solid fa-star"></i></span>
+          <strong>{{ noteMoyenne() }} ★</strong>
+        </article>
+      </div>
+
+      <!-- Ses salles (avec photo) et ses cours : ajout, modification, suppression -->
+      <section class="bloc-carte" id="mes-salles">
+        <app-gestion-salles [moi]="user" />
+      </section>
+
+      <section class="bloc-carte" id="cours">
+        <app-gestion-cours [moi]="user" />
+      </section>
+
+      <!-- Avis publiés sur ses salles -->
+      <section class="bloc-carte" id="avis">
+        <h2>Avis sur mes salles</h2>
+        @for (unAvis of avisMesSalles(); track unAvis.id) {
+          <div class="avis">
+            <div>
+              <strong>{{ nomSalle(unAvis.salle) }}</strong>
+              <span class="etoiles">{{ etoiles(unAvis.note) }}</span>
+              <p class="muted">« {{ unAvis.commentaire }} »</p>
+            </div>
+          </div>
+        } @empty {
+          <p class="muted">Pas encore d'avis sur vos salles.</p>
+        }
+      </section>
+    </div>
+  }
+</div>
