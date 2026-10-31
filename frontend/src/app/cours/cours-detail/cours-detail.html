@@ -23,6 +23,21 @@
       <h2>Description</h2>
       <p class="muted">{{ c.description }}</p>
 
+      <h2>
+        Avis
+        @if (avisDuCours().length > 0) {
+          <span class="moyenne">{{ noteMoyenne() }} ★ · {{ avisDuCours().length }} avis</span>
+        }
+      </h2>
+      @for (unAvis of avisDuCours(); track unAvis.id) {
+        <div class="avis">
+          <span class="etoiles">{{ avisService.etoiles(unAvis.note) }}</span>
+          <p class="muted">« {{ unAvis.commentaire }} »</p>
+        </div>
+      } @empty {
+        <p class="muted">Pas encore d'avis sur ce cours.</p>
+      }
+
       <h2>Autres créneaux</h2>
       <div class="creneaux">
         @for (seance of autresCreneaux(); track seance.id) {
@@ -68,7 +83,14 @@
         <p class="muted">Aucune séance prévue.</p>
       }
 
-      <button class="btn btn-outline bloc">♡ Ajouter aux favoris</button>
+      <!-- Favori : connecté = ajoute / retire ; sinon renvoie vers la connexion -->
+      @if (authService.connecte()) {
+        <button class="btn btn-outline bloc" (click)="favoriService.basculer('favoriCours', lienCours())">
+          {{ favoriService.estFavori('favoriCours', lienCours()) ? '♥ Retirer des favoris' : '♡ Ajouter aux favoris' }}
+        </button>
+      } @else {
+        <a class="btn btn-outline bloc" routerLink="/login">♡ Ajouter aux favoris</a>
+      }
     </aside>
   </div>
 } @else {

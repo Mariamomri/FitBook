@@ -15,4 +15,5 @@ export interface ReservationAdminInterface {
   statut: string;
   user: string;
   seance: string;
+  avis?: string[]; // avis déjà laissés sur cette réservation
 }

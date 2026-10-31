@@ -177,3 +177,23 @@
   text-align: center;
   margin-top: 0.6rem;
 }
+
+/* Avis publiés sur le cours */
+.moyenne {
+  margin-left: 0.6rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-style: normal;
+  color: var(--accent);
+}
+.avis {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.avis p {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+}
+.etoiles {
+  color: #facc15;
+}

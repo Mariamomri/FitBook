@@ -16,6 +16,8 @@ import { ProfilModifier } from './profil/profil-modifier/profil-modifier';
 import { Historique } from './historique/historique';
 import { AjouterUtilisateur } from './admin/ajouter-utilisateur/ajouter-utilisateur';
 import { adminGuard } from './admin/admin-guard';
+import { MesFavoris } from './favoris/mes-favoris/mes-favoris';
+import { MesAvis } from './avis/mes-avis/mes-avis';
 
 export const routes: Routes = [
   { path: '', component: Accueil },
@@ -32,5 +34,7 @@ export const routes: Routes = [
   { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
   { path: 'calendrier', component: Calendrier, canActivate: [authGuard] },
   { path: 'historique', component: Historique, canActivate: [authGuard] },
+  { path: 'favoris', component: MesFavoris, canActivate: [authGuard] },
+  { path: 'mes-avis', component: MesAvis, canActivate: [authGuard] },
   { path: 'admin/utilisateurs/nouveau', component: AjouterUtilisateur, canActivate: [authGuard, adminGuard] },
 ];

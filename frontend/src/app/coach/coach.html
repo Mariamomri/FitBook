@@ -79,6 +79,17 @@
         </div>
 
         <div class="droite">
+          @if (authService.connecte()) {
+            @let lien = '/api/coaches/' + coach.id;
+            <button
+              class="coeur"
+              [class.actif]="favoriService.estFavori('favoriCoachs', lien)"
+              (click)="favoriService.basculer('favoriCoachs', lien)"
+              aria-label="Favori"
+            >
+              {{ favoriService.estFavori('favoriCoachs', lien) ? '♥' : '♡' }}
+            </button>
+          }
           <div>
             <p class="prix">{{ coach.tarif }} €</p>
             <p class="par-heure">par heure</p>

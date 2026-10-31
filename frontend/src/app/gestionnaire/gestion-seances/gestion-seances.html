@@ -1,6 +1,6 @@
 <div class="titre-bloc">
   <h2>Calendrier &amp; séances</h2>
-  <button class="btn petit-btn" (click)="formulaireOuvert.set(true)" [disabled]="mesCours().length === 0">
+  <button class="btn petit-btn" (click)="ouvrirAjout()" [disabled]="mesCours().length === 0">
     + Ajouter une séance
   </button>
 </div>
@@ -14,8 +14,8 @@
 
 <!-- Nouvelle séance : un cours + une date + un créneau -->
 @if (formulaireOuvert()) {
-  <form class="formulaire" [formGroup]="seanceForm" (ngSubmit)="ajouter()">
-    <h3>Nouvelle séance</h3>
+  <form class="formulaire" [formGroup]="seanceForm" (ngSubmit)="enregistrer()">
+    <h3>{{ idModification() === null ? 'Nouvelle séance' : 'Modifier la séance' }}</h3>
     <div class="grille-champs">
       <div class="large">
         <label for="cours">Cours</label>
@@ -42,7 +42,7 @@
       </div>
     </div>
     <div class="boutons">
-      <button type="submit" class="btn">Ajouter</button>
+      <button type="submit" class="btn">Enregistrer</button>
       <button type="button" class="btn btn-outline" (click)="formulaireOuvert.set(false)">Annuler</button>
     </div>
   </form>
@@ -119,6 +119,7 @@
             </td>
             <td>
               <div class="actions">
+                <button class="btn-petit" (click)="ouvrirModification(seance)">Modifier</button>
                 @if (seance.statut === 'ouverte') {
                   <button class="btn-petit" (click)="annuler(seance)">Annuler</button>
                 }

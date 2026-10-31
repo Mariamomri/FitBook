@@ -23,11 +23,13 @@ export class SidebarSportif implements OnInit {
   estAdmin = computed(() => this.moi()?.roles?.includes('ROLE_ADMIN') ?? false);
 
   estGestionnaire = computed(() => this.moi()?.roles?.includes('ROLE_SALLE') ?? false);
+  estCoach = computed(() => this.moi()?.roles?.includes('ROLE_COACH') ?? false);
 
   // Titre du premier lien selon le rôle
   titreDashboard = computed(() => {
     if (this.estAdmin()) return 'Dashboard admin';
     if (this.estGestionnaire()) return 'Dashboard salle';
+    if (this.estCoach()) return 'Dashboard coach';
     return 'Dashboard sportif';
   });
 
@@ -38,6 +40,14 @@ export class SidebarSportif implements OnInit {
     { fragment: 'activites', libelle: 'Activités', icone: 'fa-dumbbell' },
     { fragment: 'horaires', libelle: 'Horaires', icone: 'fa-clock' },
     { fragment: 'calendrier', libelle: 'Calendrier & séances', icone: 'fa-calendar-days' },
+    { fragment: 'avis', libelle: 'Avis', icone: 'fa-star' },
+  ];
+
+  // Liens du coach vers les parties de sa dashboard
+  liensCoach = [
+    { fragment: 'profil-pro', libelle: 'Profil professionnel', icone: 'fa-id-card' },
+    { fragment: 'seances', libelle: 'Séances & calendrier', icone: 'fa-calendar-days' },
+    { fragment: 'disponibilites', libelle: 'Disponibilités', icone: 'fa-clock' },
     { fragment: 'avis', libelle: 'Avis', icone: 'fa-star' },
   ];
 

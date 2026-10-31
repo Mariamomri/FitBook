@@ -2,6 +2,8 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CoachService } from './coach-service';
 import { CoachInterface } from './coach-interface';
+import { FavoriService } from '../favoris/favori-service';
+import { AuthService } from '../auth/auth-service';
 
 @Component({
   selector: 'app-coach',
@@ -11,6 +13,8 @@ import { CoachInterface } from './coach-interface';
 })
 export class Coach implements OnInit {
   coachService = inject(CoachService);
+  favoriService = inject(FavoriService);
+  authService = inject(AuthService);
   coaches = signal<CoachInterface[]>([]);
 
   // Filtres
@@ -43,6 +47,7 @@ export class Coach implements OnInit {
 
   // Au chargement de la page, on récupère les coachs depuis l'API
   ngOnInit(): void {
+    this.favoriService.charger();
     this.coachService.getCoaches().subscribe((reponse) => {
       this.coaches.set(reponse.member);
     });

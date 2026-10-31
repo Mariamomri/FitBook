@@ -3,6 +3,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { SalleService } from './salle-service';
 import { SalleInterface } from './salle-interface';
+import { FavoriService } from '../favoris/favori-service';
+import { AuthService } from '../auth/auth-service';
 
 @Component({
   selector: 'app-salles',
@@ -13,6 +15,8 @@ import { SalleInterface } from './salle-interface';
 export class Salles implements OnInit {
   salleService = inject(SalleService);
   private sanitizer = inject(DomSanitizer);
+  favoriService = inject(FavoriService);
+  authService = inject(AuthService);
   salles = signal<SalleInterface[]>([]);
 
   // Filtres de la barre de recherche
@@ -62,6 +66,7 @@ export class Salles implements OnInit {
 
   // Au chargement de la page, on récupère les salles depuis l'API
   ngOnInit(): void {
+    this.favoriService.charger();
     this.salleService.getSalles().subscribe((reponse) => {
       this.salles.set(reponse.member);
     });

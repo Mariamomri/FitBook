@@ -27,6 +27,9 @@
     @if (erreur()) {
       <p class="alerte">{{ erreur() }}</p>
     }
+    @if (succes()) {
+      <p class="alerte-ok">{{ succes() }}</p>
+    }
 
     <div class="tableau">
       <table>
@@ -36,6 +39,7 @@
             <th>Salle</th>
             <th>Date</th>
             <th>Statut</th>
+            <th>Avis</th>
           </tr>
         </thead>
         <tbody>
@@ -51,10 +55,21 @@
                   <span class="statut effectuee">Effectuée</span>
                 }
               </td>
+              <td>
+                <!-- On ne note qu'une séance effectuée -->
+                @if (statutAffiche(reservation) === 'effectuee') {
+                  <button class="bouton-avis" (click)="ouvrirAvis(reservation)">Laisser un avis</button>
+                  @if (nombreAvis(reservation) > 0) {
+                    <span class="muted petit">{{ nombreAvis(reservation) }} avis</span>
+                  }
+                } @else {
+                  <span class="muted">—</span>
+                }
+              </td>
             </tr>
           } @empty {
             <tr>
-              <td colspan="4" class="muted vide">Aucune séance passée.</td>
+              <td colspan="5" class="muted vide">Aucune séance passée.</td>
             </tr>
           }
         </tbody>
@@ -62,3 +77,55 @@
     </div>
   </div>
 </div>
+
+<!-- Fenêtre « Laisser un avis » -->
+@if (reservationNotee(); as reservation) {
+  <div class="fond-modale" (click)="reservationNotee.set(null)">
+    <div class="modale" (click)="$event.stopPropagation()">
+      <h3>Votre avis sur {{ reservation.cours }}</h3>
+
+      <p class="titre-champ">Que voulez-vous noter ?</p>
+      <div class="cibles">
+        @for (cible of cibles(); track cible.type) {
+          <button
+            type="button"
+            [class.choisie]="cibleChoisie() === cible"
+            [disabled]="cible.dejaNote"
+            (click)="cibleChoisie.set(cible)"
+          >
+            {{ cible.libelle }}
+            @if (cible.dejaNote) {
+              <small>(déjà noté)</small>
+            }
+          </button>
+        }
+      </div>
+
+      @if (cibleChoisie()) {
+        <p class="titre-champ">Note</p>
+        <div class="etoiles-choix">
+          @for (n of [1, 2, 3, 4, 5]; track n) {
+            <button type="button" [class.allumee]="n <= note()" (click)="note.set(n)" [attr.aria-label]="n + ' étoiles'">★</button>
+          }
+        </div>
+
+        <p class="titre-champ">Commentaire</p>
+        <textarea #commentaire rows="3" placeholder="Votre expérience en quelques mots..."></textarea>
+
+        @if (erreurAvis()) {
+          <p class="champ-erreur">{{ erreurAvis() }}</p>
+        }
+
+        <div class="boutons">
+          <button class="btn btn-outline" (click)="reservationNotee.set(null)">Annuler</button>
+          <button class="btn" (click)="envoyerAvis(commentaire.value)">Envoyer mon avis</button>
+        </div>
+      } @else {
+        <p class="muted">Vous avez déjà noté le cours, la salle et le coach de cette séance.</p>
+        <div class="boutons">
+          <button class="btn btn-outline" (click)="reservationNotee.set(null)">Fermer</button>
+        </div>
+      }
+    </div>
+  </div>
+}

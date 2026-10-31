@@ -6,6 +6,9 @@ import { CoursInterface } from '../cours-interface';
 import { SeanceService } from '../../seances/seance-service';
 import { SeanceInterface } from '../../seances/seance-interface';
 import { AuthService } from '../../auth/auth-service';
+import { FavoriService } from '../../favoris/favori-service';
+import { AvisService } from '../../avis/avis-service';
+import { AvisInterface } from '../../avis/avis-interface';
 
 @Component({
   selector: 'app-cours-detail',
@@ -18,15 +21,28 @@ export class CoursDetail implements OnInit {
   private coursService = inject(CoursService);
   private seanceService = inject(SeanceService);
   authService = inject(AuthService);
+  favoriService = inject(FavoriService);
+  avisService = inject(AvisService);
 
   cours = signal<CoursInterface | null>(null);
   seances = signal<SeanceInterface[]>([]);
+  avis = signal<AvisInterface[]>([]);
   message = signal('');
   erreur = signal('');
   private idCours = 0;
 
   // Séance choisie dans « Autres créneaux » (null = la prochaine)
   idChoisi = signal<number | null>(null);
+
+  // Lien du cours pour les favoris et les avis ("/api/cours/12")
+  lienCours = computed(() => '/api/cours/' + this.cours()?.id);
+
+  // Avis publiés sur ce cours et note moyenne (arrondie à 0,1)
+  avisDuCours = computed(() => this.avis().filter((a) => a.statut === 'publie' && a.cours === this.lienCours()));
+  noteMoyenne = computed(() => {
+    const liste = this.avisDuCours();
+    return liste.length === 0 ? 0 : Math.round((liste.reduce((s, a) => s + a.note, 0) / liste.length) * 10) / 10;
+  });
 
   // Séances pas encore passées
   seancesAVenir = computed(() => this.seances().filter((s) => s.statut !== 'terminee'));
@@ -47,6 +63,8 @@ export class CoursDetail implements OnInit {
       this.cours.set(reponse);
     });
     this.chargerSeances();
+    this.favoriService.charger();
+    this.avisService.getAvis().subscribe((reponse) => this.avis.set(reponse.member));
   }
 
   chargerSeances(): void {

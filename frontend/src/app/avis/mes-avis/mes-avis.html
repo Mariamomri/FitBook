@@ -1,0 +1,61 @@
+<div class="espace">
+  <app-sidebar-sportif />
+
+  <div class="espace-contenu">
+    <section class="bandeau">
+      <h1>Mes <span class="vert">avis</span></h1>
+      <p class="muted">Les avis que vous avez laissés. Un nouvel avis est visible après validation par l'équipe.</p>
+    </section>
+
+    @if (erreur()) {
+      <p class="alerte">{{ erreur() }}</p>
+    }
+    @if (succes()) {
+      <p class="alerte-ok">{{ succes() }}</p>
+    }
+
+    <section class="bloc-carte">
+      @for (unAvis of mesAvis(); track unAvis.id) {
+        <article class="avis">
+          <div class="haut">
+            <strong>{{ cible(unAvis) }}</strong>
+            @switch (unAvis.statut) {
+              @case ('publie') {
+                <span class="statut ok">Publié</span>
+              }
+              @case ('refuse') {
+                <span class="statut ko">Refusé</span>
+              }
+              @default {
+                <span class="statut attente">En attente</span>
+              }
+            }
+          </div>
+
+          @if (idEnModification() === unAvis.id) {
+            <!-- Modification : étoiles cliquables + commentaire -->
+            <div class="etoiles-choix">
+              @for (n of [1, 2, 3, 4, 5]; track n) {
+                <button type="button" [class.allumee]="n <= nouvelleNote()" (click)="nouvelleNote.set(n)">★</button>
+              }
+            </div>
+            <textarea #commentaire rows="3" [value]="unAvis.commentaire"></textarea>
+            <div class="actions">
+              <button class="btn petit-btn" (click)="enregistrer(unAvis, commentaire.value)">Enregistrer</button>
+              <button class="btn btn-outline petit-btn" (click)="idEnModification.set(null)">Annuler</button>
+            </div>
+          } @else {
+            <span class="etoiles">{{ avisService.etoiles(unAvis.note) }}</span>
+            <p class="muted">« {{ unAvis.commentaire }} »</p>
+            <div class="actions">
+              <button class="btn btn-outline petit-btn" (click)="commencerModification(unAvis)">Modifier</button>
+              <button class="btn btn-outline petit-btn danger" (click)="supprimer(unAvis)">Supprimer</button>
+            </div>
+          }
+        </article>
+      } @empty {
+        <p class="muted">Vous n'avez pas encore laissé d'avis. Rendez-vous dans l'Historique après une séance.</p>
+      }
+    </section>
+  </div>
+</div>

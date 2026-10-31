@@ -91,7 +91,7 @@
 
 /* Bouton en bas à droite */
 .droite {
-  @apply flex items-end p-3;
+  @apply flex flex-col items-end justify-between gap-2 p-3;
 }
 .droite .btn {
   @apply px-3 py-2 text-xs;
@@ -106,4 +106,12 @@
 }
 .carte iframe {
   @apply block h-[520px] w-full border-0;
+}
+
+/* Bouton cœur : vide = pas favori, plein (couleur d'accent) = favori */
+.coeur {
+  @apply cursor-pointer border-0 bg-transparent text-2xl leading-none text-gris;
+}
+.coeur.actif {
+  @apply text-accent;
 }

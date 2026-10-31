@@ -8,10 +8,11 @@ import { SidebarSportif } from '../layout/sidebar-sportif/sidebar-sportif';
 import { Calendrier } from '../calendrier/calendrier';
 import { DashboardAdmin } from '../admin/dashboard-admin/dashboard-admin';
 import { DashboardSalle } from '../gestionnaire/dashboard-salle/dashboard-salle';
+import { DashboardCoach } from '../coach-espace/dashboard-coach/dashboard-coach';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink, SidebarSportif, Calendrier, DashboardAdmin, DashboardSalle],
+  imports: [RouterLink, SidebarSportif, Calendrier, DashboardAdmin, DashboardSalle, DashboardCoach],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -41,6 +42,7 @@ export class Dashboard implements OnInit {
 
   // Le gestionnaire de salle a aussi sa propre dashboard (ses salles et ses cours)
   estGestionnaire = computed(() => this.moi()?.roles?.includes('ROLE_SALLE') ?? false);
+  estCoach = computed(() => this.moi()?.roles?.includes('ROLE_COACH') ?? false);
 
   ngOnInit(): void {
     this.authService.getMoi().subscribe((reponse) => this.moi.set(reponse));

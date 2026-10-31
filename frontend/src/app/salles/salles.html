@@ -66,6 +66,18 @@
         </div>
 
         <div class="droite">
+          <!-- Cœur : seulement pour un utilisateur connecté ; stopPropagation pour ne pas changer la carte -->
+          @if (authService.connecte()) {
+            @let lien = '/api/salles/' + salle.id;
+            <button
+              class="coeur"
+              [class.actif]="favoriService.estFavori('favoriSalles', lien)"
+              (click)="$event.stopPropagation(); favoriService.basculer('favoriSalles', lien)"
+              aria-label="Favori"
+            >
+              {{ favoriService.estFavori('favoriSalles', lien) ? '♥' : '♡' }}
+            </button>
+          }
           <a class="btn" routerLink="/activites" [queryParams]="{ quoi: salle.nom }">Voir la salle</a>
         </div>
       </article>

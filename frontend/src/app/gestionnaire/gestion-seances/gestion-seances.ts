@@ -28,8 +28,11 @@ export class GestionSeances implements OnInit {
   private salleService = inject(SalleService);
   private adminService = inject(AdminService);
 
-  // Le gestionnaire connecté (donné par la dashboard)
+  // L'utilisateur connecté (donné par la dashboard)
   moi = input.required<UserInterface>();
+
+  // Utilisé par la dashboard coach : lien de sa fiche ("/api/coaches/12") pour ne garder que ses cours
+  coachLien = input<string | null>(null);
 
   seances = signal<SeanceInterface[]>([]);
   cours = signal<CoursInterface[]>([]);
@@ -37,14 +40,20 @@ export class GestionSeances implements OnInit {
   erreur = signal('');
   succes = signal('');
   formulaireOuvert = signal(false);
+  idModification = signal<number | null>(null); // null = nouvelle séance, sinon id de la séance modifiée
   aSupprimer = signal<SeanceInterface | null>(null);
 
   joursSemaine = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
   aujourdhui = new Date();
   moisAffiche = signal(new Date(this.aujourdhui.getFullYear(), this.aujourdhui.getMonth(), 1));
 
-  // Ses salles → ses cours → les séances de ses cours (la plus proche en premier)
+  // Ses cours → les séances de ses cours (la plus proche en premier)
   mesCours = computed(() => {
+    // Coach : les cours qu'il anime
+    if (this.coachLien()) {
+      return this.cours().filter((c) => c.coach === this.coachLien());
+    }
+    // Gestionnaire : les cours qui ont lieu dans ses salles
     const liens = this.salles()
       .filter((s) => s.gestionnaire === '/api/users/' + this.moi().id)
       .map((s) => '/api/salles/' + s.id);
@@ -118,7 +127,25 @@ export class GestionSeances implements OnInit {
     this.moisAffiche.set(new Date(m.getFullYear(), m.getMonth() + 1, 1));
   }
 
-  ajouter(): void {
+  ouvrirAjout(): void {
+    this.seanceForm.reset({ cours: '', date: '', heureDebut: '18:00', heureFin: '19:00' });
+    this.idModification.set(null);
+    this.formulaireOuvert.set(true);
+  }
+
+  // "2026-11-04T09:00:00+00:00" → date "2026-11-04" et heure "09:00"
+  ouvrirModification(seance: SeanceInterface): void {
+    this.seanceForm.reset({
+      cours: '/api/cours/' + seance.coursId,
+      date: seance.dateDebut.slice(0, 10),
+      heureDebut: seance.dateDebut.slice(11, 16),
+      heureFin: seance.dateFin.slice(11, 16),
+    });
+    this.idModification.set(seance.id);
+    this.formulaireOuvert.set(true);
+  }
+
+  enregistrer(): void {
     this.erreur.set('');
     this.succes.set('');
     const { cours, date, heureDebut, heureFin } = this.seanceForm.value;
@@ -130,16 +157,20 @@ export class GestionSeances implements OnInit {
     }
 
     // Heures enregistrées telles quelles (le site les affiche en UTC)
-    this.seanceService
-      .creerSeance({
-        cours: cours!,
-        dateDebut: date + 'T' + heureDebut + ':00+00:00',
-        dateFin: date + 'T' + heureFin + ':00+00:00',
-        statut: 'ouverte',
-      })
-      .subscribe({
+    const donnees = {
+      cours: cours!,
+      dateDebut: date + 'T' + heureDebut + ':00+00:00',
+      dateFin: date + 'T' + heureFin + ':00+00:00',
+    };
+    const id = this.idModification();
+    const requete =
+      id === null
+        ? this.seanceService.creerSeance({ ...donnees, statut: 'ouverte' })
+        : this.seanceService.modifierSeance(id, donnees as Partial<SeanceInterface>);
+
+    requete.subscribe({
         next: () => {
-          this.succes.set('Séance ajoutée.');
+          this.succes.set(id === null ? 'Séance ajoutée.' : 'Séance modifiée.');
           this.formulaireOuvert.set(false);
           this.charger();
         },

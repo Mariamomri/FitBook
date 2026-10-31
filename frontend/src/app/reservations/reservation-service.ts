@@ -36,4 +36,9 @@ export class ReservationService {
   supprimerReservation(id: number): Observable<void> {
     return this.http.delete<void>('https://127.0.0.1:8000/api/reservations/' + id);
   }
+
+  // Une réservation par son id (le propriétaire y a accès) : donne le lien vers la séance
+  getUneReservation(id: number): Observable<ReservationAdminInterface> {
+    return this.http.get<ReservationAdminInterface>('https://127.0.0.1:8000/api/reservations/' + id);
+  }
 }
