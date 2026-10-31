@@ -9,6 +9,8 @@ import { AuthService } from '../../auth/auth-service';
 import { FavoriService } from '../../favoris/favori-service';
 import { AvisService } from '../../avis/avis-service';
 import { AvisInterface } from '../../avis/avis-interface';
+import { CoachService } from '../../coach/coach-service';
+import { CoachInterface } from '../../coach/coach-interface';
 
 @Component({
   selector: 'app-cours-detail',
@@ -24,8 +26,10 @@ export class CoursDetail implements OnInit {
   authService = inject(AuthService);
   favoriService = inject(FavoriService);
   avisService = inject(AvisService);
+  coachService = inject(CoachService);
 
   cours = signal<CoursInterface | null>(null);
+  coach = signal<CoachInterface | null>(null);
   seances = signal<SeanceInterface[]>([]);
   avis = signal<AvisInterface[]>([]);
   message = signal('');
@@ -42,6 +46,14 @@ export class CoursDetail implements OnInit {
   avisDuCours = computed(() => this.avis().filter((a) => a.statut === 'publie' && a.cours === this.lienCours()));
   noteMoyenne = computed(() => {
     const liste = this.avisDuCours();
+    return liste.length === 0 ? 0 : Math.round((liste.reduce((s, a) => s + a.note, 0) / liste.length) * 10) / 10;
+  });
+  noteArrondie = computed(() => Math.round(this.noteMoyenne()));
+
+  // Avis publiés sur le coach du cours (pour sa carte)
+  avisDuCoach = computed(() => this.avis().filter((a) => a.statut === 'publie' && a.coach && a.coach === this.cours()?.coach));
+  noteCoach = computed(() => {
+    const liste = this.avisDuCoach();
     return liste.length === 0 ? 0 : Math.round((liste.reduce((s, a) => s + a.note, 0) / liste.length) * 10) / 10;
   });
 
@@ -62,6 +74,10 @@ export class CoursDetail implements OnInit {
 
     this.coursService.getUnCours(this.idCours).subscribe((reponse) => {
       this.cours.set(reponse);
+      // Le cours peut avoir un coach : on charge sa fiche pour la photo
+      if (reponse.coach) {
+        this.coachService.getUnCoach(Number(this.idCoach(reponse.coach))).subscribe((fiche) => this.coach.set(fiche));
+      }
     });
     this.chargerSeances();
     this.favoriService.charger();
@@ -81,12 +97,32 @@ export class CoursDetail implements OnInit {
     this.erreur.set('');
   }
 
-  // Titre en deux couleurs : le dernier mot en vert (comme sur la maquette)
+  // Titre en deux couleurs : le dernier mot en vert
   debutTitre(titre: string): string {
     return titre.split(' ').slice(0, -1).join(' ');
   }
   finTitre(titre: string): string {
     return titre.split(' ').slice(-1)[0];
+  }
+
+  // Part des avis pour une note (barres de 5★ à 1★)
+  partNote(note: number): number {
+    const liste = this.avisDuCours();
+    return liste.length === 0 ? 0 : (liste.filter((a) => a.note === note).length / liste.length) * 100;
+  }
+
+  // Photo du bandeau selon l'activité
+  photoActivite(nom: string | undefined): string {
+    const photos: Record<string, string> = {
+      musculation: 'img/barbell.jpg',
+      'hatha yoga': 'img/yoga.jpg',
+      yoga: 'img/yoga.jpg',
+      pilates: 'img/stretch.jpg',
+      crossfit: 'img/crossfit.jpg',
+      boxe: 'img/boxing.jpg',
+      zumba: 'img/cardio.jpg',
+    };
+    return photos[(nom ?? '').toLowerCase()] ?? 'img/gym1.jpg';
   }
 
   // Remplissage de la barre de places (en %)

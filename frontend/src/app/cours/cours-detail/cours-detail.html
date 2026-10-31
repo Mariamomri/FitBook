@@ -1,6 +1,6 @@
 @if (cours(); as c) {
-  <!-- Bandeau du haut (image plus tard) -->
-  <section class="bandeau">
+  <!-- Bandeau du haut avec la photo de l'activité -->
+  <section class="bandeau" [style.background-image]="'linear-gradient(90deg, rgba(21, 21, 24, 0.95) 35%, rgba(21, 21, 24, 0.3)), url(' + photoActivite(c.activiteNom) + ')'">
     <p class="fil">
       <a routerLink="/">Accueil</a> › <a routerLink="/activites">Recherche</a> › <span>{{ c.titre }}</span>
     </p>
@@ -14,29 +14,23 @@
     <div class="contenu">
       @if (c.coachNom) {
         <div class="carte-coach">
-          <span class="avatar">{{ c.coachNom.charAt(0) }}</span>
-          <p><strong>{{ c.coachNom }}</strong> · Coach</p>
+          @if (coach(); as fiche) {
+            <img class="photo-coach" [src]="coachService.photo(fiche)" [alt]="c.coachNom" />
+          } @else {
+            <span class="avatar">{{ c.coachNom.charAt(0) }}</span>
+          }
+          <div>
+            <p><strong>{{ c.coachNom }}</strong> · Coach</p>
+            @if (avisDuCoach().length > 0) {
+              <p class="petit"><span class="etoiles">{{ avisService.etoiles(noteCoach()) }}</span> {{ noteCoach() }} ({{ avisDuCoach().length }} avis)</p>
+            }
+          </div>
           <a [routerLink]="['/coach', idCoach(c.coach)]">Voir le profil →</a>
         </div>
       }
 
       <h2>Description</h2>
       <p class="muted">{{ c.description }}</p>
-
-      <h2>
-        Avis
-        @if (avisDuCours().length > 0) {
-          <span class="moyenne">{{ noteMoyenne() }} ★ · {{ avisDuCours().length }} avis</span>
-        }
-      </h2>
-      @for (unAvis of avisDuCours(); track unAvis.id) {
-        <div class="avis">
-          <span class="etoiles">{{ avisService.etoiles(unAvis.note) }}</span>
-          <p class="muted">« {{ unAvis.commentaire }} »</p>
-        </div>
-      } @empty {
-        <p class="muted">Pas encore d'avis sur ce cours.</p>
-      }
 
       <h2>Autres créneaux</h2>
       <div class="creneaux">
@@ -49,6 +43,32 @@
           <p class="muted">Aucun autre créneau.</p>
         }
       </div>
+
+      <h2>Avis ({{ avisDuCours().length }})</h2>
+      @if (avisDuCours().length > 0) {
+        <div class="resume-avis">
+          <div class="grosse-note">
+            <strong>{{ noteMoyenne() }}</strong>
+            <span class="etoiles">{{ avisService.etoiles(noteArrondie()) }}</span>
+          </div>
+          <div class="barres">
+            @for (n of [5, 4, 3, 2, 1]; track n) {
+              <div class="barre-note">
+                <span>{{ n }}★</span>
+                <div class="barre-avis"><div [style.width.%]="partNote(n)"></div></div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+      @for (unAvis of avisDuCours(); track unAvis.id) {
+        <div class="avis">
+          <span class="etoiles">{{ avisService.etoiles(unAvis.note) }}</span>
+          <p class="muted">« {{ unAvis.commentaire }} »</p>
+        </div>
+      } @empty {
+        <p class="muted">Pas encore d'avis sur ce cours.</p>
+      }
     </div>
 
     <!-- Carte de réservation (droite) -->
@@ -60,7 +80,7 @@
         <p class="date">
           {{ s.dateDebut | date: 'EEE d MMM · HH:mm' : 'UTC' : 'fr' }} – {{ s.dateFin | date: 'HH:mm' : 'UTC' }}
         </p>
-        <p class="petit"><strong>{{ s.placesRestantes }} places restantes</strong> <span class="muted">sur {{ c.capacite }}</span></p>
+        <p class="petit"><strong>{{ s.placesRestantes }} places restantes</strong>&nbsp;<span class="muted">sur {{ c.capacite }}</span></p>
         <div class="barre"><div class="barre-remplie" [style.width.%]="pourcentage(s, c.capacite)"></div></div>
 
         @if (message()) {

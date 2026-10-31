@@ -3,6 +3,8 @@
   padding: 2.5rem 2rem 3rem;
   border: 1px solid var(--accent);
   background: linear-gradient(90deg, #151518 35%, #3a2a30);
+  background-size: cover;
+  background-position: center;
 }
 
 .fil {
@@ -59,7 +61,7 @@
     grid-template-columns: 1fr 320px;
   }
 
-  /* la carte remonte sur le bandeau, comme sur la maquette */
+  /* la carte remonte sur le bandeau */
   .carte-resa {
     margin-top: -9rem;
   }
@@ -196,4 +198,62 @@
 }
 .etoiles {
   color: #facc15;
+}
+
+/* Photo du coach dans sa carte */
+.photo-coach {
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.carte-coach div {
+  flex: 1;
+}
+
+/* Résumé des avis : grosse note + barres */
+.resume-avis {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.grosse-note {
+  display: flex;
+  flex-direction: column;
+}
+
+.grosse-note strong {
+  font-family: var(--font-title);
+  font-size: 3.5rem;
+  font-style: italic;
+  line-height: 1;
+}
+
+.barres {
+  flex: 1;
+  max-width: 320px;
+}
+
+.barre-note {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.barre-avis {
+  flex: 1;
+  height: 6px;
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.barre-avis div {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
 }
