@@ -22,8 +22,16 @@
     @if (authService.connecte()) {
       <button class="btn btn-outline pill" (click)="deconnexion()">Se déconnecter</button>
     } @else {
-      <a routerLink="login" class="btn btn-outline pill">Connexion</a>
-      <a routerLink="inscription" class="btn pill">Inscription</a>
+      <!-- Le bouton de la page ouverte est plein, l'autre en contour (Inscription plein par défaut) -->
+      <a
+        routerLink="login"
+        class="btn pill"
+        routerLinkActive
+        #lienConnexion="routerLinkActive"
+        [class.btn-outline]="!lienConnexion.isActive"
+        >Connexion</a
+      >
+      <a routerLink="inscription" class="btn pill" [class.btn-outline]="lienConnexion.isActive">Inscription</a>
     }
   </div>
 </nav>
