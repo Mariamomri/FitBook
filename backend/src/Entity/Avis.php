@@ -152,4 +152,21 @@ class Avis
 
         return $this;
     }
+
+    // Auteur de l'avis affiché sur les fiches : prénom + initiale du nom (ex. "Mariam O.")
+    public function getAuteur(): ?string
+    {
+        $user = $this->reservation?->getUser();
+        if (!$user) {
+            return null;
+        }
+
+        return $user->getFirstname() . ' ' . mb_substr($user->getLastname() ?? '', 0, 1) . '.';
+    }
+
+    // Photo de profil de l'auteur (null = pas de photo)
+    public function getAuteurImage(): ?string
+    {
+        return $this->reservation?->getUser()?->getImageName();
+    }
 }

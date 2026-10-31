@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Reservation;
 use App\Entity\User;
 use App\Repository\ReservationRepository;
+use App\Security\EmailVerifier;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mime\Address;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -56,10 +59,40 @@ final class MeController extends AbstractController
                 'salle' => $cours->getSalle()->getNom(),
                 'dateDebut' => $seance->getDateDebut()->format('d/m/Y H:i'),
                 'dateFin' => $seance->getDateFin()->format('H:i'),
+                // Identifiants utiles pour savoir sur quoi le sportif peut laisser un avis
+                'coursId' => $cours->getId(),
+                'salleId' => $cours->getSalle()->getId(),
+                'coachId' => $cours->getCoach()?->getId(),
             ];
         }
 
         return $this->json($resultat);
+    }
+
+    // Renvoie le mail de confirmation (le lien reçu à l'inscription expire après 1 heure)
+    #[Route('/api/me/renvoyer-confirmation', name: 'api_me_renvoyer_confirmation', methods: ['POST'])]
+    public function renvoyerConfirmation(EmailVerifier $emailVerifier): JsonResponse
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($user->isVerified()) {
+            return $this->json(['message' => 'Votre email est déjà confirmé.'], 422);
+        }
+
+        $emailVerifier->sendEmailConfirmation(
+            'app_verify_email',
+            $user,
+            (new TemplatedEmail())
+                ->from(new Address('noreply@fitbook.be', 'FitBook'))
+                ->to((string) $user->getEmail())
+                ->subject('Confirmez votre email - FitBook')
+                ->htmlTemplate('confirmation_email.html.twig')
+        );
+
+        return $this->json(['message' => 'Email de confirmation envoyé à ' . $user->getEmail() . '.']);
     }
 
     // Réservations des salles du gestionnaire connecté
