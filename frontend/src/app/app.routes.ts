@@ -18,17 +18,27 @@ import { AjouterUtilisateur } from './admin/ajouter-utilisateur/ajouter-utilisat
 import { adminGuard } from './admin/admin-guard';
 import { MesFavoris } from './favoris/mes-favoris/mes-favoris';
 import { MesAvis } from './avis/mes-avis/mes-avis';
+import { FicheSalle } from './salles/fiche-salle/fiche-salle';
+import { FicheCoach } from './coach/fiche-coach/fiche-coach';
+import { ReservationConfirmee } from './reservations/reservation-confirmee/reservation-confirmee';
+import { VerifiezEmail } from './auth/verifiez-email/verifiez-email';
+import { CompteConfirme } from './auth/compte-confirme/compte-confirme';
 
 export const routes: Routes = [
   { path: '', component: Accueil },
   { path: 'login', component: Login },
   { path: 'inscription', component: Inscription },
+  { path: 'verifiez-email', component: VerifiezEmail },
+  { path: 'compte-confirme', component: CompteConfirme },
   { path: 'activites', component: Activites },
   { path: 'activites/:id', component: CoursDetail },
   { path: 'salles', component: Salles },
+  { path: 'salles/:id', component: FicheSalle },
   { path: 'coach', component: Coach },
+  { path: 'coach/:id', component: FicheCoach },
   { path: 'contact', component: Contact },
   { path: 'reservations', component: Reservations, canActivate: [authGuard] },
+  { path: 'reservation-confirmee', component: ReservationConfirmee, canActivate: [authGuard] },
   { path: 'profil', component: Profil, canActivate: [authGuard] },
   { path: 'profil/modifier', component: ProfilModifier, canActivate: [authGuard] },
   { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
