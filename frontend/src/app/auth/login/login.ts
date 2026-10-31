@@ -27,6 +27,9 @@ export class Login {
       this.authService.logout();
       this.themeService.appliquer('vert');
     }
+    if (this.emailConfirme) {
+      this.router.navigate(['/compte-confirme']);
+    }
   }
 
   // Le formulaire est créé dans le TypeScript, avec ses règles de validation
