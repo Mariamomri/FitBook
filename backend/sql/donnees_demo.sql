@@ -140,3 +140,11 @@ INSERT INTO avis_notes (id, note, commentaire, statut, created_at, updated_at, r
 INSERT INTO favori_salle (user_id, salle_id) VALUES (2007, 2001), (2008, 2003), (2009, 2002);
 INSERT INTO favori_cours (user_id, cours_id) VALUES (2007, 2002), (2008, 2003), (2008, 2004), (2010, 2007);
 INSERT INTO favori_coach (user_id, coach_id) VALUES (2007, 2001), (2008, 2002), (2009, 2003);
+
+-- 15. Photos de démonstration (fichiers déjà présents dans public/images/salles et public/images/coaches)
+UPDATE salles SET image_name = 'salle-2001.jpg' WHERE id = 2001;
+UPDATE salles SET image_name = 'salle-2002.jpg' WHERE id = 2002;
+UPDATE salles SET image_name = 'salle-2003.jpg' WHERE id = 2003;
+UPDATE coaches SET image_name = 'coach-2001.jpg' WHERE id = 2001;
+UPDATE coaches SET image_name = 'coach-2002.jpg' WHERE id = 2002;
+UPDATE coaches SET image_name = 'coach-2003.jpg' WHERE id = 2003;
