@@ -84,6 +84,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 20)]
     #[Assert\NotBlank()]
+    #[Assert\Choice(choices: ['vert', 'orange', 'jaune', 'bleu', 'rose', 'rouge'], message: 'Couleur non valide.')]
     private ?string $accentColor = null;
 
     #[ApiProperty(securityPostDenormalize: "is_granted('ROLE_ADMIN')")] // seul un admin peut modifier ce champ
