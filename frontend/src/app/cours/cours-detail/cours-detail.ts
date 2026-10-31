@@ -9,12 +9,13 @@ import { AuthService } from '../../auth/auth-service';
 import { FavoriService } from '../../favoris/favori-service';
 import { AvisService } from '../../avis/avis-service';
 import { AvisInterface } from '../../avis/avis-interface';
+import { DonnerAvis } from '../../avis/donner-avis/donner-avis';
 import { CoachService } from '../../coach/coach-service';
 import { CoachInterface } from '../../coach/coach-interface';
 
 @Component({
   selector: 'app-cours-detail',
-  imports: [DatePipe, RouterLink],
+  imports: [DatePipe, RouterLink, DonnerAvis],
   templateUrl: './cours-detail.html',
   styleUrl: './cours-detail.css',
 })
@@ -34,6 +35,8 @@ export class CoursDetail implements OnInit {
   avis = signal<AvisInterface[]>([]);
   message = signal('');
   erreur = signal('');
+  // 403 à la réservation : l'email du compte n'est pas encore confirmé
+  emailNonConfirme = signal(false);
   private idCours = 0;
 
   // Séance choisie dans « Autres créneaux » (null = la prochaine)
@@ -105,11 +108,6 @@ export class CoursDetail implements OnInit {
     return titre.split(' ').slice(-1)[0];
   }
 
-  // Part des avis pour une note (barres de 5★ à 1★)
-  partNote(note: number): number {
-    const liste = this.avisDuCours();
-    return liste.length === 0 ? 0 : (liste.filter((a) => a.note === note).length / liste.length) * 100;
-  }
 
   // Photo du bandeau selon l'activité
   photoActivite(nom: string | undefined): string {
@@ -138,6 +136,7 @@ export class CoursDetail implements OnInit {
   reserver(idSeance: number): void {
     this.message.set('');
     this.erreur.set('');
+    this.emailNonConfirme.set(false);
 
     this.seanceService.reserver(idSeance).subscribe({
       next: (reponse) => {
@@ -147,7 +146,20 @@ export class CoursDetail implements OnInit {
       error: (err) => {
         // 422 : séance complète ou déjà réservée / 403 : email non confirmé
         this.erreur.set(err.error?.detail || 'Erreur lors de la réservation');
+        this.emailNonConfirme.set(err.status === 403);
       },
+    });
+  }
+
+  // Bouton « Renvoyer l'email » sous le message d'erreur
+  renvoyerEmail(): void {
+    this.authService.renvoyerConfirmation().subscribe({
+      next: (reponse) => {
+        this.erreur.set('');
+        this.emailNonConfirme.set(false);
+        this.message.set(reponse.message + ' Cliquez sur le lien reçu, puis reconnectez-vous.');
+      },
+      error: (err) => this.erreur.set(err.error?.message ?? "Impossible d'envoyer l'email."),
     });
   }
 }

@@ -180,22 +180,7 @@
   margin-top: 0.6rem;
 }
 
-/* Avis publiés sur le cours */
-.moyenne {
-  margin-left: 0.6rem;
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  font-style: normal;
-  color: var(--accent);
-}
-.avis {
-  padding: 0.6rem 0;
-  border-bottom: 1px solid var(--border);
-}
-.avis p {
-  margin: 0.2rem 0 0;
-  font-size: 0.85rem;
-}
+/* Étoiles */
 .etoiles {
   color: #facc15;
 }
@@ -212,48 +197,14 @@
   flex: 1;
 }
 
-/* Résumé des avis : grosse note + barres */
-.resume-avis {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.grosse-note {
-  display: flex;
-  flex-direction: column;
-}
-
-.grosse-note strong {
-  font-family: var(--font-title);
-  font-size: 3.5rem;
-  font-style: italic;
-  line-height: 1;
-}
-
-.barres {
-  flex: 1;
-  max-width: 320px;
-}
-
-.barre-note {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.7rem;
-  color: var(--muted);
-}
-
-.barre-avis {
-  flex: 1;
-  height: 6px;
-  background: var(--border);
-  border-radius: 4px;
-}
-
-.barre-avis div {
-  height: 100%;
-  background: var(--accent);
-  border-radius: 4px;
+/* Lien « Renvoyer l'email de confirmation » sous l'erreur */
+.renvoyer {
+  margin: 0 0 0.8rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
 }

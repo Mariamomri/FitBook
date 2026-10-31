@@ -44,31 +44,7 @@
         }
       </div>
 
-      <h2>Avis ({{ avisDuCours().length }})</h2>
-      @if (avisDuCours().length > 0) {
-        <div class="resume-avis">
-          <div class="grosse-note">
-            <strong>{{ noteMoyenne() }}</strong>
-            <span class="etoiles">{{ avisService.etoiles(noteArrondie()) }}</span>
-          </div>
-          <div class="barres">
-            @for (n of [5, 4, 3, 2, 1]; track n) {
-              <div class="barre-note">
-                <span>{{ n }}★</span>
-                <div class="barre-avis"><div [style.width.%]="partNote(n)"></div></div>
-              </div>
-            }
-          </div>
-        </div>
-      }
-      @for (unAvis of avisDuCours(); track unAvis.id) {
-        <div class="avis">
-          <span class="etoiles">{{ avisService.etoiles(unAvis.note) }}</span>
-          <p class="muted">« {{ unAvis.commentaire }} »</p>
-        </div>
-      } @empty {
-        <p class="muted">Pas encore d'avis sur ce cours.</p>
-      }
+      <app-donner-avis cible="cours" [lien]="lienCours()" />
     </div>
 
     <!-- Carte de réservation (droite) -->
@@ -88,6 +64,9 @@
         }
         @if (erreur()) {
           <p class="erreur">{{ erreur() }}</p>
+          @if (emailNonConfirme()) {
+            <button type="button" class="renvoyer" (click)="renvoyerEmail()">Renvoyer l'email de confirmation →</button>
+          }
         }
 
         @if (s.statut === 'ouverte' && s.placesRestantes > 0) {
