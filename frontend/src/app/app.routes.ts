@@ -14,6 +14,7 @@ import { Seances } from './seances/seances';
 import { CoursDetail } from './cours/cours-detail/cours-detail';
 import { Contact } from './contact/contact';
 import { Calendrier } from './calendrier/calendrier';
+import { ProfilModifier } from './profil/profil-modifier/profil-modifier';
 
 export const routes: Routes = [
   { path: '', component: Accueil },
@@ -28,6 +29,7 @@ export const routes: Routes = [
   { path: 'contact', component: Contact },
   { path: 'reservations', component: Reservations, canActivate: [authGuard] },
   { path: 'profil', component: Profil, canActivate: [authGuard] },
+  { path: 'profil/modifier', component: ProfilModifier, canActivate: [authGuard] },
   { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
   { path: 'calendrier', component: Calendrier, canActivate: [authGuard] },
-];
+];

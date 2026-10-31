@@ -1,1 +1,43 @@
-<p>profil works!</p>
+<!-- Bandeau du haut -->
+<section class="bandeau">
+  <span class="points"></span>
+  <p class="fil"><a routerLink="/">Accueil</a> › <span>Mon profil</span></p>
+  <h1>Mon <span class="vert">profil.</span></h1>
+  <span class="rayures"></span>
+</section>
+
+@if (moi(); as user) {
+  <!-- Carte du profil, qui chevauche le bandeau -->
+  <article class="carte">
+    <div class="couverture"></div>
+
+    <div class="avatar">
+      <img [src]="profilService.photo(user.imageName)" [alt]="user.firstname" />
+    </div>
+
+    <h2>{{ user.firstname }} {{ user.lastname }}</h2>
+    <p class="email">{{ user.email }}</p>
+    <span class="role">{{ profilService.libelleRole(user.roles) }}</span>
+
+    <dl class="details">
+      <div>
+        <dt>Téléphone</dt>
+        <dd>{{ user.phone || 'Non renseigné' }}</dd>
+      </div>
+      <div>
+        <dt>Couleur du site</dt>
+        <dd>
+          <span class="pastille" [style.background]="couleur(user.accentColor).code"></span>
+          {{ couleur(user.accentColor).libelle }}
+        </dd>
+      </div>
+    </dl>
+
+    <a class="btn" routerLink="/profil/modifier">Modifier mon profil</a>
+    <a class="lien" routerLink="/dashboard">Aller à mon Dashboard →</a>
+  </article>
+} @else if (erreur()) {
+  <p class="alerte chargement">{{ erreur() }}</p>
+} @else {
+  <p class="muted chargement">Chargement du profil...</p>
+}
