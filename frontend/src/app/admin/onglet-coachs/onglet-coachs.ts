@@ -1,11 +1,9 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AdminService } from '../admin-service';
+import { CoachService } from '../../coach/coach-service';
 import { CoachInterface } from '../../coach/coach-interface';
 import { UserInterface } from '../../auth/user-interface';
-
-// Un coach vu par l'admin : en plus, le lien vers son compte ("/api/users/12")
-type CoachAdmin = CoachInterface & { user?: string };
 
 @Component({
   selector: 'app-onglet-coachs',
@@ -15,8 +13,9 @@ type CoachAdmin = CoachInterface & { user?: string };
 })
 export class OngletCoachs implements OnInit {
   adminService = inject(AdminService);
+  private coachService = inject(CoachService);
 
-  coaches = signal<CoachAdmin[]>([]);
+  coaches = signal<CoachInterface[]>([]);
   comptesCoach = signal<UserInterface[]>([]);
   erreur = signal('');
   succes = signal('');
@@ -24,7 +23,7 @@ export class OngletCoachs implements OnInit {
 
   // null = formulaire fermé, 0 = nouveau coach, sinon id du coach modifié
   idFormulaire = signal<number | null>(null);
-  aSupprimer = signal<CoachAdmin | null>(null);
+  aSupprimer = signal<CoachInterface | null>(null);
 
   coachesFiltres = computed(() => {
     const texte = this.recherche().toLowerCase();
@@ -44,13 +43,13 @@ export class OngletCoachs implements OnInit {
   ngOnInit(): void {
     this.charger();
     // Comptes avec le rôle ROLE_COACH (la fiche coach est liée à un compte)
-    this.adminService.liste<UserInterface>('users').subscribe((reponse) =>
+    this.adminService.getUtilisateurs().subscribe((reponse) =>
       this.comptesCoach.set(reponse.member.filter((u) => u.roles?.includes('ROLE_COACH'))),
     );
   }
 
   charger(): void {
-    this.adminService.liste<CoachAdmin>('coaches').subscribe({
+    this.coachService.getCoaches().subscribe({
       next: (reponse) => this.coaches.set(reponse.member),
       error: (err) => this.erreur.set(this.adminService.messageErreur(err)),
     });
@@ -61,7 +60,7 @@ export class OngletCoachs implements OnInit {
     this.idFormulaire.set(0);
   }
 
-  ouvrirModification(coach: CoachAdmin): void {
+  ouvrirModification(coach: CoachInterface): void {
     this.coachForm.reset({
       user: coach.user ?? '',
       biographie: coach.biographie,
@@ -84,13 +83,17 @@ export class OngletCoachs implements OnInit {
 
     const valeurs = this.coachForm.value;
     // tarif est un DECIMAL côté Symfony : on l'envoie en texte
-    const donnees = { ...valeurs, tarif: String(valeurs.tarif), certifications: valeurs.certifications || null };
+    const donnees = {
+      ...(valeurs as Partial<CoachInterface>),
+      tarif: String(valeurs.tarif),
+      certifications: valeurs.certifications || undefined,
+    };
 
     const id = this.idFormulaire();
     const requete =
       id === 0
-        ? this.adminService.creer<CoachAdmin>('coaches', donnees)
-        : this.adminService.modifier<CoachAdmin>('coaches', id!, donnees);
+        ? this.coachService.creerCoach(donnees)
+        : this.coachService.modifierCoach(id!, donnees);
 
     requete.subscribe({
       next: () => {
@@ -107,7 +110,7 @@ export class OngletCoachs implements OnInit {
     if (!coach) {
       return;
     }
-    this.adminService.supprimer('coaches', coach.id!).subscribe({
+    this.coachService.supprimerCoach(coach.id!).subscribe({
       next: () => {
         this.coaches.update((liste) => liste.filter((c) => c.id !== coach.id));
         this.succes.set('La fiche de ' + coach.nomComplet + ' a été supprimée.');

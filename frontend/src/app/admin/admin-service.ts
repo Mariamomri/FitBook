@@ -8,7 +8,7 @@ import { UserInterface } from '../auth/user-interface';
 })
 export class AdminService {
   private http = inject(HttpClient);
-  api = 'https://127.0.0.1:8000/api';
+  private api = 'https://127.0.0.1:8000/api/users';
 
   // Rôles proposés dans les listes (valeur choisie + libellé affiché + rôles Symfony)
   roles = [
@@ -18,24 +18,25 @@ export class AdminService {
     { valeur: 'admin', libelle: 'Admin', roles: ['ROLE_ADMIN'] },
   ];
 
-  // CRUD générique sur une ressource API Platform (users, salles, coaches, activites...)
-  liste<T>(ressource: string): Observable<{ member: T[]; totalItems: number }> {
-    return this.http.get<{ member: T[]; totalItems: number }>(this.api + '/' + ressource);
+  // Liste de tous les comptes (réservée à l'admin côté Symfony)
+  getUtilisateurs(): Observable<{ member: UserInterface[] }> {
+    return this.http.get<{ member: UserInterface[] }>(this.api);
   }
 
-  creer<T>(ressource: string, donnees: object): Observable<T> {
+  // Création d'un compte par l'admin (il choisit le rôle)
+  creerUtilisateur(user: UserInterface): Observable<UserInterface> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/ld+json' });
-    return this.http.post<T>(this.api + '/' + ressource, donnees, { headers });
+    return this.http.post<UserInterface>(this.api, user, { headers });
   }
 
-  // PATCH : seulement les champs modifiés (format merge-patch d'API Platform)
-  modifier<T>(ressource: string, id: number, donnees: object): Observable<T> {
+  // Changer le rôle ou le statut (actif / suspendu)
+  modifierUtilisateur(id: number, user: Partial<UserInterface>): Observable<UserInterface> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/merge-patch+json' });
-    return this.http.patch<T>(this.api + '/' + ressource + '/' + id, donnees, { headers });
+    return this.http.patch<UserInterface>(`${this.api}/${id}`, user, { headers });
   }
 
-  supprimer(ressource: string, id: number): Observable<void> {
-    return this.http.delete<void>(this.api + '/' + ressource + '/' + id);
+  supprimerUtilisateur(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.api}/${id}`);
   }
 
   // Message lisible à partir d'une erreur Symfony (422 = règles de validation non respectées)
@@ -45,10 +46,10 @@ export class AdminService {
       return violations.map((v) => v.propertyPath + ' : ' + v.message).join(' / ');
     }
     if (err.status === 403) {
-      return "Action non autorisée.";
+      return 'Action non autorisée.';
     }
     if (err.status === 500) {
-      return 'Impossible : cet élément est encore lié à d\'autres données (réservations, cours...).';
+      return "Impossible : cet élément est encore lié à d'autres données (réservations, cours...).";
     }
     return err.error?.detail ?? 'Erreur serveur';
   }

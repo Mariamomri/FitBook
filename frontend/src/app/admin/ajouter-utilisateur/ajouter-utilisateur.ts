@@ -38,7 +38,7 @@ export class AjouterUtilisateur {
     const { role, statut, firstname, lastname, email, phone, plainPassword } = this.utilisateurForm.value;
 
     this.adminService
-      .creer('users', {
+      .creerUtilisateur({
         firstname: firstname!,
         lastname: lastname!,
         email: email!,

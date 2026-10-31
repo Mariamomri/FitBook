@@ -1,6 +1,9 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AdminService } from '../admin-service';
+import { SalleService } from '../../salles/salle-service';
+import { CoachService } from '../../coach/coach-service';
+import { ReservationService } from '../../reservations/reservation-service';
 import { SidebarSportif } from '../../layout/sidebar-sportif/sidebar-sportif';
 import { OngletUtilisateurs } from '../onglet-utilisateurs/onglet-utilisateurs';
 import { OngletSalles } from '../onglet-salles/onglet-salles';
@@ -26,6 +29,9 @@ import { OngletAvis } from '../onglet-avis/onglet-avis';
 })
 export class DashboardAdmin implements OnInit {
   private adminService = inject(AdminService);
+  private salleService = inject(SalleService);
+  private coachService = inject(CoachService);
+  private reservationService = inject(ReservationService);
   private route = inject(ActivatedRoute);
 
   // Onglets de la gestion des données (valeur dans l'adresse : /dashboard?onglet=salles)
@@ -39,7 +45,7 @@ export class DashboardAdmin implements OnInit {
   ];
   onglet = signal('utilisateurs');
 
-  // Chiffres du haut (API Platform donne le total dans totalItems)
+  // Chiffres du haut
   nombreUtilisateurs = signal(0);
   nombreSalles = signal(0);
   nombreCoachs = signal(0);
@@ -49,9 +55,11 @@ export class DashboardAdmin implements OnInit {
     // L'onglet suit l'adresse : les liens du menu de gauche ouvrent directement le bon onglet
     this.route.queryParamMap.subscribe((parametres) => this.onglet.set(parametres.get('onglet') ?? 'utilisateurs'));
 
-    this.adminService.liste('users').subscribe((reponse) => this.nombreUtilisateurs.set(reponse.totalItems));
-    this.adminService.liste('salles').subscribe((reponse) => this.nombreSalles.set(reponse.totalItems));
-    this.adminService.liste('coaches').subscribe((reponse) => this.nombreCoachs.set(reponse.totalItems));
-    this.adminService.liste('reservations').subscribe((reponse) => this.nombreReservations.set(reponse.totalItems));
+    this.adminService.getUtilisateurs().subscribe((reponse) => this.nombreUtilisateurs.set(reponse.member.length));
+    this.salleService.getSalles().subscribe((reponse) => this.nombreSalles.set(reponse.member.length));
+    this.coachService.getCoaches().subscribe((reponse) => this.nombreCoachs.set(reponse.member.length));
+    this.reservationService
+      .getToutesLesReservations()
+      .subscribe((reponse) => this.nombreReservations.set(reponse.member.length));
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SalleInterface } from './salle-interface';
 
@@ -18,5 +18,21 @@ export class SalleService {
   // Photo envoyée par le gestionnaire, ou image par défaut si la salle n'en a pas
   photo(salle: SalleInterface): string {
     return salle.imageName ? 'https://127.0.0.1:8000/images/salles/' + salle.imageName : 'img/gym1.jpg';
+  }
+
+  // Ajouter une salle (admin ou gestionnaire) : API Platform attend du JSON-LD
+  creerSalle(salle: SalleInterface): Observable<SalleInterface> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/ld+json' });
+    return this.http.post<SalleInterface>(this.api, salle, { headers });
+  }
+
+  // Modifier une salle : on envoie seulement les champs changés (merge-patch)
+  modifierSalle(id: number, salle: Partial<SalleInterface>): Observable<SalleInterface> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/merge-patch+json' });
+    return this.http.patch<SalleInterface>(`${this.api}/${id}`, salle, { headers });
+  }
+
+  supprimerSalle(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.api}/${id}`);
   }
 }

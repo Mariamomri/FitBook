@@ -7,4 +7,5 @@ export interface CoachInterface {
   certifications?: string; // peut être vide (nullable)
   langues: string;
   imageName?: string | null; // nom du fichier photo (null = pas de photo)
+  user?: string; // lien vers le compte du coach, ex. "/api/users/12"
 }

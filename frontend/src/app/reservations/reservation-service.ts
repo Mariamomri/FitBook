@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ReservationInterface } from './reservation-interface';
+import { ReservationInterface, ReservationAdminInterface } from './reservation-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -27,4 +27,13 @@ export class ReservationService {
   annuler(id: number): Observable<{ message: string; statut: string }> {
     return this.http.patch<{ message: string; statut: string }>(this.api + '/' + id + '/annuler', {});
   }
-}
+
+  // Toutes les réservations (admin) : user et seance sont des liens ("/api/users/12")
+  getToutesLesReservations(): Observable<{ member: ReservationAdminInterface[] }> {
+    return this.http.get<{ member: ReservationAdminInterface[] }>('https://127.0.0.1:8000/api/reservations');
+  }
+
+  supprimerReservation(id: number): Observable<void> {
+    return this.http.delete<void>('https://127.0.0.1:8000/api/reservations/' + id);
+  }
+}

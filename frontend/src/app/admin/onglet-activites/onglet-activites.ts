@@ -1,12 +1,8 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AdminService } from '../admin-service';
-
-interface ActiviteAdmin {
-  id?: number;
-  nom: string;
-  description?: string | null;
-}
+import { ActiviteService } from '../../activites/activite-service';
+import { ActiviteInterface } from '../../activites/activite-interface';
 
 @Component({
   selector: 'app-onglet-activites',
@@ -16,14 +12,15 @@ interface ActiviteAdmin {
 })
 export class OngletActivites implements OnInit {
   adminService = inject(AdminService);
+  private activiteService = inject(ActiviteService);
 
-  activites = signal<ActiviteAdmin[]>([]);
+  activites = signal<ActiviteInterface[]>([]);
   erreur = signal('');
   succes = signal('');
 
   // null = formulaire fermé, 0 = nouvelle activité, sinon id de l'activité modifiée
   idFormulaire = signal<number | null>(null);
-  aSupprimer = signal<ActiviteAdmin | null>(null);
+  aSupprimer = signal<ActiviteInterface | null>(null);
 
   activiteForm = new FormGroup({
     nom: new FormControl('', [Validators.required, Validators.maxLength(100)]),
@@ -35,7 +32,7 @@ export class OngletActivites implements OnInit {
   }
 
   charger(): void {
-    this.adminService.liste<ActiviteAdmin>('activites').subscribe({
+    this.activiteService.getActivites().subscribe({
       next: (reponse) => this.activites.set(reponse.member),
       error: (err) => this.erreur.set(this.adminService.messageErreur(err)),
     });
@@ -46,7 +43,7 @@ export class OngletActivites implements OnInit {
     this.idFormulaire.set(0);
   }
 
-  ouvrirModification(activite: ActiviteAdmin): void {
+  ouvrirModification(activite: ActiviteInterface): void {
     this.activiteForm.reset({ nom: activite.nom, description: activite.description ?? '' });
     this.idFormulaire.set(activite.id!);
   }
@@ -60,12 +57,12 @@ export class OngletActivites implements OnInit {
       return;
     }
 
-    const donnees = { nom: this.activiteForm.value.nom, description: this.activiteForm.value.description || null };
+    const donnees = { nom: this.activiteForm.value.nom!, description: this.activiteForm.value.description || null };
     const id = this.idFormulaire();
     const requete =
       id === 0
-        ? this.adminService.creer<ActiviteAdmin>('activites', donnees)
-        : this.adminService.modifier<ActiviteAdmin>('activites', id!, donnees);
+        ? this.activiteService.creerActivite(donnees)
+        : this.activiteService.modifierActivite(id!, donnees);
 
     requete.subscribe({
       next: () => {
@@ -82,7 +79,7 @@ export class OngletActivites implements OnInit {
     if (!activite) {
       return;
     }
-    this.adminService.supprimer('activites', activite.id!).subscribe({
+    this.activiteService.supprimerActivite(activite.id!).subscribe({
       next: () => {
         this.activites.update((liste) => liste.filter((a) => a.id !== activite.id));
         this.succes.set(activite.nom + ' a été supprimée.');

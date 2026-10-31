@@ -48,7 +48,7 @@ export class OngletUtilisateurs implements OnInit {
   }
 
   ngOnInit(): void {
-    this.adminService.liste<UserInterface>('users').subscribe({
+    this.adminService.getUtilisateurs().subscribe({
       next: (reponse) => this.utilisateurs.set(reponse.member),
       error: (err) => this.erreur.set(this.adminService.messageErreur(err)),
     });
@@ -69,7 +69,7 @@ export class OngletUtilisateurs implements OnInit {
       isActive: this.nouveauStatut() === 'actif',
     };
 
-    this.adminService.modifier<UserInterface>('users', user.id!, donnees).subscribe({
+    this.adminService.modifierUtilisateur(user.id!, donnees).subscribe({
       next: () => {
         this.utilisateurs.update((liste) => liste.map((u) => (u.id === user.id ? { ...u, ...donnees } : u)));
         this.idEnModification.set(null);
@@ -87,7 +87,7 @@ export class OngletUtilisateurs implements OnInit {
     this.erreur.set('');
     this.succes.set('');
 
-    this.adminService.supprimer('users', user.id!).subscribe({
+    this.adminService.supprimerUtilisateur(user.id!).subscribe({
       next: () => {
         this.utilisateurs.update((liste) => liste.filter((u) => u.id !== user.id));
         this.succes.set(user.firstname + ' ' + user.lastname + ' a été supprimé.');

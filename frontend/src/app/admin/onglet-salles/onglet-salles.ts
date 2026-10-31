@@ -1,11 +1,9 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AdminService } from '../admin-service';
+import { SalleService } from '../../salles/salle-service';
 import { SalleInterface } from '../../salles/salle-interface';
 import { UserInterface } from '../../auth/user-interface';
-
-// Une salle vue par l'admin : en plus, le lien vers son gestionnaire ("/api/users/12")
-type SalleAdmin = SalleInterface & { gestionnaire?: string };
 
 @Component({
   selector: 'app-onglet-salles',
@@ -15,8 +13,9 @@ type SalleAdmin = SalleInterface & { gestionnaire?: string };
 })
 export class OngletSalles implements OnInit {
   adminService = inject(AdminService);
+  private salleService = inject(SalleService);
 
-  salles = signal<SalleAdmin[]>([]);
+  salles = signal<SalleInterface[]>([]);
   gestionnaires = signal<UserInterface[]>([]);
   erreur = signal('');
   succes = signal('');
@@ -24,7 +23,7 @@ export class OngletSalles implements OnInit {
 
   // Formulaire ouvert ? (null = fermé, 0 = nouvelle salle, sinon id de la salle modifiée)
   idFormulaire = signal<number | null>(null);
-  aSupprimer = signal<SalleAdmin | null>(null);
+  aSupprimer = signal<SalleInterface | null>(null);
 
   sallesFiltrees = computed(() => {
     const texte = this.recherche().toLowerCase();
@@ -49,13 +48,13 @@ export class OngletSalles implements OnInit {
   ngOnInit(): void {
     this.charger();
     // Les gestionnaires possibles : comptes avec le rôle ROLE_SALLE
-    this.adminService.liste<UserInterface>('users').subscribe((reponse) =>
+    this.adminService.getUtilisateurs().subscribe((reponse) =>
       this.gestionnaires.set(reponse.member.filter((u) => u.roles?.includes('ROLE_SALLE'))),
     );
   }
 
   charger(): void {
-    this.adminService.liste<SalleAdmin>('salles').subscribe({
+    this.salleService.getSalles().subscribe({
       next: (reponse) => this.salles.set(reponse.member),
       error: (err) => this.erreur.set(this.adminService.messageErreur(err)),
     });
@@ -71,7 +70,7 @@ export class OngletSalles implements OnInit {
     this.idFormulaire.set(0);
   }
 
-  ouvrirModification(salle: SalleAdmin): void {
+  ouvrirModification(salle: SalleInterface): void {
     this.salleForm.reset({
       nom: salle.nom,
       adresse: salle.adresse,
@@ -100,7 +99,7 @@ export class OngletSalles implements OnInit {
     const valeurs = this.salleForm.value;
     // Les champs vides facultatifs sont envoyés à null ; les DECIMAL sont du texte
     const donnees = {
-      ...valeurs,
+      ...(valeurs as SalleInterface),
       equipements: valeurs.equipements || null,
       latitude: valeurs.latitude ? String(valeurs.latitude) : null,
       longitude: valeurs.longitude ? String(valeurs.longitude) : null,
@@ -109,8 +108,8 @@ export class OngletSalles implements OnInit {
     const id = this.idFormulaire();
     const requete =
       id === 0
-        ? this.adminService.creer<SalleAdmin>('salles', donnees)
-        : this.adminService.modifier<SalleAdmin>('salles', id!, donnees);
+        ? this.salleService.creerSalle(donnees)
+        : this.salleService.modifierSalle(id!, donnees);
 
     requete.subscribe({
       next: () => {
@@ -127,7 +126,7 @@ export class OngletSalles implements OnInit {
     if (!salle) {
       return;
     }
-    this.adminService.supprimer('salles', salle.id!).subscribe({
+    this.salleService.supprimerSalle(salle.id!).subscribe({
       next: () => {
         this.salles.update((liste) => liste.filter((s) => s.id !== salle.id));
         this.succes.set(salle.nom + ' a été supprimée.');

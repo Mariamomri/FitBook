@@ -7,3 +7,12 @@ export interface ReservationInterface {
   dateDebut: string;
   dateFin: string;
 }
+
+// Réservation telle que l'admin la reçoit d'API Platform (liens vers le sportif et la séance)
+export interface ReservationAdminInterface {
+  id: number;
+  numero: string;
+  statut: string;
+  user: string;
+  seance: string;
+}
