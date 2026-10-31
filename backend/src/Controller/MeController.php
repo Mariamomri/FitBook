@@ -11,6 +11,27 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class MeController extends AbstractController
 {
+
+    // Données de l'utilisateur connecté (profil, couleur du site, rôle)
+    #[Route('/api/me', name: 'api_me', methods: ['GET'])]
+    public function moi(): JsonResponse
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY'); // Vérifie que l'utilisateur est authentifié avec un JWT valide
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        return $this->json([
+            'id' => $user->getId(),
+            'email' => $user->getEmail(),
+            'firstname' => $user->getFirstname(),
+            'lastname' => $user->getLastname(),
+            'phone' => $user->getPhone(),
+            'accentColor' => $user->getAccentColor(),
+            'roles' => $user->getRoles(),
+        ]);
+    }
+
     // Réservations de l'utilisateur connecté uniquement (JWT obligatoire)
     #[Route('/api/me/reservations', name: 'api_me_reservations', methods: ['GET'])]
     public function mesReservations(): JsonResponse
