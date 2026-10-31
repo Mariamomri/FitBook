@@ -6,6 +6,9 @@ export interface ReservationInterface {
   salle: string;
   dateDebut: string;
   dateFin: string;
+  coursId?: number; // pour savoir sur quoi le sportif peut laisser un avis
+  salleId?: number;
+  coachId?: number | null;
 }
 
 // Réservation reçue par une salle ou un coach (nom du sportif déjà calculé par Symfony)
