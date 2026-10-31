@@ -1,0 +1,79 @@
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
+}
+
+<div class="barre">
+  <select #choixStatut [value]="statutFiltre()" (change)="statutFiltre.set(choixStatut.value)">
+    <option value="tous">Statut : Tous</option>
+    <option value="en_attente">En attente</option>
+    <option value="publie">Publié</option>
+    <option value="refuse">Refusé</option>
+  </select>
+</div>
+
+<div class="tableau">
+  <table>
+    <thead>
+      <tr>
+        <th>Cible</th>
+        <th>Note</th>
+        <th>Commentaire</th>
+        <th>Statut</th>
+        <th>Modération</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (unAvis of avisFiltres(); track unAvis.id) {
+        <tr>
+          <td><strong>{{ cible(unAvis) }}</strong></td>
+          <td class="etoiles">{{ etoiles(unAvis.note) }}</td>
+          <td class="muted">« {{ unAvis.commentaire }} »</td>
+          <td>
+            @switch (unAvis.statut) {
+              @case ('publie') {
+                <span class="statut ok">Publié</span>
+              }
+              @case ('refuse') {
+                <span class="statut ko">Refusé</span>
+              }
+              @default {
+                <span class="statut attente">En attente</span>
+              }
+            }
+          </td>
+          <td>
+            <div class="actions">
+              @if (unAvis.statut !== 'publie') {
+                <button class="btn-petit plein" (click)="changerStatut(unAvis, 'publie')">Valider</button>
+              }
+              @if (unAvis.statut !== 'refuse') {
+                <button class="btn-petit" (click)="changerStatut(unAvis, 'refuse')">Refuser</button>
+              }
+              <button class="btn-petit danger" (click)="aSupprimer.set(unAvis)">Supprimer</button>
+            </div>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="5" class="muted vide">Aucun avis.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+@if (aSupprimer(); as unAvis) {
+  <div class="fond-modale" (click)="aSupprimer.set(null)">
+    <div class="modale" (click)="$event.stopPropagation()">
+      <h3>Supprimer cet avis ?</h3>
+      <p class="muted">« {{ unAvis.commentaire }} » sera supprimé définitivement.</p>
+      <div class="boutons">
+        <button class="btn btn-outline" (click)="aSupprimer.set(null)">Annuler</button>
+        <button class="btn bouton-danger" (click)="confirmerSuppression()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+}

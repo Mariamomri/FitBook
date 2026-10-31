@@ -1,0 +1,107 @@
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
+}
+
+<!-- Recherche, filtres et ajout -->
+<div class="barre">
+  <input
+    #champ
+    type="search"
+    placeholder="Rechercher un utilisateur..."
+    [value]="recherche()"
+    (input)="recherche.set(champ.value)"
+  />
+  <select #choixRole [value]="roleFiltre()" (change)="roleFiltre.set(choixRole.value)">
+    <option value="tous">Rôle : Tous</option>
+    @for (role of adminService.roles; track role.valeur) {
+      <option [value]="role.valeur">{{ role.libelle }}</option>
+    }
+  </select>
+  <select #choixStatut [value]="statutFiltre()" (change)="statutFiltre.set(choixStatut.value)">
+    <option value="tous">Statut : Tous</option>
+    <option value="actif">Actif</option>
+    <option value="suspendu">Suspendu</option>
+  </select>
+  <a class="btn petit-btn" routerLink="/admin/utilisateurs/nouveau">+ Ajouter</a>
+</div>
+
+<div class="tableau">
+  <table>
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Rôle</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (user of utilisateursFiltres(); track user.id) {
+        <tr>
+          <td><strong>{{ user.firstname }} {{ user.lastname }}</strong></td>
+          <td class="muted">{{ user.email }}</td>
+
+          @if (idEnModification() === user.id) {
+            <!-- Ligne en modification : listes déroulantes -->
+            <td>
+              <select #role [value]="nouveauRole()" (change)="nouveauRole.set(role.value)">
+                @for (choix of adminService.roles; track choix.valeur) {
+                  <option [value]="choix.valeur">{{ choix.libelle }}</option>
+                }
+              </select>
+            </td>
+            <td>
+              <select #statut [value]="nouveauStatut()" (change)="nouveauStatut.set(statut.value)">
+                <option value="actif">Actif</option>
+                <option value="suspendu">Suspendu</option>
+              </select>
+            </td>
+            <td>
+              <div class="actions">
+                <button class="btn-petit plein" (click)="enregistrerModification(user)">Enregistrer</button>
+                <button class="btn-petit" (click)="idEnModification.set(null)">Annuler</button>
+              </div>
+            </td>
+          } @else {
+            <td>{{ adminService.libelleRole(adminService.roleDe(user)) }}</td>
+            <td>
+              @if (user.isActive === false) {
+                <span class="statut ko">Suspendu</span>
+              } @else {
+                <span class="statut ok">Actif</span>
+              }
+            </td>
+            <td>
+              <div class="actions">
+                <button class="btn-petit" (click)="commencerModification(user)">Modifier</button>
+                <button class="btn-petit danger" (click)="aSupprimer.set(user)">Supprimer</button>
+              </div>
+            </td>
+          }
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="5" class="muted vide">Aucun utilisateur.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<!-- Confirmation avant suppression -->
+@if (aSupprimer(); as user) {
+  <div class="fond-modale" (click)="aSupprimer.set(null)">
+    <div class="modale" (click)="$event.stopPropagation()">
+      <h3>Supprimer ce compte ?</h3>
+      <p class="muted">{{ user.firstname }} {{ user.lastname }} ({{ user.email }}) sera supprimé définitivement.</p>
+      <div class="boutons">
+        <button class="btn btn-outline" (click)="aSupprimer.set(null)">Annuler</button>
+        <button class="btn bouton-danger" (click)="confirmerSuppression()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+}

@@ -11,7 +11,20 @@
   }
 
   <nav>
-    <a routerLink="/dashboard" routerLinkActive="actif"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+    <a routerLink="/dashboard" routerLinkActive="actif" [routerLinkActiveOptions]="optionsLienExact"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+    @if (estAdmin()) {
+      <!-- Chaque lien ouvre l'onglet correspondant de la dashboard admin -->
+      @for (lien of liensAdmin; track lien.onglet) {
+        <a
+          routerLink="/dashboard"
+          [queryParams]="{ onglet: lien.onglet }"
+          routerLinkActive="actif"
+          [routerLinkActiveOptions]="optionsLienExact"
+          ><i [class]="'fa-solid ' + lien.icone"></i> {{ lien.libelle }}</a
+        >
+      }
+      <p class="separateur">Espace sportif</p>
+    }
     <a routerLink="/reservations" routerLinkActive="actif"><i class="fa-solid fa-ticket"></i> Mes réservations</a>
     <a routerLink="/historique" routerLinkActive="actif"><i class="fa-solid fa-clock-rotate-left"></i> Historique</a>
     <a routerLink="/calendrier" routerLinkActive="actif"><i class="fa-solid fa-calendar-days"></i> Calendrier</a>

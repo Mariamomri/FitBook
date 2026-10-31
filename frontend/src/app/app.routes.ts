@@ -14,6 +14,8 @@ import { Contact } from './contact/contact';
 import { Calendrier } from './calendrier/calendrier';
 import { ProfilModifier } from './profil/profil-modifier/profil-modifier';
 import { Historique } from './historique/historique';
+import { AjouterUtilisateur } from './admin/ajouter-utilisateur/ajouter-utilisateur';
+import { adminGuard } from './admin/admin-guard';
 
 export const routes: Routes = [
   { path: '', component: Accueil },
@@ -30,4 +32,5 @@ export const routes: Routes = [
   { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
   { path: 'calendrier', component: Calendrier, canActivate: [authGuard] },
   { path: 'historique', component: Historique, canActivate: [authGuard] },
+  { path: 'admin/utilisateurs/nouveau', component: AjouterUtilisateur, canActivate: [authGuard, adminGuard] },
 ];

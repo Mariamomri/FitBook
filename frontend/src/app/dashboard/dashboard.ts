@@ -6,10 +6,11 @@ import { ReservationService } from '../reservations/reservation-service';
 import { ReservationInterface } from '../reservations/reservation-interface';
 import { SidebarSportif } from '../layout/sidebar-sportif/sidebar-sportif';
 import { Calendrier } from '../calendrier/calendrier';
+import { DashboardAdmin } from '../admin/dashboard-admin/dashboard-admin';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink, SidebarSportif, Calendrier],
+  imports: [RouterLink, SidebarSportif, Calendrier, DashboardAdmin],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -33,6 +34,9 @@ export class Dashboard implements OnInit {
   effectuees = computed(() => this.reservations().filter((r) => r.statut !== 'annulee' && !this.estFuture(r)));
 
   annulees = computed(() => this.reservations().filter((r) => r.statut === 'annulee'));
+
+  // L'admin a sa propre dashboard (gestion des comptes, salles, coachs)
+  estAdmin = computed(() => this.moi()?.roles?.includes('ROLE_ADMIN') ?? false);
 
   ngOnInit(): void {
     this.authService.getMoi().subscribe((reponse) => this.moi.set(reponse));

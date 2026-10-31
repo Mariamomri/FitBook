@@ -1,0 +1,67 @@
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
+}
+
+<div class="barre">
+  <button class="btn petit-btn" (click)="ouvrirAjout()">+ Ajouter une activité</button>
+</div>
+
+@if (idFormulaire() !== null) {
+  <form class="formulaire" [formGroup]="activiteForm" (ngSubmit)="enregistrer()">
+    <h3>{{ idFormulaire() === 0 ? 'Nouvelle activité' : "Modifier l'activité" }}</h3>
+    <label for="nom">Nom</label>
+    <input id="nom" type="text" formControlName="nom" placeholder="Yoga, Boxe..." />
+    <label for="description">Description</label>
+    <textarea id="description" rows="3" formControlName="description"></textarea>
+    <div class="boutons">
+      <button type="submit" class="btn">Enregistrer</button>
+      <button type="button" class="btn btn-outline" (click)="idFormulaire.set(null)">Annuler</button>
+    </div>
+  </form>
+}
+
+<div class="tableau">
+  <table>
+    <thead>
+      <tr>
+        <th>Activité</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (activite of activites(); track activite.id) {
+        <tr>
+          <td><strong>{{ activite.nom }}</strong></td>
+          <td class="muted">{{ activite.description || '—' }}</td>
+          <td>
+            <div class="actions">
+              <button class="btn-petit" (click)="ouvrirModification(activite)">Modifier</button>
+              <button class="btn-petit danger" (click)="aSupprimer.set(activite)">Supprimer</button>
+            </div>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="3" class="muted vide">Aucune activité.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+@if (aSupprimer(); as activite) {
+  <div class="fond-modale" (click)="aSupprimer.set(null)">
+    <div class="modale" (click)="$event.stopPropagation()">
+      <h3>Supprimer cette activité ?</h3>
+      <p class="muted">{{ activite.nom }} sera supprimée définitivement.</p>
+      <div class="boutons">
+        <button class="btn btn-outline" (click)="aSupprimer.set(null)">Annuler</button>
+        <button class="btn bouton-danger" (click)="confirmerSuppression()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,99 @@
+/* Styles communs aux onglets de l'administration */
+@reference "../../styles.css";
+
+/* Barre au-dessus du tableau : recherche + bouton ajouter */
+.barre {
+  @apply mb-4 flex flex-wrap items-center gap-3;
+}
+.barre input,
+.barre select {
+  @apply min-w-0 flex-1 rounded-md border border-bordure bg-nav px-3 py-2 text-texte;
+}
+.petit-btn {
+  @apply px-3 py-2 text-xs;
+}
+
+/* Formulaire d'ajout / modification */
+.formulaire {
+  @apply mb-5 rounded-[10px] border border-accent bg-nav p-5;
+}
+.formulaire h3 {
+  @apply mt-0 mb-3;
+}
+.grille-champs {
+  @apply grid grid-cols-1 gap-x-4 md:grid-cols-2;
+}
+.grille-champs .large {
+  @apply md:col-span-2;
+}
+.formulaire select,
+.formulaire textarea,
+td select {
+  @apply w-full rounded-md border border-bordure bg-carte px-3 py-2 text-texte;
+}
+.boutons {
+  @apply mt-4 flex gap-3;
+}
+
+/* Tableau */
+.tableau {
+  @apply overflow-x-auto;
+}
+table {
+  @apply w-full border-collapse text-sm;
+}
+th {
+  @apply border-b border-bordure px-2 py-2 text-left text-xs font-bold text-gris uppercase;
+}
+td {
+  @apply border-b border-bordure px-2 py-3 align-middle;
+}
+.vide {
+  @apply py-6 text-center;
+}
+.actions {
+  @apply flex flex-wrap gap-2;
+}
+
+/* Petits boutons du tableau */
+.btn-petit {
+  @apply cursor-pointer rounded-md border border-bordure bg-transparent px-3 py-1 text-xs font-bold text-texte uppercase;
+}
+.btn-petit.plein {
+  @apply border-accent bg-accent text-sur-accent;
+}
+.btn-petit.danger {
+  @apply border-danger text-danger;
+}
+
+/* Pastilles de statut */
+.statut {
+  @apply rounded-full px-2 py-0.5 text-xs font-bold whitespace-nowrap;
+}
+.statut.ok {
+  @apply bg-accent/15 text-accent;
+}
+.statut.attente {
+  @apply bg-yellow-400/15 text-yellow-300;
+}
+.statut.ko {
+  @apply bg-danger/15 text-danger;
+}
+
+/* Fenêtre de confirmation avant suppression */
+.fond-modale {
+  @apply fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4;
+}
+.modale {
+  @apply w-full max-w-md rounded-[10px] border border-bordure bg-carte p-6;
+}
+.modale h3 {
+  @apply mt-0;
+}
+.bouton-danger {
+  @apply bg-danger text-white;
+}
+
+.etoiles {
+  @apply whitespace-nowrap text-yellow-400;
+}

@@ -50,3 +50,8 @@ nav a.actif i {
 .deconnexion {
   @apply flex cursor-pointer items-center gap-3 border-0 border-t border-solid border-bordure bg-transparent px-4 pt-4 text-left text-sm text-danger;
 }
+
+/* Titre entre les liens admin et les liens sportif */
+.separateur {
+  @apply mt-3 mb-1 px-4 text-xs font-bold tracking-wider text-gris uppercase;
+}

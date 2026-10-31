@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../auth/auth-service';
 import { UserInterface } from '../../auth/user-interface';
@@ -18,6 +18,22 @@ export class SidebarSportif implements OnInit {
   profilService = inject(ProfilService);
 
   moi = signal<UserInterface | null>(null);
+
+  // Liens d'administration seulement pour l'admin
+  estAdmin = computed(() => this.moi()?.roles?.includes('ROLE_ADMIN') ?? false);
+
+  // Liens d'administration (un par onglet de la dashboard admin)
+  liensAdmin = [
+    { onglet: 'utilisateurs', libelle: 'Utilisateurs', icone: 'fa-users' },
+    { onglet: 'salles', libelle: 'Salles', icone: 'fa-house' },
+    { onglet: 'coachs', libelle: 'Coachs', icone: 'fa-flag' },
+    { onglet: 'activites', libelle: 'Activités', icone: 'fa-list' },
+    { onglet: 'reservations', libelle: 'Réservations', icone: 'fa-check' },
+    { onglet: 'avis', libelle: 'Avis à modérer', icone: 'fa-star' },
+  ];
+
+  // Un lien n'est actif que si l'adresse correspond exactement (onglet compris)
+  optionsLienExact = { paths: 'exact', queryParams: 'exact', matrixParams: 'ignored', fragment: 'ignored' } as const;
 
   // Nom et photo affichés en haut du menu
   ngOnInit(): void {

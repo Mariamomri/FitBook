@@ -1,0 +1,67 @@
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
+}
+
+<div class="barre">
+  <select #choixStatut [value]="statutFiltre()" (change)="statutFiltre.set(choixStatut.value)">
+    <option value="tous">Statut : Tous</option>
+    <option value="confirmee">Confirmée</option>
+    <option value="annulee">Annulée</option>
+  </select>
+</div>
+
+<div class="tableau">
+  <table>
+    <thead>
+      <tr>
+        <th>Numéro</th>
+        <th>Sportif</th>
+        <th>Séance</th>
+        <th>Date</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (reservation of reservationsFiltrees(); track reservation.id) {
+        @let seanceReservee = seance(reservation.seance);
+        <tr>
+          <td class="muted">{{ reservation.numero }}</td>
+          <td><strong>{{ sportif(reservation.user) }}</strong></td>
+          <td>{{ seanceReservee?.coursTitre ?? '—' }}</td>
+          <td class="muted">{{ seanceReservee?.dateDebut | date: 'dd/MM/yyyy HH:mm' : 'UTC' }}</td>
+          <td>
+            @if (reservation.statut === 'annulee') {
+              <span class="statut ko">Annulée</span>
+            } @else {
+              <span class="statut ok">Confirmée</span>
+            }
+          </td>
+          <td>
+            <button class="btn-petit danger" (click)="aSupprimer.set(reservation)">Supprimer</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6" class="muted vide">Aucune réservation.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+@if (aSupprimer(); as reservation) {
+  <div class="fond-modale" (click)="aSupprimer.set(null)">
+    <div class="modale" (click)="$event.stopPropagation()">
+      <h3>Supprimer cette réservation ?</h3>
+      <p class="muted">La réservation {{ reservation.numero }} sera supprimée et la place libérée.</p>
+      <div class="boutons">
+        <button class="btn btn-outline" (click)="aSupprimer.set(null)">Annuler</button>
+        <button class="btn bouton-danger" (click)="confirmerSuppression()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+}

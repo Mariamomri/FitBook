@@ -1,0 +1,65 @@
+<div class="espace">
+  <app-sidebar-sportif />
+
+  <div class="espace-contenu">
+    <!-- Bandeau du haut -->
+    <section class="bandeau">
+      <h1>Dashboard <span class="vert">admin</span></h1>
+      <p class="muted">Administration de la plateforme FitBook</p>
+    </section>
+
+    <!-- Chiffres -->
+    <div class="chiffres">
+      <article class="chiffre">
+        <span>Utilisateurs <i class="fa-solid fa-users"></i></span>
+        <strong>{{ nombreUtilisateurs() }}</strong>
+      </article>
+      <article class="chiffre">
+        <span>Salles <i class="fa-solid fa-house"></i></span>
+        <strong>{{ nombreSalles() }}</strong>
+      </article>
+      <article class="chiffre">
+        <span>Coachs <i class="fa-solid fa-flag"></i></span>
+        <strong>{{ nombreCoachs() }}</strong>
+      </article>
+      <article class="chiffre mise-en-avant">
+        <span>Réservations <i class="fa-solid fa-check"></i></span>
+        <strong>{{ nombreReservations() }}</strong>
+      </article>
+    </div>
+
+    <!-- Gestion des données : un onglet par type de données -->
+    <section class="bloc-carte">
+      <h2>Gestion des données</h2>
+
+      <nav class="onglets">
+        @for (choix of onglets; track choix.valeur) {
+          <a routerLink="/dashboard" [queryParams]="{ onglet: choix.valeur }" [class.actif]="onglet() === choix.valeur">
+            {{ choix.libelle }}
+          </a>
+        }
+      </nav>
+
+      @switch (onglet()) {
+        @case ('salles') {
+          <app-onglet-salles />
+        }
+        @case ('coachs') {
+          <app-onglet-coachs />
+        }
+        @case ('activites') {
+          <app-onglet-activites />
+        }
+        @case ('reservations') {
+          <app-onglet-reservations />
+        }
+        @case ('avis') {
+          <app-onglet-avis />
+        }
+        @default {
+          <app-onglet-utilisateurs />
+        }
+      }
+    </section>
+  </div>
+</div>

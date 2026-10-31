@@ -1,0 +1,120 @@
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
+}
+
+<div class="barre">
+  <input #champ type="search" placeholder="Rechercher une salle..." [value]="recherche()" (input)="recherche.set(champ.value)" />
+  <button class="btn petit-btn" (click)="ouvrirAjout()">+ Ajouter une salle</button>
+</div>
+
+<!-- Formulaire d'ajout ou de modification -->
+@if (idFormulaire() !== null) {
+  <form class="formulaire" [formGroup]="salleForm" (ngSubmit)="enregistrer()">
+    <h3>{{ idFormulaire() === 0 ? 'Nouvelle salle' : 'Modifier la salle' }}</h3>
+    <div class="grille-champs">
+      <div>
+        <label for="nom">Nom</label>
+        <input id="nom" type="text" formControlName="nom" />
+      </div>
+      <div>
+        <label for="gestionnaire">Gestionnaire</label>
+        <select id="gestionnaire" formControlName="gestionnaire">
+          <option value="">Choisir...</option>
+          @for (user of gestionnaires(); track user.id) {
+            <option [value]="'/api/users/' + user.id">{{ user.firstname }} {{ user.lastname }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="adresse">Adresse</label>
+        <input id="adresse" type="text" formControlName="adresse" />
+      </div>
+      <div>
+        <label for="codePostal">Code postal</label>
+        <input id="codePostal" type="text" formControlName="codePostal" />
+      </div>
+      <div>
+        <label for="ville">Ville</label>
+        <input id="ville" type="text" formControlName="ville" />
+      </div>
+      <div>
+        <label for="telephone">Téléphone</label>
+        <input id="telephone" type="tel" formControlName="telephone" />
+      </div>
+      <div>
+        <label for="capacite">Capacité</label>
+        <input id="capacite" type="number" min="1" formControlName="capacite" />
+      </div>
+      <div>
+        <label for="equipements">Équipements</label>
+        <input id="equipements" type="text" formControlName="equipements" />
+      </div>
+      <div>
+        <label for="latitude">Latitude</label>
+        <input id="latitude" type="text" formControlName="latitude" placeholder="50.8466" />
+      </div>
+      <div>
+        <label for="longitude">Longitude</label>
+        <input id="longitude" type="text" formControlName="longitude" placeholder="4.3528" />
+      </div>
+      <div class="large">
+        <label for="description">Description</label>
+        <textarea id="description" rows="3" formControlName="description"></textarea>
+      </div>
+    </div>
+    <div class="boutons">
+      <button type="submit" class="btn">Enregistrer</button>
+      <button type="button" class="btn btn-outline" (click)="idFormulaire.set(null)">Annuler</button>
+    </div>
+  </form>
+}
+
+<div class="tableau">
+  <table>
+    <thead>
+      <tr>
+        <th>Salle</th>
+        <th>Ville</th>
+        <th>Capacité</th>
+        <th>Gestionnaire</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (salle of sallesFiltrees(); track salle.id) {
+        <tr>
+          <td><strong>{{ salle.nom }}</strong></td>
+          <td class="muted">{{ salle.ville }}</td>
+          <td>{{ salle.capacite }} pers.</td>
+          <td class="muted">{{ nomGestionnaire(salle.gestionnaire) }}</td>
+          <td>
+            <div class="actions">
+              <button class="btn-petit" (click)="ouvrirModification(salle)">Modifier</button>
+              <button class="btn-petit danger" (click)="aSupprimer.set(salle)">Supprimer</button>
+            </div>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="5" class="muted vide">Aucune salle.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+@if (aSupprimer(); as salle) {
+  <div class="fond-modale" (click)="aSupprimer.set(null)">
+    <div class="modale" (click)="$event.stopPropagation()">
+      <h3>Supprimer cette salle ?</h3>
+      <p class="muted">{{ salle.nom }} ({{ salle.ville }}) et ses cours seront supprimés définitivement.</p>
+      <div class="boutons">
+        <button class="btn btn-outline" (click)="aSupprimer.set(null)">Annuler</button>
+        <button class="btn bouton-danger" (click)="confirmerSuppression()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+}
