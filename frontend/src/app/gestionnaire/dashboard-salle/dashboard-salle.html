@@ -53,6 +53,11 @@
         <app-gestion-seances [moi]="user" />
       </section>
 
+      <!-- Réservations des séances de ses salles -->
+      <section class="bloc-carte" id="reservations">
+        <app-reservations-recues pour="salle" />
+      </section>
+
       <!-- Avis publiés sur ses salles -->
       <section class="bloc-carte" id="avis">
         <h2>Avis sur mes salles</h2>

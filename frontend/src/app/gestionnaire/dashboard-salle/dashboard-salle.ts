@@ -13,10 +13,11 @@ import { GestionCours } from '../gestion-cours/gestion-cours';
 import { GestionHoraires } from '../gestion-horaires/gestion-horaires';
 import { GestionSeances } from '../gestion-seances/gestion-seances';
 import { OngletActivites } from '../../admin/onglet-activites/onglet-activites';
+import { ReservationsRecues } from '../../reservations/reservations-recues/reservations-recues';
 
 @Component({
   selector: 'app-dashboard-salle',
-  imports: [SidebarSportif, GestionSalles, GestionCours, GestionHoraires, GestionSeances, OngletActivites],
+  imports: [SidebarSportif, GestionSalles, GestionCours, GestionHoraires, GestionSeances, OngletActivites, ReservationsRecues],
   templateUrl: './dashboard-salle.html',
   styleUrl: './dashboard-salle.css',
 })
