@@ -20,6 +20,15 @@ export class Login {
   // Symfony redirige vers /login?verified=1 après la confirmation de l'email
   emailConfirme = this.route.snapshot.queryParamMap.get('verified') === '1';
 
+  constructor() {
+    // Le lien de confirmation peut être ouvert dans un navigateur où quelqu'un d'autre est connecté
+    // (par exemple l'admin qui vient de créer le compte) : on ferme cette session pour repartir de zéro
+    if (this.emailConfirme && this.authService.connecte()) {
+      this.authService.logout();
+      this.themeService.appliquer('vert');
+    }
+  }
+
   // Le formulaire est créé dans le TypeScript, avec ses règles de validation
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
