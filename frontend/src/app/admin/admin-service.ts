@@ -48,6 +48,10 @@ export class AdminService {
     if (err.status === 403) {
       return 'Action non autorisée.';
     }
+    // Doublon refusé par la base (ex. un compte qui a déjà une fiche coach)
+    if (String(err.error?.detail ?? '').includes('Duplicat') || String(err.error?.detail ?? '').includes('Duplicate')) {
+      return 'Cet élément existe déjà (doublon refusé par la base de données).';
+    }
     if (err.status === 500) {
       return "Impossible : cet élément est encore lié à d'autres données (réservations, cours...).";
     }

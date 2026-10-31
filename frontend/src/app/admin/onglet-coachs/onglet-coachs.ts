@@ -24,6 +24,15 @@ export class OngletCoachs implements OnInit {
   // null = formulaire fermé, 0 = nouveau coach, sinon id du coach modifié
   idFormulaire = signal<number | null>(null);
   aSupprimer = signal<CoachInterface | null>(null);
+  envoiEnCours = signal(false); // évite un double clic qui créerait deux fois la fiche
+
+  // Comptes coach sans fiche (un compte = une seule fiche) ; en modification, on garde le compte actuel
+  comptesDisponibles = computed(() => {
+    const comptesAvecFiche = this.coaches()
+      .filter((c) => c.id !== this.idFormulaire())
+      .map((c) => c.user);
+    return this.comptesCoach().filter((compte) => !comptesAvecFiche.includes('/api/users/' + compte.id));
+  });
 
   coachesFiltres = computed(() => {
     const texte = this.recherche().toLowerCase();
@@ -90,6 +99,7 @@ export class OngletCoachs implements OnInit {
     };
 
     const id = this.idFormulaire();
+    this.envoiEnCours.set(true);
     const requete =
       id === 0
         ? this.coachService.creerCoach(donnees)
@@ -97,11 +107,15 @@ export class OngletCoachs implements OnInit {
 
     requete.subscribe({
       next: () => {
+        this.envoiEnCours.set(false);
         this.succes.set(id === 0 ? 'Fiche coach créée.' : 'Fiche coach modifiée.');
         this.idFormulaire.set(null);
         this.charger();
       },
-      error: (err) => this.erreur.set(this.adminService.messageErreur(err)),
+      error: (err) => {
+        this.envoiEnCours.set(false);
+        this.erreur.set(this.adminService.messageErreur(err));
+      },
     });
   }
 

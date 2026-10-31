@@ -18,8 +18,8 @@
       <div class="large">
         <label for="user">Compte du coach</label>
         <select id="user" formControlName="user">
-          <option value="">Choisir un compte avec le rôle Coach...</option>
-          @for (compte of comptesCoach(); track compte.id) {
+          <option value="">Choisir un compte Coach sans fiche...</option>
+          @for (compte of comptesDisponibles(); track compte.id) {
             <option [value]="'/api/users/' + compte.id">{{ compte.firstname }} {{ compte.lastname }} ({{ compte.email }})</option>
           }
         </select>
@@ -46,9 +46,12 @@
       </div>
     </div>
     <div class="boutons">
-      <button type="submit" class="btn">Enregistrer</button>
+      <button type="submit" class="btn" [disabled]="envoiEnCours()">Enregistrer</button>
       <button type="button" class="btn btn-outline" (click)="idFormulaire.set(null)">Annuler</button>
     </div>
+    @if (idFormulaire() === 0 && comptesDisponibles().length === 0) {
+      <p class="muted">Tous les comptes Coach ont déjà une fiche. Créez d'abord un compte avec le rôle Coach.</p>
+    }
   </form>
 }
 
