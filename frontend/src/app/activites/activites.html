@@ -71,6 +71,9 @@
     }
     @if (erreur()) {
       <p class="erreur">{{ erreur() }}</p>
+      @if (emailNonConfirme()) {
+        <button type="button" class="renvoyer" (click)="renvoyerEmail()">Renvoyer l'email de confirmation →</button>
+      }
     }
 
     @for (seance of seancesFiltrees(); track seance.id) {

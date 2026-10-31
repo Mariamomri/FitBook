@@ -131,3 +131,15 @@
 }
 .places { color: var(--accent); }
 .complet { color: var(--danger); }
+
+/* Lien « Renvoyer l'email de confirmation » sous l'erreur */
+.renvoyer {
+  margin: 0 0 0.8rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
