@@ -15,6 +15,11 @@ export class CoachService {
     return this.http.get<{ member: CoachInterface[] }>(this.api);
   }
 
+  // Un coach par son id (fiche du coach)
+  getUnCoach(id: number): Observable<CoachInterface> {
+    return this.http.get<CoachInterface>(`${this.api}/${id}`);
+  }
+
   // Photo envoyée par le coach, ou avatar par défaut s'il n'en a pas
   photo(coach: CoachInterface): string {
     return coach.imageName ? 'https://127.0.0.1:8000/images/coaches/' + coach.imageName : 'img/avatar-defaut.svg';

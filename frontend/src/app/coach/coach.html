@@ -94,7 +94,7 @@
             <p class="prix">{{ coach.tarif }} €</p>
             <p class="par-heure">par heure</p>
           </div>
-          <a class="btn" routerLink="/activites" [queryParams]="{ quoi: coach.nomComplet }">Voir ses séances</a>
+          <a class="btn" [routerLink]="['/coach', coach.id]">Voir le profil</a>
         </div>
       </article>
     } @empty {

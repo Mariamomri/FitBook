@@ -1,0 +1,123 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+/* Bandeau : bordure, points, rayures et photo dans un rond */
+.bandeau {
+  @apply relative mb-8 grid grid-cols-1 items-center gap-6 overflow-hidden rounded-[10px] border-2 border-accent bg-nav p-6 md:grid-cols-[200px_1fr_auto];
+}
+.points {
+  @apply absolute top-0 left-0 h-full w-1/4 opacity-50;
+  background-image: radial-gradient(var(--accent) 2px, transparent 2px);
+  background-size: 12px 12px;
+}
+.rayures {
+  @apply absolute right-6 bottom-4 h-5 w-32;
+  background: repeating-linear-gradient(-60deg, var(--accent) 0 6px, transparent 6px 14px);
+}
+.rond {
+  @apply relative mx-auto h-44 w-44 overflow-hidden rounded-full border-4 border-accent bg-accent;
+}
+.rond img {
+  @apply h-full w-full object-cover object-top;
+}
+.infos {
+  @apply relative;
+}
+.infos h1 {
+  @apply m-0 text-5xl;
+}
+.infos p {
+  @apply my-1 text-sm;
+}
+.fil {
+  @apply text-xs;
+}
+.fil a {
+  @apply text-gris no-underline;
+}
+.fil span {
+  @apply text-accent;
+}
+.actions {
+  @apply relative flex flex-col gap-3;
+}
+.etoiles {
+  @apply text-yellow-400;
+}
+
+/* Deux colonnes */
+.mise-en-page {
+  @apply grid grid-cols-1 gap-8 lg:grid-cols-[1fr_300px];
+}
+h2 {
+  @apply mt-6 mb-3 text-2xl;
+}
+.certifs {
+  @apply text-sm text-accent;
+}
+
+/* Séances */
+.ligne {
+  @apply mb-2 flex flex-wrap items-center gap-3 rounded-md border border-bordure bg-carte px-4 py-3;
+}
+.ligne div {
+  @apply flex flex-1 flex-col;
+}
+.ligne span.muted {
+  @apply text-xs;
+}
+.places {
+  @apply rounded-full bg-accent/15 px-2 py-0.5 text-xs font-bold text-accent;
+}
+.places.complet {
+  @apply bg-danger/15 text-danger;
+}
+.petit-btn {
+  @apply px-3 py-1.5 text-xs;
+}
+
+/* Avis */
+.resume-avis {
+  @apply mb-4 flex items-center gap-6;
+}
+.grosse-note {
+  @apply flex flex-col;
+}
+.grosse-note strong {
+  @apply font-titre text-6xl font-black italic leading-none;
+}
+.barres {
+  @apply flex-1;
+}
+.barre-note {
+  @apply flex items-center gap-2 text-xs text-gris;
+}
+.barre {
+  @apply h-1.5 flex-1 rounded bg-bordure;
+}
+.barre div {
+  @apply h-full rounded bg-accent;
+}
+.avis {
+  @apply border-b border-bordure py-3;
+}
+.avis p {
+  @apply mt-1 mb-0 text-sm;
+}
+
+/* Colonne de droite */
+.ligne-info {
+  @apply my-1 flex justify-between text-sm;
+}
+.ligne-info span {
+  @apply text-gris capitalize;
+}
+.pastilles {
+  @apply flex flex-wrap gap-2;
+}
+.pastilles span {
+  @apply rounded-full bg-carte px-3 py-1 text-xs;
+}
+.pastilles.accent span {
+  @apply bg-accent font-bold text-sur-accent;
+}
