@@ -10,7 +10,7 @@ export const adminGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   return authService.getMoi().pipe(
-    map((moi) => (moi.roles?.includes('ROLE_ADMIN') ? true : router.createUrlTree(['/dashboard']))),
+    map((moi) => (moi.roles?.includes('ROLE_ADMIN') ? true : router.createUrlTree(['/acces-refuse']))),
     catchError(() => of(router.createUrlTree(['/login']))),
   );
 };

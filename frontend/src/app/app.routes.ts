@@ -23,6 +23,8 @@ import { FicheCoach } from './coach/fiche-coach/fiche-coach';
 import { ReservationConfirmee } from './reservations/reservation-confirmee/reservation-confirmee';
 import { VerifiezEmail } from './auth/verifiez-email/verifiez-email';
 import { CompteConfirme } from './auth/compte-confirme/compte-confirme';
+import { PageIntrouvable } from './erreurs/page-introuvable/page-introuvable';
+import { AccesRefuse } from './erreurs/acces-refuse/acces-refuse';
 
 export const routes: Routes = [
   { path: '', component: Accueil },
@@ -47,4 +49,7 @@ export const routes: Routes = [
   { path: 'favoris', component: MesFavoris, canActivate: [authGuard] },
   { path: 'mes-avis', component: MesAvis, canActivate: [authGuard] },
   { path: 'admin/utilisateurs/nouveau', component: AjouterUtilisateur, canActivate: [authGuard, adminGuard] },
+  { path: 'acces-refuse', component: AccesRefuse },
+  // Toute autre adresse : page 404 (toujours en dernier)
+  { path: '**', component: PageIntrouvable },
 ];
