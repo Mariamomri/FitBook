@@ -33,6 +33,11 @@ export class AuthService {
     this.connecte.set(false);
   }
 
+  // Renvoie le mail de confirmation à l'utilisateur connecté
+  renvoyerConfirmation(): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>('https://127.0.0.1:8000/api/me/renvoyer-confirmation', {});
+  }
+
   // Utilisateur connecté (Symfony le retrouve grâce au token)
   getMoi(): Observable<UserInterface> {
     return this.http.get<UserInterface>('https://127.0.0.1:8000/api/me');
@@ -43,4 +48,4 @@ export class AuthService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/ld+json' });
     return this.http.post<UserInterface>('https://127.0.0.1:8000/api/users', user, { headers });
   }
-}
+}
