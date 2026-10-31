@@ -39,6 +39,8 @@ export class AvisService {
 
   // Les étoiles affichées partout sur le site : 4 → "★★★★☆"
   etoiles(note: number): string {
-    return '★'.repeat(note) + '☆'.repeat(5 - note);
+    // Math.round : une moyenne de 4,6 donne 5 étoiles
+    const arrondi = Math.round(note);
+    return '★'.repeat(arrondi) + '☆'.repeat(5 - arrondi);
   }
 }

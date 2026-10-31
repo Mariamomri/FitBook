@@ -7,4 +7,7 @@ export interface AvisInterface {
   salle?: string | null; // l'avis porte sur une salle, un coach ou un cours
   coach?: string | null;
   cours?: string | null;
+  auteur?: string; // "Mariam O." (calculé par Symfony, lecture seule)
+  auteurImage?: string | null;
+  createdAt?: string;
 }
