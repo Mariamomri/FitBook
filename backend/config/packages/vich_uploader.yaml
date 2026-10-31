@@ -1,0 +1,29 @@
+vich_uploader:
+    db_driver: orm
+    metadata:
+        type: attribute
+
+    mappings:
+        # photos des salles : enregistrées dans public/images/salles
+        salles:
+            uri_prefix: /images/salles
+            upload_destination: "%kernel.project_dir%/public/images/salles"
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            delete_on_update: true
+            delete_on_remove: true
+
+        # photos des coachs : enregistrées dans public/images/coachs
+        coachs:
+            uri_prefix: /images/coachs
+            upload_destination: "%kernel.project_dir%/public/images/coachs"
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            delete_on_update: true
+            delete_on_remove: true
+
+        # photos de profil des utilisateurs : enregistrées dans public/images/users
+        users:
+            uri_prefix: /images/users
+            upload_destination: "%kernel.project_dir%/public/images/users"
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            delete_on_update: true
+            delete_on_remove: true
