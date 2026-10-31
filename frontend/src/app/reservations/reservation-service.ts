@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ReservationInterface, ReservationAdminInterface } from './reservation-interface';
+import { ReservationInterface, ReservationAdminInterface, ReservationRecueInterface } from './reservation-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +35,16 @@ export class ReservationService {
 
   supprimerReservation(id: number): Observable<void> {
     return this.http.delete<void>('https://127.0.0.1:8000/api/reservations/' + id);
+  }
+
+  // Réservations des salles du gestionnaire connecté
+  getReservationsDeMesSalles(): Observable<ReservationRecueInterface[]> {
+    return this.http.get<ReservationRecueInterface[]>('https://127.0.0.1:8000/api/me/salle/reservations');
+  }
+
+  // Réservations des cours du coach connecté
+  getReservationsDeMesCours(): Observable<ReservationRecueInterface[]> {
+    return this.http.get<ReservationRecueInterface[]>('https://127.0.0.1:8000/api/me/coach/reservations');
   }
 
   // Une réservation par son id (le propriétaire y a accès) : donne le lien vers la séance
