@@ -4,7 +4,9 @@
 /* Bandeau du haut */
 .bandeau {
   @apply mb-6 rounded-lg p-8;
-  background: linear-gradient(90deg, #151518 40%, #3a2a30);
+  background:
+    linear-gradient(90deg, #151518 40%, rgba(21, 21, 24, 0.4)),
+    url('/img/stretch.jpg') center / cover;
 }
 
 .bandeau h1 {

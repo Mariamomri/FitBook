@@ -3,7 +3,9 @@
   padding: 2.5rem 2rem;
   margin-bottom: 2rem;
   border: 1px solid var(--accent);
-  background: linear-gradient(90deg, #151518 40%, #2a2a30);
+  background:
+    linear-gradient(90deg, #151518 40%, rgba(21, 21, 24, 0.4)),
+    url('/img/boxing.jpg') center / cover;
 }
 .fil { font-size: 0.75rem; margin: 0 0 0.5rem; }
 .fil a { color: var(--muted); text-decoration: none; }
