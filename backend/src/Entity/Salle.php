@@ -14,12 +14,16 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\ApiProperty;
+use Symfony\Component\HttpFoundation\File\File; // fichier envoyé lors de l'upload
+use Vich\UploaderBundle\Mapping\Attribute as Vich; // pour l'upload des photos
 
 #[ORM\Entity(repositoryClass: SalleRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'salles')]
 //pour exposer l'entité via l'API Platform
 // Lecture publique ; le gestionnaire ne gère que ses propres salles, l'admin gère tout
+#[Vich\Uploadable] // la salle peut avoir une photo
 #[ApiResource(operations: [
     new GetCollection(),
     new Get(),
@@ -63,6 +67,22 @@ class Salle
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 7, nullable: true)]
     private ?string $longitude = null;
+
+
+    // fichier photo reçu (pas enregistré en base, utilisé seulement pendant l'upload)
+    #[Vich\UploadableField(mapping: 'salles', fileNameProperty: 'imageName', size: 'imageSize')]
+    #[ApiProperty(readable: false, writable: false)]
+    private ?File $imageFile = null;
+
+    // nom du fichier enregistré dans public/images/salles
+    #[ORM\Column(nullable: true)]
+    #[ApiProperty(writable: false)]
+    private ?string $imageName = null;
+
+    // taille du fichier en octets
+    #[ORM\Column(nullable: true)]
+    #[ApiProperty(writable: false)]
+    private ?int $imageSize = null;
 
     #[ORM\ManyToOne(inversedBy: 'salles')]
     #[ORM\JoinColumn(nullable: false)]
@@ -320,5 +340,41 @@ class Salle
         }
 
         return $this;
+    }
+
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    // quand une nouvelle photo arrive, on change updatedAt pour que Doctrine enregistre la modification
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if ($imageFile !== null) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageSize(): ?int
+    {
+        return $this->imageSize;
+    }
+
+    public function setImageSize(?int $imageSize): void
+    {
+        $this->imageSize = $imageSize;
     }
 }
