@@ -57,6 +57,7 @@ security:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/users, roles: PUBLIC_ACCESS, methods: [POST] }
         - { path: ^/api/contact, roles: PUBLIC_ACCESS, methods: [POST] }
+        - { path: ^/api/(mot-de-passe-oublie|nouveau-mot-de-passe), roles: PUBLIC_ACCESS, methods: [POST] }
         - {
               path: ^/api/(activites|salles|coaches|horaires|seances|cours|avis),
               roles: PUBLIC_ACCESS,
