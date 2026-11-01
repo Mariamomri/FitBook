@@ -5,11 +5,23 @@ namespace App\Entity;
 use App\Repository\CarteMembreRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use Symfony\Component\Validator\Constraints as Assert; // règles de validation des données envoyées
 
 #[ORM\Entity(repositoryClass: CarteMembreRepository::class)]
 #[ORM\Table(name: 'cartes_membre')]
-#[ApiResource] //pour exposer l'entité via l'API Platform
+// Gestion des cartes par l'admin ; le sportif voit et demande sa carte avec /api/me/carte
+#[ApiResource(operations: [
+    new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+    new Get(security: "is_granted('ROLE_ADMIN') or object.getUser() == user"),
+    new Post(security: "is_granted('ROLE_ADMIN')"),
+    new Patch(security: "is_granted('ROLE_ADMIN')"),
+    new Delete(security: "is_granted('ROLE_ADMIN')")
+])]
 class CarteMembre
 {
     #[ORM\Id]
