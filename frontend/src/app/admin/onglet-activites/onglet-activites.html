@@ -1,10 +1,3 @@
-@if (erreur()) {
-  <p class="alerte">{{ erreur() }}</p>
-}
-@if (succes()) {
-  <p class="alerte-ok">{{ succes() }}</p>
-}
-
 <div class="barre">
   <button class="btn petit-btn" (click)="ouvrirAjout()">+ Ajouter une activité</button>
 </div>
@@ -21,6 +14,13 @@
       <button type="button" class="btn btn-outline" (click)="idFormulaire.set(null)">Annuler</button>
     </div>
   </form>
+}
+<!-- Messages juste sous le formulaire, près du bouton -->
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
 }
 
 <div class="tableau">

@@ -3,13 +3,6 @@
   <button class="btn petit-btn" (click)="ouvrirAjout()" [disabled]="mesSalles().length === 0">+ Ajouter un cours</button>
 </div>
 
-@if (erreur()) {
-  <p class="alerte">{{ erreur() }}</p>
-}
-@if (succes()) {
-  <p class="alerte-ok">{{ succes() }}</p>
-}
-
 <!-- Formulaire : un cours = une activité dans une de ses salles, avec ou sans coach -->
 @if (idFormulaire() !== null) {
   <form class="formulaire" [formGroup]="coursForm" (ngSubmit)="enregistrer()">
@@ -72,6 +65,13 @@
       <button type="button" class="btn btn-outline" (click)="idFormulaire.set(null)">Annuler</button>
     </div>
   </form>
+}
+<!-- Messages juste sous le formulaire, près du bouton -->
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
 }
 
 <div class="barre">

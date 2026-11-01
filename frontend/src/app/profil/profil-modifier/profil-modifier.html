@@ -30,13 +30,6 @@
     <form class="formulaire" [formGroup]="profilForm" (ngSubmit)="enregistrer()">
       <p class="eyebrow">Informations personnelles</p>
 
-      @if (succes()) {
-        <p class="alerte alerte-ok">{{ succes() }}</p>
-      }
-      @if (erreur()) {
-        <p class="alerte">{{ erreur() }}</p>
-      }
-
       <!-- Photo de profil : envoyée dès qu'on choisit un fichier -->
       <label>Photo de profil</label>
       <div class="photo">
@@ -94,6 +87,14 @@
         }
       </div>
       <p class="muted mini">La couleur choisie s'applique aux boutons, liens et accents du site.</p>
+
+      <!-- Messages juste au-dessus des boutons pour être vus tout de suite -->
+      @if (succes()) {
+        <p class="alerte alerte-ok">{{ succes() }}</p>
+      }
+      @if (erreur()) {
+        <p class="alerte">{{ erreur() }}</p>
+      }
 
       <div class="boutons">
         <button type="button" class="btn btn-outline" (click)="annuler()">Annuler</button>

@@ -3,13 +3,6 @@
   <button class="btn petit-btn" (click)="ouvrirAjout()">+ Ajouter un créneau</button>
 </div>
 
-@if (erreur()) {
-  <p class="alerte">{{ erreur() }}</p>
-}
-@if (succes()) {
-  <p class="alerte-ok">{{ succes() }}</p>
-}
-
 @if (idFormulaire() !== null) {
   <form class="formulaire" [formGroup]="disponibiliteForm" (ngSubmit)="enregistrer()">
     <h3>{{ idFormulaire() === 0 ? 'Nouveau créneau' : 'Modifier le créneau' }}</h3>
@@ -36,6 +29,13 @@
       <button type="button" class="btn btn-outline" (click)="idFormulaire.set(null)">Annuler</button>
     </div>
   </form>
+}
+<!-- Messages juste sous le formulaire, près du bouton -->
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
 }
 
 <!-- Ses créneaux, groupés visuellement par jour -->

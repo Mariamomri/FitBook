@@ -1,12 +1,5 @@
 <h2>Profil professionnel</h2>
 
-@if (erreur()) {
-  <p class="alerte">{{ erreur() }}</p>
-}
-@if (succes()) {
-  <p class="alerte-ok">{{ succes() }}</p>
-}
-
 <div class="mise-en-page">
   <!-- Photo visible sur la page Coachs -->
   <div class="photo">
@@ -43,4 +36,11 @@
       <button type="submit" class="btn">Enregistrer</button>
     </div>
   </form>
+  <!-- Messages juste sous le formulaire, près du bouton -->
+  @if (erreur()) {
+    <p class="alerte">{{ erreur() }}</p>
+  }
+  @if (succes()) {
+    <p class="alerte-ok">{{ succes() }}</p>
+  }
 </div>

@@ -3,13 +3,6 @@
   <button class="btn petit-btn" (click)="ouvrirAjout()">+ Ajouter une salle</button>
 </div>
 
-@if (erreur()) {
-  <p class="alerte">{{ erreur() }}</p>
-}
-@if (succes()) {
-  <p class="alerte-ok">{{ succes() }}</p>
-}
-
 <!-- Formulaire d'ajout ou de modification -->
 @if (idFormulaire() !== null) {
   <form class="formulaire" [formGroup]="salleForm" (ngSubmit)="enregistrer()">
@@ -78,6 +71,13 @@
       <button type="button" class="btn btn-outline" (click)="idFormulaire.set(null)">Annuler</button>
     </div>
   </form>
+}
+<!-- Messages juste sous le formulaire, près du bouton -->
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
 }
 
 <!-- Une carte par salle, avec sa photo -->

@@ -10,10 +10,6 @@
 
     <div class="mise-en-page">
       <form class="formulaire" [formGroup]="utilisateurForm" (ngSubmit)="creer()">
-        @if (erreur()) {
-          <p class="alerte">{{ erreur() }}</p>
-        }
-
         <h2>Compte</h2>
         <div class="deux-colonnes">
           <div>
@@ -67,6 +63,11 @@
           <p class="champ-erreur">6 caractères minimum</p>
         }
         <p class="muted mini">À communiquer à la personne, qui pourra le changer ensuite.</p>
+
+        <!-- Message juste au-dessus des boutons -->
+        @if (erreur()) {
+          <p class="alerte">{{ erreur() }}</p>
+        }
 
         <div class="boutons">
           <button type="submit" class="btn">Créer le compte →</button>

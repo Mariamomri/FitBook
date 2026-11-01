@@ -5,13 +5,6 @@
   </button>
 </div>
 
-@if (erreur()) {
-  <p class="alerte">{{ erreur() }}</p>
-}
-@if (succes()) {
-  <p class="alerte-ok">{{ succes() }}</p>
-}
-
 <!-- Nouvelle séance : un cours + une date + un créneau -->
 @if (formulaireOuvert()) {
   <form class="formulaire" [formGroup]="seanceForm" (ngSubmit)="enregistrer()">
@@ -46,6 +39,13 @@
       <button type="button" class="btn btn-outline" (click)="formulaireOuvert.set(false)">Annuler</button>
     </div>
   </form>
+}
+<!-- Messages juste sous le formulaire, près du bouton -->
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
 }
 
 <div class="deux-colonnes">
