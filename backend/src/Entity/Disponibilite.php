@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use Symfony\Component\Validator\Constraints as Assert; // règles de validation des données envoyées
 
 #[ORM\Entity(repositoryClass: DisponibiliteRepository::class)]
 #[ORM\Table(name: 'disponibilites_coaches')]
@@ -31,16 +32,21 @@ class Disponibilite
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
+    #[Assert\Choice(choices: ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'], message: 'Jour invalide.')]
     private ?string $jour = null;
 
     #[ORM\Column(type: Types::TIME_IMMUTABLE)]
+    #[Assert\NotNull(message: "L'heure de début est obligatoire.")]
     private ?\DateTimeImmutable $heureDebut = null;
 
     #[ORM\Column(type: Types::TIME_IMMUTABLE)]
+    #[Assert\NotNull(message: "L'heure de fin est obligatoire.")]
+    #[Assert\GreaterThan(propertyPath: 'heureDebut', message: 'La fin doit être après le début.')]
     private ?\DateTimeImmutable $heureFin = null;
 
     #[ORM\ManyToOne(inversedBy: 'disponibilites')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'Le coach est obligatoire.')]
     private ?Coach $coach = null;
 
     public function getId(): ?int

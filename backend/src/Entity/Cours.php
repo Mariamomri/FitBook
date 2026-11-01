@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use Symfony\Component\Validator\Constraints as Assert; // règles de validation des données envoyées
 
 #[ORM\Entity(repositoryClass: CoursRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -35,26 +36,36 @@ class Cours
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(message: 'Le titre est obligatoire.')]
+    #[Assert\Length(min: 2, max: 100)]
     private ?string $titre = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'La description est obligatoire.')]
     private ?string $description = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\Choice(choices: ['Débutant', 'Intermédiaire', 'Avancé', 'Tous niveaux'], message: 'Niveau invalide.')]
     private ?string $niveau = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'La capacité est obligatoire.')]
+    #[Assert\Positive(message: 'La capacité doit être supérieure à 0.')]
     private ?int $capacite = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 2)]
+    #[Assert\NotNull(message: 'Le prix est obligatoire.')]
+    #[Assert\PositiveOrZero(message: 'Le prix ne peut pas être négatif.')]
     private ?string $prix = null;
 
     #[ORM\ManyToOne(inversedBy: 'cours')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'La salle est obligatoire.')]
     private ?Salle $salle = null;
 
     #[ORM\ManyToOne(inversedBy: 'cours')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: "L'activité est obligatoire.")]
     private ?Activite $activite = null;
 
     #[ORM\ManyToOne(inversedBy: 'cours')]

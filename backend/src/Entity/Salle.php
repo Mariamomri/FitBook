@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\ApiProperty;
 use Symfony\Component\HttpFoundation\File\File; // fichier envoyé lors de l'upload
 use Vich\UploaderBundle\Mapping\Attribute as Vich; // pour l'upload des photos
+use Symfony\Component\Validator\Constraints as Assert; // règles de validation des données envoyées
 
 #[ORM\Entity(repositoryClass: SalleRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -39,33 +40,49 @@ class Salle
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(message: 'Le nom de la salle est obligatoire.')]
+    #[Assert\Length(min: 2, max: 100, minMessage: 'Le nom doit contenir au moins {{ limit }} caractères.')]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "L'adresse est obligatoire.")]
+    #[Assert\Length(max: 255)]
     private ?string $adresse = null;
 
     #[ORM\Column(length: 10)]
+    #[Assert\NotBlank(message: 'Le code postal est obligatoire.')]
+    #[Assert\Regex(pattern: '/^\d{4,5}$/', message: 'Code postal invalide (4 ou 5 chiffres).')]
     private ?string $codePostal = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: 'La ville est obligatoire.')]
+    #[Assert\Length(min: 2, max: 50)]
     private ?string $ville = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'La description est obligatoire.')]
     private ?string $description = null;
 
     #[ORM\Column(length: 30)]
+    #[Assert\NotBlank(message: 'Le téléphone est obligatoire.')]
+    #[Assert\Regex(pattern: '/^[0-9 +.\/()-]{6,30}$/', message: 'Numéro de téléphone invalide.')]
     private ?string $telephone = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'La capacité est obligatoire.')]
+    #[Assert\Positive(message: 'La capacité doit être supérieure à 0.')]
     private ?int $capacite = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     private ?string $equipements = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 7, nullable: true)]
+    #[Assert\Range(min: -90, max: 90, notInRangeMessage: 'Latitude invalide.')]
     private ?string $latitude = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 7, nullable: true)]
+    #[Assert\Range(min: -180, max: 180, notInRangeMessage: 'Longitude invalide.')]
     private ?string $longitude = null;
 
 
@@ -86,6 +103,7 @@ class Salle
 
     #[ORM\ManyToOne(inversedBy: 'salles')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'Le gestionnaire est obligatoire.')]
     private ?User $gestionnaire = null;
 
     /**

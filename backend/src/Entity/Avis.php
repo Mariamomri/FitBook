@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use Symfony\Component\Validator\Constraints as Assert; // règles de validation des données envoyées
 
 // Un avis vient toujours d'une réservation (donner_lieu 1,1) et porte sur UNE cible :
 // une salle OU un coach OU un cours (noter_salle / noter_coach / noter_cours 0,1).
@@ -39,6 +40,8 @@ use ApiPlatform\Metadata\Post;
     ),
     new Delete(security: "is_granted('ROLE_ADMIN') or object.getReservation()?.getUser() == user")
 ])]
+// Un avis porte sur une seule cible : une salle OU un coach OU un cours
+#[Assert\Expression("(this.getSalle() ? 1 : 0) + (this.getCoach() ? 1 : 0) + (this.getCours() ? 1 : 0) == 1", message: 'Un avis porte sur une salle, un coach ou un cours (un seul).')]
 class Avis
 {
     #[ORM\Id]
@@ -47,16 +50,22 @@ class Avis
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'La note est obligatoire.')]
+    #[Assert\Range(min: 1, max: 5, notInRangeMessage: 'La note doit être entre {{ min }} et {{ max }}.')]
     private ?int $note = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'Le commentaire est obligatoire.')]
+    #[Assert\Length(min: 3, max: 500, minMessage: 'Le commentaire doit contenir au moins {{ limit }} caractères.', maxMessage: '{{ limit }} caractères maximum.')]
     private ?string $commentaire = null;
 
     #[ORM\Column(length: 20)]
+    #[Assert\Choice(choices: ['en_attente', 'publie', 'refuse'], message: 'Statut invalide.')]
     private ?string $statut = null;
 
     #[ORM\ManyToOne(inversedBy: 'avis')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'La réservation est obligatoire.')]
     private ?Reservation $reservation = null;
 
     #[ORM\ManyToOne(inversedBy: 'avis')]

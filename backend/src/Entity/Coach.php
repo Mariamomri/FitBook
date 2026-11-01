@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use Symfony\Component\HttpFoundation\File\File; // fichier envoyé lors de l'upload
 use Vich\UploaderBundle\Mapping\Attribute as Vich; // pour l'upload des photos
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert; // règles de validation des données envoyées
 
 #[ORM\Entity(repositoryClass: CoachRepository::class)]
 #[UniqueEntity(fields: ['user'], message: 'Ce compte a déjà une fiche coach.')]
@@ -41,18 +42,26 @@ class Coach
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'La biographie est obligatoire.')]
+    #[Assert\Length(min: 10, minMessage: 'La biographie doit contenir au moins {{ limit }} caractères.')]
     private ?string $biographie = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: "Les années d'expérience sont obligatoires.")]
+    #[Assert\Range(min: 0, max: 60, notInRangeMessage: "Entre {{ min }} et {{ max }} ans d'expérience.")]
     private ?int $anneesExperience = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 2)]
+    #[Assert\NotNull(message: 'Le tarif est obligatoire.')]
+    #[Assert\PositiveOrZero(message: 'Le tarif ne peut pas être négatif.')]
     private ?string $tarif = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $certifications = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(message: 'Indiquez au moins une langue.')]
+    #[Assert\Length(max: 100)]
     private ?string $langues = null;
 
 
@@ -78,6 +87,7 @@ class Coach
 
     #[ORM\OneToOne(inversedBy: 'coach', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'Le compte du coach est obligatoire.')]
     private ?User $user = null;
 
     /**

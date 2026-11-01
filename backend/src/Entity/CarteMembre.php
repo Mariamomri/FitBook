@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CarteMembreRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Validator\Constraints as Assert; // règles de validation des données envoyées
 
 #[ORM\Entity(repositoryClass: CarteMembreRepository::class)]
 #[ORM\Table(name: 'cartes_membre')]
@@ -17,15 +18,21 @@ class CarteMembre
     private ?int $id = null;
 
     #[ORM\Column(length: 20, unique: true)] //numéro d'affiliation unique pour chaque carte
+    #[Assert\NotBlank(message: "Le numéro d'affiliation est obligatoire.")]
+    #[Assert\Length(max: 20)]
     private ?string $numeroAffiliation = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: "La date d'émission est obligatoire.")]
     private ?\DateTimeImmutable $dateEmission = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: "La date d'expiration est obligatoire.")]
+    #[Assert\GreaterThan(propertyPath: 'dateEmission', message: "L'expiration doit être après l'émission.")]
     private ?\DateTimeImmutable $dateExpiration = null;
 
     #[ORM\Column(length: 20)]
+    #[Assert\Choice(choices: ['active', 'expiree', 'suspendue'], message: 'Statut invalide.')]
     private ?string $statut = null;
 
     #[ORM\OneToOne(inversedBy: 'carteMembre', cascade: ['persist', 'remove'])]
