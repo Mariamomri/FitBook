@@ -46,6 +46,7 @@
               </td>
               <td>
                 @if (reservation.statut !== 'annulee') {
+                  <button class="btn-qr" (click)="afficherQr(reservation)" aria-label="QR code"><i class="fa-solid fa-qrcode"></i> QR</button>
                   <button class="btn-annuler" (click)="annuler(reservation)">Annuler</button>
                 } @else {
                   <span class="muted">—</span>
@@ -62,3 +63,15 @@
     </div>
   </div>
 </div>
+
+<!-- Fenêtre du QR code -->
+@if (qrOuvert(); as qr) {
+  <div class="fond-qr" (click)="qrOuvert.set(null)">
+    <div class="fenetre-qr" (click)="$event.stopPropagation()">
+      <h3>Réservation {{ qr.numero }}</h3>
+      <img [src]="qr.image" [alt]="'QR code de la réservation ' + qr.numero" />
+      <p class="muted">Présentez ce QR code à l'accueil de la salle.</p>
+      <button class="btn" (click)="qrOuvert.set(null)">Fermer</button>
+    </div>
+  </div>
+}

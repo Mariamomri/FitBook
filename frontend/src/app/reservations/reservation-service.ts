@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import QRCode from 'qrcode'; // bibliothèque qui dessine un QR code
 import { ReservationInterface, ReservationAdminInterface, ReservationRecueInterface } from './reservation-interface';
 
 @Injectable({
@@ -35,6 +36,15 @@ export class ReservationService {
 
   supprimerReservation(id: number): Observable<void> {
     return this.http.delete<void>('https://127.0.0.1:8000/api/reservations/' + id);
+  }
+
+  // QR code de la réservation (image en base64) : l'accueil de la salle le scanne pour lire le numéro
+  qrCode(numero: string): Promise<string> {
+    return QRCode.toDataURL('FITBOOK-RESERVATION:' + numero, {
+      width: 220,
+      margin: 1,
+      color: { dark: '#080809', light: '#ffffff' },
+    });
   }
 
   // Réservations des salles du gestionnaire connecté

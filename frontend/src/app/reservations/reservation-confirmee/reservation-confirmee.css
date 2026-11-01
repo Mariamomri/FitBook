@@ -55,3 +55,17 @@
 .petit {
   @apply mt-4 text-xs;
 }
+
+/* Détails à gauche, QR code à droite */
+.contenu {
+  @apply grid grid-cols-1 items-start gap-4 sm:grid-cols-[1fr_auto];
+}
+.qr {
+  @apply m-0 text-center;
+}
+.qr img {
+  @apply mx-auto block h-36 w-36 rounded-md bg-white p-1;
+}
+.qr figcaption {
+  @apply mt-1 text-xs text-gris;
+}

@@ -15,6 +15,8 @@ export class Reservations implements OnInit {
   reservations = signal<ReservationInterface[]>([]);
   erreur = signal('');
   succes = signal('');
+  // Fenêtre du QR code : numéro de la réservation et image (null = fermée)
+  qrOuvert = signal<{ numero: string; image: string } | null>(null);
 
   // Au chargement de la page, on récupère les réservations de l'utilisateur connecté
   ngOnInit(): void {
@@ -39,5 +41,10 @@ export class Reservations implements OnInit {
       // 403 ou 422 : Symfony renvoie le message à afficher (déjà annulée, séance commencée...)
       error: (err) => this.erreur.set(err.error?.message ?? 'Impossible d\'annuler cette réservation'),
     });
+  }
+
+  // Bouton « QR » : on dessine le QR code puis on ouvre la fenêtre
+  afficherQr(reservation: ReservationInterface): void {
+    this.reservationService.qrCode(reservation.numero).then((image) => this.qrOuvert.set({ numero: reservation.numero, image }));
   }
 }

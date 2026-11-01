@@ -98,4 +98,54 @@ tr:last-child td {
 .vide {
   text-align: center;
   padding: 2rem;
-}
+}
+
+/* Bouton QR code */
+.btn-qr {
+  margin-right: 0.4rem;
+  padding: 0.4rem 0.9rem;
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Fenêtre du QR code */
+.fond-qr {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.fenetre-qr {
+  width: 100%;
+  max-width: 320px;
+  padding: 1.5rem;
+  text-align: center;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--accent);
+  border-radius: 10px;
+}
+
+.fenetre-qr h3 {
+  margin-bottom: 1rem;
+}
+
+.fenetre-qr img {
+  display: block;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 0.8rem;
+  padding: 0.3rem;
+  background: #ffffff;
+  border-radius: 6px;
+}

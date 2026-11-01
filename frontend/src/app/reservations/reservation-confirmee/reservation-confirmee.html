@@ -10,6 +10,7 @@
       </div>
     </div>
 
+    <div class="contenu">
     @if (seance(); as s) {
       <dl class="details">
         <div><dt>Séance</dt><dd>{{ s.coursTitre }} · {{ s.activiteNom }}</dd></div>
@@ -26,6 +27,15 @@
         <div><dt>Prix</dt><dd>{{ s.prix }} €</dd></div>
       </dl>
     }
+
+    <!-- QR code à présenter à l'accueil de la salle -->
+    @if (qrCode()) {
+      <figure class="qr">
+        <img [src]="qrCode()" [alt]="'QR code de la réservation ' + numero" />
+        <figcaption>Présentez ce QR code à l'accueil</figcaption>
+      </figure>
+    }
+    </div>
 
     <p class="info"><i class="fa-solid fa-envelope"></i> Un email de confirmation vient de vous être envoyé.</p>
 
