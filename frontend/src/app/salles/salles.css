@@ -28,7 +28,7 @@
 
 /* Barre de recherche qui chevauche le bas du bandeau */
 .recherche {
-  @apply relative mx-8 -mt-10 mb-8 grid grid-cols-1 gap-4 rounded-md border border-bordure bg-nav p-4 md:grid-cols-[2fr_1fr_1fr];
+  @apply relative mx-8 -mt-10 mb-8 grid grid-cols-1 gap-4 rounded-md border border-bordure bg-nav p-4 md:grid-cols-[2fr_1fr_1fr_1fr];
 }
 .recherche label {
   @apply mb-1 text-[0.6rem];
@@ -114,4 +114,15 @@
 }
 .coeur.actif {
   @apply text-accent;
+}
+
+/* Recherche par distance */
+.pres-de-moi {
+  @apply w-full whitespace-nowrap;
+}
+.message-position {
+  @apply mx-8 -mt-5 mb-6 text-xs;
+}
+.distance {
+  @apply my-1 text-xs font-bold text-accent;
 }
