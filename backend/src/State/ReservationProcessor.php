@@ -5,6 +5,8 @@ namespace App\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Entity\Reservation;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Mailer\MailerInterface;
@@ -57,7 +59,12 @@ final class ReservationProcessor implements ProcessorInterface
     // Enregistrement en base (persist + flush)
     $reservation = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
 
+    // QR code de la réservation : même texte que dans l'application Angular ("FITBOOK-RESERVATION:" + numéro)
+    $qrCode = new QrCode(data: 'FITBOOK-RESERVATION:' . $reservation->getNumero(), size: 220, margin: 10);
+    $imageQr = (new PngWriter())->write($qrCode)->getString();
+
     // Email de confirmation au sportif (template reservation_confirmation.html.twig)
+    // embed : l'image est jointe à l'email, le template l'affiche avec src="cid:qrcode"
     $this->mailer->send(
       (new TemplatedEmail())
         ->from(new Address('noreply@fitbook.be', 'FitBook'))
@@ -65,6 +72,7 @@ final class ReservationProcessor implements ProcessorInterface
         ->subject('Réservation confirmée - FitBook')
         ->htmlTemplate('reservation_confirmation.html.twig')
         ->context(['reservation' => $reservation])
+        ->embed($imageQr, 'qrcode', 'image/png')
     );
 
     return $reservation;
