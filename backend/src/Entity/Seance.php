@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SeanceRepository;
+use App\State\SeanceProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -24,7 +25,11 @@ use Symfony\Component\Validator\Constraints as Assert; // règles de validation 
     new GetCollection(),
     new Get(),
     new Post(securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getCours()?.getSalle()?.getGestionnaire() == user or object.getCours()?.getCoach()?.getUser() == user"),
-    new Patch(security: "is_granted('ROLE_ADMIN') or object.getCours()?.getSalle()?.getGestionnaire() == user or object.getCours()?.getCoach()?.getUser() == user", securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getCours()?.getSalle()?.getGestionnaire() == user or object.getCours()?.getCoach()?.getUser() == user"),
+    new Patch(
+        security: "is_granted('ROLE_ADMIN') or object.getCours()?.getSalle()?.getGestionnaire() == user or object.getCours()?.getCoach()?.getUser() == user",
+        securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getCours()?.getSalle()?.getGestionnaire() == user or object.getCours()?.getCoach()?.getUser() == user",
+        processor: SeanceProcessor::class // annulation : réservations annulées + email aux sportifs
+    ),
     new Delete(security: "is_granted('ROLE_ADMIN') or object.getCours()?.getSalle()?.getGestionnaire() == user or object.getCours()?.getCoach()?.getUser() == user")
 ])]
 #[ApiFilter(SearchFilter::class, properties: ['cours' => 'exact'])] // filtre : /api/seances?cours=2001
