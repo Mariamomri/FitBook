@@ -27,10 +27,16 @@ use ApiPlatform\Metadata\Post;
     new Post(
         security: "is_granted('ROLE_USER') and user.isVerified()",
         securityMessage: 'Veuillez confirmer votre email avant de laisser un avis.',
-        securityPostDenormalize: "object.getReservation()?.getUser() == user",
-        securityPostDenormalizeMessage: 'Vous ne pouvez donner un avis que sur vos propres réservations.'
+        // l'avis doit venir d'une de ses réservations et arriver « en attente » (publié seulement par l'admin)
+        securityPostDenormalize: "object.getReservation()?.getUser() == user and object.getStatut() == 'en_attente'",
+        securityPostDenormalizeMessage: 'Vous ne pouvez donner un avis que sur vos propres réservations, en attente de validation.'
     ),
-    new Patch(security: "is_granted('ROLE_ADMIN') or object.getReservation()?.getUser() == user"),
+    new Patch(
+        security: "is_granted('ROLE_ADMIN') or object.getReservation()?.getUser() == user",
+        // l'auteur peut changer la note et le commentaire, pas le statut ni la réservation
+        securityPostDenormalize: "is_granted('ROLE_ADMIN') or (object.getStatut() == previous_object.getStatut() and object.getReservation() == previous_object.getReservation())",
+        securityPostDenormalizeMessage: "Seul l'administrateur peut changer le statut d'un avis."
+    ),
     new Delete(security: "is_granted('ROLE_ADMIN') or object.getReservation()?.getUser() == user")
 ])]
 class Avis
