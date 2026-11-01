@@ -54,3 +54,17 @@ input:focus {
 .retour {
   @apply mt-3 block text-center text-xs font-bold text-accent no-underline;
 }
+
+/* Message « Email envoyé » */
+.envoye {
+  @apply my-4 rounded-md border border-accent bg-accent/10 p-4 text-center text-sm;
+}
+.envoye i {
+  @apply mb-2 text-3xl text-accent;
+}
+.envoye p {
+  @apply my-1;
+}
+.lien {
+  @apply w-full cursor-pointer border-0 bg-transparent;
+}
