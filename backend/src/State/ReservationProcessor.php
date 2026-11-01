@@ -29,6 +29,14 @@ final class ReservationProcessor implements ProcessorInterface
     $seance = $data->getSeance();
     $capacite = $seance->getCours()->getCapacite();
 
+    // On ne réserve qu'une séance ouverte qui n'a pas encore commencé
+    if ($seance->getStatut() !== 'ouverte') {
+      throw new UnprocessableEntityHttpException('Cette séance n\'est pas ouverte aux réservations.');
+    }
+    if ($seance->getDateDebut() <= new \DateTimeImmutable()) {
+      throw new UnprocessableEntityHttpException('Cette séance a déjà commencé.');
+    }
+
     // On compte seulement les réservations confirmées de cette séance
     $confirmees = 0;
     foreach ($seance->getReservations() as $reservation) {

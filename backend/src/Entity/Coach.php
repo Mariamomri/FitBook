@@ -16,8 +16,10 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\ApiProperty;
 use Symfony\Component\HttpFoundation\File\File; // fichier envoyé lors de l'upload
 use Vich\UploaderBundle\Mapping\Attribute as Vich; // pour l'upload des photos
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: CoachRepository::class)]
+#[UniqueEntity(fields: ['user'], message: 'Ce compte a déjà une fiche coach.')]
 #[ORM\Table(name: 'coaches')]
 //pour exposer l'entité via l'API Platform
 // Lecture publique ; l'admin crée et supprime les profils, le coach modifie le sien
