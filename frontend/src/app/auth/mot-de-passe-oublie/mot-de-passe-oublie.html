@@ -1,0 +1,29 @@
+<section class="fond">
+  <span class="points"></span>
+  <span class="rayures"></span>
+
+  <article class="carte">
+    <h1>Mot de passe<br /><span class="vert">oublié ?</span></h1>
+    <p class="muted">Entrez votre email : vous recevrez un lien pour choisir un nouveau mot de passe.</p>
+
+    <form [formGroup]="oublieForm" (ngSubmit)="envoyer()">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" placeholder="mariam@exemple.be" />
+      @if (oublieForm.controls.email.touched && oublieForm.controls.email.invalid) {
+        <p class="champ-erreur">⚠ Format d'email invalide</p>
+      }
+
+      @if (erreur()) {
+        <p class="alerte">{{ erreur() }}</p>
+      }
+
+      <button type="submit" class="btn bloc" [disabled]="envoiEnCours()">Envoyer le lien →</button>
+    </form>
+
+    <a class="retour" routerLink="/login">← Retour à la connexion</a>
+
+    @if (succes()) {
+      <p class="info"><i class="fa-solid fa-envelope"></i> {{ succes() }}</p>
+    }
+  </article>
+</section>

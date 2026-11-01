@@ -33,6 +33,16 @@ export class AuthService {
     this.connecte.set(false);
   }
 
+  // Mot de passe oublié : Symfony envoie un lien valable 1 heure (même réponse si l'email n'existe pas)
+  motDePasseOublie(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>('https://127.0.0.1:8000/api/mot-de-passe-oublie', { email });
+  }
+
+  // Nouveau mot de passe : le token vient du lien reçu par email
+  nouveauMotDePasse(token: string, password: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>('https://127.0.0.1:8000/api/nouveau-mot-de-passe', { token, password });
+  }
+
   // Renvoie le mail de confirmation à l'utilisateur connecté
   renvoyerConfirmation(): Observable<{ message: string }> {
     return this.http.post<{ message: string }>('https://127.0.0.1:8000/api/me/renvoyer-confirmation', {});

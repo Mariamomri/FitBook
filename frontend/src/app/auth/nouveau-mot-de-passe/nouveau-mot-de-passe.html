@@ -1,0 +1,49 @@
+<section class="fond">
+  <span class="points"></span>
+  <span class="rayures"></span>
+
+  <article class="carte">
+    <h1>Nouveau<br /><span class="vert">mot de passe</span></h1>
+
+    @if (succes()) {
+      <p class="alerte-ok">{{ succes() }}</p>
+      <a class="btn bloc" routerLink="/login">Se connecter →</a>
+    } @else if (!token) {
+      <p class="alerte">Ce lien est incomplet. Faites une nouvelle demande.</p>
+      <a class="btn bloc" routerLink="/mot-de-passe-oublie">Mot de passe oublié →</a>
+    } @else {
+      <p class="muted">Choisissez un nouveau mot de passe pour votre compte.</p>
+
+      <form [formGroup]="motDePasseForm" (ngSubmit)="enregistrer()">
+        <label for="password">Nouveau mot de passe</label>
+        <input id="password" type="password" formControlName="password" (input)="saisie.set($any($event.target).value)" />
+        <div class="force">
+          @for (n of [1, 2, 3, 4]; track n) {
+            <span [class.allume]="n <= force()"></span>
+          }
+        </div>
+        <p class="aide">8 caractères min., 1 majuscule, 1 chiffre</p>
+
+        <label for="confirmation">Confirmer le mot de passe</label>
+        <input
+          id="confirmation"
+          type="password"
+          formControlName="confirmation"
+          [class.invalide]="motDePasseForm.controls.confirmation.touched && motDePasseForm.hasError('differents')"
+        />
+        @if (motDePasseForm.controls.confirmation.touched && motDePasseForm.hasError('differents')) {
+          <p class="champ-erreur">⚠ Les mots de passe ne correspondent pas</p>
+        }
+        @if (motDePasseForm.controls.password.touched && motDePasseForm.controls.password.invalid) {
+          <p class="champ-erreur">⚠ 8 caractères minimum, avec 1 majuscule et 1 chiffre</p>
+        }
+
+        @if (erreur()) {
+          <p class="alerte">{{ erreur() }}</p>
+        }
+
+        <button type="submit" class="btn bloc">Enregistrer</button>
+      </form>
+    }
+  </article>
+</section>

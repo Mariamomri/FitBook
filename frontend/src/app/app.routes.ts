@@ -23,6 +23,8 @@ import { FicheCoach } from './coach/fiche-coach/fiche-coach';
 import { ReservationConfirmee } from './reservations/reservation-confirmee/reservation-confirmee';
 import { VerifiezEmail } from './auth/verifiez-email/verifiez-email';
 import { CompteConfirme } from './auth/compte-confirme/compte-confirme';
+import { MotDePasseOublie } from './auth/mot-de-passe-oublie/mot-de-passe-oublie';
+import { NouveauMotDePasse } from './auth/nouveau-mot-de-passe/nouveau-mot-de-passe';
 import { PageIntrouvable } from './erreurs/page-introuvable/page-introuvable';
 import { AccesRefuse } from './erreurs/acces-refuse/acces-refuse';
 
@@ -32,6 +34,8 @@ export const routes: Routes = [
   { path: 'inscription', component: Inscription },
   { path: 'verifiez-email', component: VerifiezEmail },
   { path: 'compte-confirme', component: CompteConfirme },
+  { path: 'mot-de-passe-oublie', component: MotDePasseOublie },
+  { path: 'nouveau-mot-de-passe', component: NouveauMotDePasse },
   { path: 'activites', component: Activites },
   { path: 'activites/:id', component: CoursDetail },
   { path: 'salles', component: Salles },
