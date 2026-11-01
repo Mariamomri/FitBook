@@ -53,8 +53,10 @@ export class Login {
         this.authService.getMoi().subscribe((moi) => this.themeService.appliquer(moi.accentColor));
         this.router.navigate(['/dashboard']);
       },
-      error: () => {
-        this.erreur.set('Email ou mot de passe incorrect');
+      error: (err) => {
+        // Compte suspendu par l'admin : Symfony renvoie un message précis
+        const message: string = err.error?.message ?? '';
+        this.erreur.set(message.includes('désactivé') ? message : 'Email ou mot de passe incorrect');
       },
     });
   }
