@@ -1,0 +1,61 @@
+<div class="espace">
+  <app-sidebar-sportif />
+
+  <div class="espace-contenu">
+    <section class="bandeau">
+      <h1>Ma carte <span class="vert">membre</span></h1>
+      <p class="muted">Présentez-la à l'accueil de toutes les salles FitBook.</p>
+    </section>
+
+    <section class="bloc-carte">
+      @if (carte(); as c) {
+        <!-- Carte de membre façon carte bancaire -->
+        <div class="carte-membre" [class.inactive]="c.statut !== 'active'">
+          <span class="points"></span>
+          <div class="haut">
+            <span class="logo"><span class="logo-f">F</span> FIT<span class="vert">BOOK</span></span>
+            <span class="statut" [class.active]="c.statut === 'active'">{{ carteMembreService.libelleStatut(c.statut) }}</span>
+          </div>
+          <p class="numero">{{ c.numero }}</p>
+          <div class="bas">
+            <div>
+              <span class="etiquette-carte">Membre</span>
+              <strong>{{ moi()?.firstname }} {{ moi()?.lastname }}</strong>
+            </div>
+            <div>
+              <span class="etiquette-carte">Valable jusqu'au</span>
+              <strong>{{ c.dateExpiration | date: 'dd/MM/yyyy' }}</strong>
+            </div>
+          </div>
+          <span class="rayures"></span>
+        </div>
+
+        <p class="muted petit">Émise le {{ c.dateEmission | date: 'dd/MM/yyyy' }}.</p>
+
+        @if (c.statut === 'expiree') {
+          <button class="btn" (click)="demander()">Renouveler ma carte →</button>
+        }
+        @if (c.statut === 'suspendue') {
+          <p class="alerte">Votre carte est suspendue. Contactez l'administrateur via la page Contact.</p>
+        }
+      } @else if (charge()) {
+        <div class="vide">
+          <i class="fa-solid fa-id-card"></i>
+          <h2>Pas encore de carte</h2>
+          <p class="muted">Gratuite et valable 1 an : elle vous identifie dans toutes les salles partenaires.</p>
+          <button class="btn" (click)="demander()">Obtenir ma carte →</button>
+        </div>
+      } @else {
+        <p class="muted">Chargement...</p>
+      }
+
+      <!-- Messages juste sous le bouton -->
+      @if (succes()) {
+        <p class="alerte-ok">{{ succes() }}</p>
+      }
+      @if (erreur()) {
+        <p class="alerte">{{ erreur() }}</p>
+      }
+    </section>
+  </div>
+</div>

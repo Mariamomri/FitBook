@@ -1,0 +1,53 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+/* Bandeau avec photo */
+.bandeau {
+  @apply mb-5 rounded-[10px] px-8 pt-8 pb-8;
+  background:
+    linear-gradient(90deg, #0f0f11 40%, rgba(15, 15, 17, 0.4)),
+    url('/img/crossfit.jpg') center / cover;
+}
+.bandeau h1 {
+  @apply m-0 text-5xl;
+}
+.fil {
+  @apply mb-3 text-xs;
+}
+.fil a {
+  @apply text-gris no-underline;
+}
+.fil span,
+.vert {
+  @apply text-accent;
+}
+
+/* Formulaire à gauche, règles à droite */
+.mise-en-page {
+  @apply grid grid-cols-1 gap-5 xl:grid-cols-[1fr_260px];
+}
+.formulaire {
+  @apply rounded-[10px] border border-bordure bg-carte p-6;
+}
+.formulaire h2 {
+  @apply mt-2 mb-3 text-2xl;
+}
+.deux-colonnes {
+  @apply grid grid-cols-1 gap-x-4 md:grid-cols-2;
+}
+.mini {
+  @apply mt-1 text-xs;
+}
+.boutons {
+  @apply mt-6 flex gap-3;
+}
+
+.regles {
+  @apply self-start rounded-[10px] border border-bordure border-l-4 border-l-accent bg-carte p-5;
+}
+.regles h3 {
+  @apply mt-0;
+}
+.regles p {
+  @apply m-0 text-sm;
+}

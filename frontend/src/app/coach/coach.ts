@@ -2,6 +2,8 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CoachService } from './coach-service';
 import { CoachInterface } from './coach-interface';
+import { FavoriService } from '../favoris/favori-service';
+import { AuthService } from '../auth/auth-service';
 
 @Component({
   selector: 'app-coach',
@@ -10,7 +12,9 @@ import { CoachInterface } from './coach-interface';
   styleUrl: './coach.css',
 })
 export class Coach implements OnInit {
-  private coachService = inject(CoachService);
+  coachService = inject(CoachService);
+  favoriService = inject(FavoriService);
+  authService = inject(AuthService);
   coaches = signal<CoachInterface[]>([]);
 
   // Filtres
@@ -18,9 +22,6 @@ export class Coach implements OnInit {
   languesChoisies = signal<string[]>([]);
   tarifMax = signal(100);
   tri = signal('experience');
-
-  // Photos des coachs (dans public/img), en attendant les images du backend
-  photos = ['img/coach.jpg', 'img/boxing.jpg', 'img/yoga.jpg', 'img/cardio.jpg', 'img/strength.jpg', 'img/battle-ropes.jpg'];
 
   // Liste des langues parlées par les coachs, sans doublon
   langues = computed(() => {
@@ -46,6 +47,7 @@ export class Coach implements OnInit {
 
   // Au chargement de la page, on récupère les coachs depuis l'API
   ngOnInit(): void {
+    this.favoriService.charger();
     this.coachService.getCoaches().subscribe((reponse) => {
       this.coaches.set(reponse.member);
     });
@@ -58,10 +60,5 @@ export class Coach implements OnInit {
     } else {
       this.languesChoisies.set([...this.languesChoisies(), langue]);
     }
-  }
-
-  // Une photo par coach : on reprend la liste depuis le début quand elle est finie
-  photo(numero: number): string {
-    return this.photos[numero % this.photos.length];
   }
 }

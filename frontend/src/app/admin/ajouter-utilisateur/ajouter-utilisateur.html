@@ -1,0 +1,88 @@
+<div class="espace">
+  <app-sidebar-sportif />
+
+  <div class="espace-contenu">
+    <!-- Bandeau du haut -->
+    <section class="bandeau">
+      <p class="fil"><a routerLink="/dashboard">Dashboard</a> › <span>Ajouter un utilisateur</span></p>
+      <h1>Ajouter un <span class="vert">utilisateur</span></h1>
+    </section>
+
+    <div class="mise-en-page">
+      <form class="formulaire" [formGroup]="utilisateurForm" (ngSubmit)="creer()">
+        <h2>Compte</h2>
+        <div class="deux-colonnes">
+          <div>
+            <label for="role">Rôle</label>
+            <select id="role" formControlName="role">
+              @for (role of adminService.roles; track role.valeur) {
+                <option [value]="role.valeur">{{ role.libelle }}</option>
+              }
+            </select>
+          </div>
+          <div>
+            <label for="statut">Statut</label>
+            <select id="statut" formControlName="statut">
+              <option value="actif">Actif</option>
+              <option value="suspendu">Suspendu</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="firstname">Prénom</label>
+            <input id="firstname" type="text" formControlName="firstname" />
+            @if (utilisateurForm.controls.firstname.invalid && utilisateurForm.controls.firstname.touched) {
+              <p class="champ-erreur">Entre 2 et 50 caractères</p>
+            }
+          </div>
+          <div>
+            <label for="lastname">Nom</label>
+            <input id="lastname" type="text" formControlName="lastname" />
+            @if (utilisateurForm.controls.lastname.invalid && utilisateurForm.controls.lastname.touched) {
+              <p class="champ-erreur">Entre 2 et 50 caractères</p>
+            }
+          </div>
+
+          <div>
+            <label for="email">Email</label>
+            <input id="email" type="email" formControlName="email" />
+            @if (utilisateurForm.controls.email.invalid && utilisateurForm.controls.email.touched) {
+              <p class="champ-erreur">Email invalide</p>
+            }
+          </div>
+          <div>
+            <label for="phone">Téléphone</label>
+            <input id="phone" type="tel" formControlName="phone" placeholder="+32 470 12 34 56" />
+          </div>
+        </div>
+
+        <h2>Accès</h2>
+        <label for="plainPassword">Mot de passe provisoire</label>
+        <input id="plainPassword" type="text" formControlName="plainPassword" />
+        @if (utilisateurForm.controls.plainPassword.invalid && utilisateurForm.controls.plainPassword.touched) {
+          <p class="champ-erreur">6 caractères minimum</p>
+        }
+        <p class="muted mini">À communiquer à la personne, qui pourra le changer ensuite.</p>
+
+        <!-- Message juste au-dessus des boutons -->
+        @if (erreur()) {
+          <p class="alerte">{{ erreur() }}</p>
+        }
+
+        <div class="boutons">
+          <button type="submit" class="btn">Créer le compte →</button>
+          <a class="btn btn-outline" routerLink="/dashboard">Annuler</a>
+        </div>
+      </form>
+
+      <!-- Encadré des règles -->
+      <aside class="regles">
+        <h3>Règles</h3>
+        <p class="muted">
+          Email unique (contrôlé par Symfony). Rôles : Sportif, Coach, Gestionnaire, Admin. Un compte « Suspendu » ne
+          peut plus se connecter.
+        </p>
+      </aside>
+    </div>
+  </div>
+</div>

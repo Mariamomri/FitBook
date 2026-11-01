@@ -7,6 +7,7 @@ use ApiPlatform\State\ProcessorInterface;
 use App\Entity\User;
 use App\Security\EmailVerifier;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -25,6 +26,7 @@ final class UserPasswordHasher implements ProcessorInterface
     private ProcessorInterface $persistProcessor,
     private UserPasswordHasherInterface $passwordHasher,
     private EmailVerifier $emailVerifier,
+    private Security $security,
   ) {}
 
   public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): User
@@ -39,9 +41,23 @@ final class UserPasswordHasher implements ProcessorInterface
     }
 
     // Nouvelle inscription : on ne fait pas confiance aux données envoyées example injection : { "email": "pirata@gmail.com", "plainPassword": "123456", "roles": ["ROLE_ADMIN"], "isVerified": true }
+    $estAdmin = $this->security->isGranted('ROLE_ADMIN');
+
     if ($isNew) {
       $data->setIsVerified(false);
-      $data->setRoles(array_values(array_diff($data->getRoles(), ['ROLE_ADMIN'])));
+      // Seul l'admin peut créer un compte coach ou gestionnaire ; une inscription normale = sportif
+      if (!$estAdmin) {
+        $data->setRoles([]);
+      }
+    }
+
+    // Modification de son propre profil : on remet les rôles et le statut du compte d'avant
+    // (sinon un sportif pourrait envoyer { "roles": ["ROLE_ADMIN"] } ou { "verified": true })
+    if (!$isNew && !$estAdmin && isset($context['previous_data'])) {
+      $avant = $context['previous_data'];
+      $data->setRoles(array_values(array_diff($avant->getRoles(), ['ROLE_USER'])));
+      $data->setIsVerified((bool) $avant->isVerified());
+      $data->setIsActive((bool) $avant->isActive());
     }
 
     // 2. enregistrement en base (persist + flush)

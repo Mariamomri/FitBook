@@ -52,7 +52,7 @@
         <input type="radio" formControlName="profil" value="coach" /> Coach
       </label>
       <label class="profil" [class.choisi]="contactForm.value.profil === 'salle'">
-        <input type="radio" formControlName="profil" value="salle" /> Salle
+        <input type="radio" formControlName="profil" value="salle" /> Gérant de Salle
       </label>
     </div>
 
@@ -97,7 +97,7 @@
       <p class="champ-erreur">{{ erreursServeur()['formulaire'] }}</p>
     }
     @if (erreur()) {
-      <p class="alerte">"inserisco icona errore" {{ erreur() }}</p>
+      <p class="alerte"><i class="fa-solid fa-triangle-exclamation"></i> {{ erreur() }}</p>
     }
     @if (succes()) {
       <p class="alerte-ok">{{ succes() }}</p>

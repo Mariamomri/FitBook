@@ -13,11 +13,20 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\ApiProperty;
+use Symfony\Component\HttpFoundation\File\File; // fichier envoyé lors de l'upload
+use Vich\UploaderBundle\Mapping\Attribute as Vich; // pour l'upload des photos
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert; // règles de validation des données envoyées
 
 #[ORM\Entity(repositoryClass: CoachRepository::class)]
+#[UniqueEntity(fields: ['user'], message: 'Ce compte a déjà une fiche coach.')]
 #[ORM\Table(name: 'coaches')]
 //pour exposer l'entité via l'API Platform
 // Lecture publique ; l'admin crée et supprime les profils, le coach modifie le sien
+
+#[Vich\Uploadable]
+
 #[ApiResource(operations: [
     new GetCollection(),
     new Get(),
@@ -33,22 +42,52 @@ class Coach
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'La biographie est obligatoire.')]
+    #[Assert\Length(min: 10, minMessage: 'La biographie doit contenir au moins {{ limit }} caractères.')]
     private ?string $biographie = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: "Les années d'expérience sont obligatoires.")]
+    #[Assert\Range(min: 0, max: 60, notInRangeMessage: "Entre {{ min }} et {{ max }} ans d'expérience.")]
     private ?int $anneesExperience = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 2)]
+    #[Assert\NotNull(message: 'Le tarif est obligatoire.')]
+    #[Assert\PositiveOrZero(message: 'Le tarif ne peut pas être négatif.')]
     private ?string $tarif = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $certifications = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(message: 'Indiquez au moins une langue.')]
+    #[Assert\Length(max: 100)]
     private ?string $langues = null;
+
+
+    // fichier photo reçu (pas enregistré en base, utilisé seulement pendant l'upload)
+    #[Vich\UploadableField(mapping: 'coachs', fileNameProperty: 'imageName', size: 'imageSize')]
+    #[ApiProperty(readable: false, writable: false)]
+    private ?File $imageFile = null;
+
+    // nom du fichier enregistré dans public/images/coachs
+    #[ORM\Column(nullable: true)]
+    #[ApiProperty(writable: false)]
+    private ?string $imageName = null;
+
+    // taille du fichier en octets
+    #[ORM\Column(nullable: true)]
+    #[ApiProperty(writable: false)]
+    private ?int $imageSize = null;
+
+    // date du dernier changement de photo (permet à Doctrine de voir la modification)
+    #[ORM\Column(nullable: true)]
+    #[ApiProperty(writable: false)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToOne(inversedBy: 'coach', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'Le compte du coach est obligatoire.')]
     private ?User $user = null;
 
     /**
@@ -283,5 +322,46 @@ class Coach
         }
 
         return $this;
+    }
+
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    // quand une nouvelle photo arrive, on change updatedAt pour que Doctrine enregistre la modification
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if ($imageFile !== null) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageSize(): ?int
+    {
+        return $this->imageSize;
+    }
+
+    public function setImageSize(?int $imageSize): void
+    {
+        $this->imageSize = $imageSize;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
     }
 }

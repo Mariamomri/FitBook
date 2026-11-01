@@ -1,0 +1,125 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+/* Bandeau du haut : photo, points et rayures */
+.bandeau {
+  @apply relative mb-8 overflow-hidden border-2 border-accent px-8 pt-10 pb-8;
+  background:
+    linear-gradient(90deg, #0f0f11 40%, rgba(15, 15, 17, 0.5)),
+    url('/img/gym2.jpg') center / cover;
+}
+.bandeau h1 {
+  @apply relative m-0 text-6xl leading-none;
+}
+.fil {
+  @apply relative mb-3 text-xs;
+}
+.fil a {
+  @apply text-gris no-underline;
+}
+.fil span,
+.vert {
+  @apply text-accent;
+}
+.points {
+  @apply absolute top-0 right-0 h-full w-1/3 opacity-60;
+  background-image: radial-gradient(var(--accent) 2px, transparent 2px);
+  background-size: 12px 12px;
+}
+.rayures {
+  @apply absolute right-8 bottom-6 h-6 w-36;
+  background: repeating-linear-gradient(-60deg, var(--accent) 0 6px, transparent 6px 14px);
+}
+
+/* Deux colonnes : carte à gauche, formulaire à droite */
+.mise-en-page {
+  @apply mb-12 grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr];
+}
+
+/* Carte de gauche */
+.cote {
+  @apply flex flex-col items-center self-start overflow-hidden rounded-[10px] border border-bordure bg-carte px-5 pb-5 text-center;
+}
+.couverture {
+  @apply -mx-5 h-20 self-stretch;
+  background: url('/img/barbell.jpg') center / cover;
+}
+.avatar {
+  @apply -mt-12 mb-3 flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 border-accent bg-nav font-titre text-3xl font-black text-accent italic;
+}
+.avatar img,
+.mini-avatar img {
+  @apply h-full w-full object-cover;
+}
+.cote h2 {
+  @apply m-0 text-2xl;
+}
+.petit {
+  @apply mt-1 text-sm;
+}
+
+/* Menu de la carte */
+.menu {
+  @apply mt-4 flex w-full flex-col gap-1 text-left;
+}
+.menu a {
+  @apply flex justify-between rounded-md px-3 py-3 text-sm text-texte no-underline;
+}
+.menu a:hover {
+  @apply bg-nav;
+}
+.menu a.actif {
+  @apply border-l-4 border-accent bg-nav font-semibold text-accent;
+}
+.menu span {
+  @apply text-gris;
+}
+
+/* Formulaire */
+.formulaire {
+  @apply rounded-[10px] border border-bordure bg-carte p-6;
+}
+.mini {
+  @apply mt-1 mb-4 text-xs;
+}
+
+.photo {
+  @apply mb-4 flex items-center gap-4;
+}
+.mini-avatar {
+  @apply flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-accent bg-nav font-titre font-black text-accent italic;
+}
+
+.deux-colonnes {
+  @apply grid grid-cols-1 gap-4 md:grid-cols-2;
+}
+
+input:disabled {
+  @apply cursor-not-allowed opacity-60;
+}
+
+/* Boutons de couleur */
+.couleurs {
+  @apply flex flex-wrap gap-2;
+}
+.couleur {
+  @apply flex cursor-pointer items-center gap-2 rounded-md border border-bordure bg-nav px-3 py-2 text-xs font-bold text-texte uppercase;
+}
+.couleur.choisie {
+  @apply border-2 border-accent;
+}
+.pastille {
+  @apply inline-block h-4 w-4 rounded-full;
+}
+
+.boutons {
+  @apply mt-6 flex justify-end gap-3 border-t border-bordure pt-4;
+}
+
+.chargement {
+  @apply mt-8 text-center;
+}
+
+.petit-btn {
+  @apply px-3 py-2 text-xs;
+}

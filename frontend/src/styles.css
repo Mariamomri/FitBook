@@ -55,7 +55,7 @@
 }
 
 :root[data-accent='bleu'] {
-  --accent: cyan;
+  --accent: #3DA5FF;
   --on-accent: #ffffff;
 }
 
@@ -195,6 +195,10 @@ input[type='text'],
 input[type='email'],
 input[type='password'],
 input[type='tel'],
+input[type='number'],
+input[type='date'],
+input[type='time'],
+input[type='search'],
 select,
 textarea {
   width: 100%;
@@ -205,6 +209,8 @@ textarea {
   border-radius: 6px;
   font-family: var(--font-body);
   font-size: 0.9rem;
+  color-scheme: dark;
+  /* calendrier et horloge du navigateur en sombre */
 }
 
 input:focus,
@@ -265,4 +271,38 @@ input[type='radio'] {
   width: 100%;
   text-align: center;
   margin-top: 1.5rem;
+}
+
+/* Espace membre : menu à gauche, contenu à droite */
+.espace {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1000px) {
+  .espace {
+    grid-template-columns: 220px 1fr;
+  }
+}
+
+.espace-contenu {
+  min-width: 0;
+}
+
+/* Tableaux : défilement horizontal sur petit écran au lieu de déborder de la page */
+.tableau {
+  overflow-x: auto;
+}
+
+/* Mobile : titres plus petits pour qu'ils tiennent dans l'écran
+   (!important car chaque page donne une grande taille à son titre) */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2.6rem !important;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
 }

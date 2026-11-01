@@ -1,0 +1,114 @@
+@if (salle(); as s) {
+  <p class="fil"><a routerLink="/">Accueil</a> › <a routerLink="/salles">Salles</a> › <span>{{ s.nom }}</span></p>
+
+  <!-- Grande photo -->
+  <div class="photo">
+    <img [src]="salleService.photo(s)" [alt]="s.nom" />
+    <span class="points"></span>
+  </div>
+
+  <!-- Nom, adresse, note et boutons -->
+  <section class="entete">
+    <div>
+      <h1>{{ s.nom }}</h1>
+      <p class="muted">{{ s.adresse }}, {{ s.codePostal }} {{ s.ville }}</p>
+      @if (avisDeLaSalle().length > 0) {
+        <p class="note"><span class="etoiles">{{ avisService.etoiles(noteArrondie()) }}</span> {{ noteMoyenne() }} · {{ avisDeLaSalle().length }} avis</p>
+      }
+      @if (horaireDuJour(); as h) {
+        @if (estOuverte()) {
+          <span class="etat ouvert">● Ouvert · ferme à {{ heure(h.heureFermeture) }}</span>
+        } @else {
+          <span class="etat ferme">● Fermé · horaires {{ heure(h.heureOuverture) }} – {{ heure(h.heureFermeture) }}</span>
+        }
+      } @else if (horairesDeLaSalle().length > 0) {
+        <span class="etat ferme">● Fermé aujourd'hui</span>
+      }
+    </div>
+    <div class="actions">
+      @if (authService.connecte()) {
+        <button class="btn btn-outline" (click)="favoriService.basculer('favoriSalles', lienSalle())">
+          {{ favoriService.estFavori('favoriSalles', lienSalle()) ? '♥ Favori' : '♡ Favori' }}
+        </button>
+      }
+      <a class="btn" routerLink="/activites" [queryParams]="{ quoi: s.nom }">Voir les cours →</a>
+    </div>
+  </section>
+
+  <div class="mise-en-page">
+    <!-- Colonne principale -->
+    <div>
+      <h2>À propos</h2>
+      <p class="muted">{{ s.description }}</p>
+
+      <h2>Cours de la salle</h2>
+      @for (seance of prochainesSeances(); track seance.id) {
+        <div class="ligne">
+          <div>
+            <strong>{{ seance.coursTitre }}</strong>
+            <!-- 'UTC' : afficher l'heure enregistrée en base sans décalage horaire -->
+            <span class="muted">
+              {{ seance.dateDebut | date: 'EEE d MMM · HH:mm' : 'UTC' : 'fr' }}{{ seance.coachNom ? ' · Coach ' + seance.coachNom : '' }}
+            </span>
+          </div>
+          @if (seance.placesRestantes > 0) {
+            <span class="places">{{ seance.placesRestantes }} places</span>
+            <a class="btn petit-btn" [routerLink]="['/activites', seance.coursId]">Réserver</a>
+          } @else {
+            <span class="places complet">Complet</span>
+            <button class="btn btn-outline petit-btn" disabled>Complet</button>
+          }
+        </div>
+      } @empty {
+        <p class="muted">Aucune séance prévue pour le moment.</p>
+      }
+
+      <h2>Coachs de la salle</h2>
+      <div class="coachs">
+        @for (coach of coachesDeLaSalle(); track coach.id) {
+          <a class="coach" [routerLink]="['/coach', coach.id]">
+            @if (coach.imageName) {
+              <img [src]="coachService.photo(coach)" [alt]="coach.nomComplet" />
+            } @else {
+              <span class="initiales">{{ initiales(coach.nomComplet) }}</span>
+            }
+            <span>{{ coach.nomComplet }}</span>
+          </a>
+        } @empty {
+          <p class="muted">Pas encore de coach.</p>
+        }
+      </div>
+
+      <app-donner-avis cible="salle" [lien]="lienSalle()" />
+    </div>
+
+    <!-- Colonne de droite -->
+    <aside class="cote">
+      <h2>Adresse &amp; accès</h2>
+      @if (carteUrl(); as url) {
+        <iframe [src]="url" title="Plan de la salle" loading="lazy"></iframe>
+      }
+
+      <h2>Horaires</h2>
+      @for (horaire of horairesDeLaSalle(); track horaire.id) {
+        <p class="ligne-info"><span>{{ horaire.jour }}</span><strong>{{ heure(horaire.heureOuverture) }} – {{ heure(horaire.heureFermeture) }}</strong></p>
+      } @empty {
+        <p class="muted">Horaires non renseignés.</p>
+      }
+
+      <h2>Capacité</h2>
+      <p class="ligne-info"><span>Capacité maximale</span><strong>{{ s.capacite }} personnes</strong></p>
+
+      <h2>Équipements</h2>
+      <div class="pastilles">
+        @for (equipement of equipements(); track equipement) {
+          <span>{{ equipement }}</span>
+        } @empty {
+          <p class="muted">Non renseignés.</p>
+        }
+      </div>
+    </aside>
+  </div>
+} @else {
+  <p class="muted">Chargement...</p>
+}

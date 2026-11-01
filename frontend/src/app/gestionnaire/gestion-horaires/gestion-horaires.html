@@ -1,0 +1,41 @@
+<div class="titre-bloc">
+  <h2>Horaires d'ouverture</h2>
+  @if (mesSalles().length > 1) {
+    <select #choixSalle [value]="salleChoisie()" (change)="salleChoisie.set(choixSalle.value)">
+      @for (salle of mesSalles(); track salle.id) {
+        <option [value]="'/api/salles/' + salle.id">{{ salle.nom }}</option>
+      }
+    </select>
+  }
+</div>
+
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
+}
+
+@if (salleChoisie()) {
+  <!-- Une ligne par jour : ouverture, fermeture, case « Fermé », enregistrer -->
+  <div class="semaine">
+    @for (jour of jours; track jour) {
+      @let horaire = horaireDuJour(jour);
+      <div class="jour">
+        <strong>{{ jour }}</strong>
+        <input #ouverture type="time" [value]="heure(horaire?.heureOuverture) || '07:00'" />
+        <span>–</span>
+        <input #fermeture type="time" [value]="heure(horaire?.heureFermeture) || '22:00'" />
+        <label class="case">
+          <input #ferme type="checkbox" [checked]="!horaire" />
+          Fermé
+        </label>
+        <button class="btn-petit plein" (click)="enregistrerJour(jour, ouverture.value, fermeture.value, ferme.checked)">
+          Enregistrer
+        </button>
+      </div>
+    }
+  </div>
+} @else {
+  <p class="muted">Ajoutez d'abord une salle pour définir ses horaires.</p>
+}

@@ -1,32 +1,64 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CoursService } from '../cours-service';
 import { CoursInterface } from '../cours-interface';
 import { SeanceService } from '../../seances/seance-service';
 import { SeanceInterface } from '../../seances/seance-interface';
 import { AuthService } from '../../auth/auth-service';
+import { FavoriService } from '../../favoris/favori-service';
+import { AvisService } from '../../avis/avis-service';
+import { AvisInterface } from '../../avis/avis-interface';
+import { DonnerAvis } from '../../avis/donner-avis/donner-avis';
+import { CoachService } from '../../coach/coach-service';
+import { CoachInterface } from '../../coach/coach-interface';
 
 @Component({
   selector: 'app-cours-detail',
-  imports: [DatePipe, RouterLink],
+  imports: [DatePipe, RouterLink, DonnerAvis],
   templateUrl: './cours-detail.html',
   styleUrl: './cours-detail.css',
 })
 export class CoursDetail implements OnInit {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private coursService = inject(CoursService);
   private seanceService = inject(SeanceService);
   authService = inject(AuthService);
+  favoriService = inject(FavoriService);
+  avisService = inject(AvisService);
+  coachService = inject(CoachService);
 
   cours = signal<CoursInterface | null>(null);
+  coach = signal<CoachInterface | null>(null);
   seances = signal<SeanceInterface[]>([]);
+  avis = signal<AvisInterface[]>([]);
   message = signal('');
   erreur = signal('');
+  // 403 à la réservation : l'email du compte n'est pas encore confirmé
+  emailNonConfirme = signal(false);
   private idCours = 0;
 
   // Séance choisie dans « Autres créneaux » (null = la prochaine)
   idChoisi = signal<number | null>(null);
+
+  // Lien du cours pour les favoris et les avis ("/api/cours/12")
+  lienCours = computed(() => '/api/cours/' + this.cours()?.id);
+
+  // Avis publiés sur ce cours et note moyenne (arrondie à 0,1)
+  avisDuCours = computed(() => this.avis().filter((a) => a.statut === 'publie' && a.cours === this.lienCours()));
+  noteMoyenne = computed(() => {
+    const liste = this.avisDuCours();
+    return liste.length === 0 ? 0 : Math.round((liste.reduce((s, a) => s + a.note, 0) / liste.length) * 10) / 10;
+  });
+  noteArrondie = computed(() => Math.round(this.noteMoyenne()));
+
+  // Avis publiés sur le coach du cours (pour sa carte)
+  avisDuCoach = computed(() => this.avis().filter((a) => a.statut === 'publie' && a.coach && a.coach === this.cours()?.coach));
+  noteCoach = computed(() => {
+    const liste = this.avisDuCoach();
+    return liste.length === 0 ? 0 : Math.round((liste.reduce((s, a) => s + a.note, 0) / liste.length) * 10) / 10;
+  });
 
   // Séances pas encore passées
   seancesAVenir = computed(() => this.seances().filter((s) => s.statut !== 'terminee'));
@@ -45,8 +77,14 @@ export class CoursDetail implements OnInit {
 
     this.coursService.getUnCours(this.idCours).subscribe((reponse) => {
       this.cours.set(reponse);
+      // Le cours peut avoir un coach : on charge sa fiche pour la photo
+      if (reponse.coach) {
+        this.coachService.getUnCoach(Number(this.idCoach(reponse.coach))).subscribe((fiche) => this.coach.set(fiche));
+      }
     });
     this.chargerSeances();
+    this.favoriService.charger();
+    this.avisService.getAvis().subscribe((reponse) => this.avis.set(reponse.member));
   }
 
   chargerSeances(): void {
@@ -62,7 +100,7 @@ export class CoursDetail implements OnInit {
     this.erreur.set('');
   }
 
-  // Titre en deux couleurs : le dernier mot en vert (comme sur la maquette)
+  // Titre en deux couleurs : le dernier mot en vert
   debutTitre(titre: string): string {
     return titre.split(' ').slice(0, -1).join(' ');
   }
@@ -70,24 +108,58 @@ export class CoursDetail implements OnInit {
     return titre.split(' ').slice(-1)[0];
   }
 
+
+  // Photo du bandeau selon l'activité
+  photoActivite(nom: string | undefined): string {
+    const photos: Record<string, string> = {
+      musculation: 'img/barbell.jpg',
+      'hatha yoga': 'img/yoga.jpg',
+      yoga: 'img/yoga.jpg',
+      pilates: 'img/stretch.jpg',
+      crossfit: 'img/crossfit.jpg',
+      boxe: 'img/boxing.jpg',
+      zumba: 'img/cardio.jpg',
+    };
+    return photos[(nom ?? '').toLowerCase()] ?? 'img/gym1.jpg';
+  }
+
   // Remplissage de la barre de places (en %)
   pourcentage(seance: SeanceInterface, capacite: number): number {
     return ((capacite - seance.placesRestantes) / capacite) * 100;
   }
 
+  // "/api/coaches/12" → 12
+  idCoach(lien: string | null | undefined): string {
+    return lien?.split('/').pop() ?? '';
+  }
+
   reserver(idSeance: number): void {
     this.message.set('');
     this.erreur.set('');
+    this.emailNonConfirme.set(false);
 
     this.seanceService.reserver(idSeance).subscribe({
-      next: () => {
-        this.message.set('Réservation confirmée !');
-        this.chargerSeances(); // met à jour les places restantes
+      next: (reponse) => {
+        // On affiche la page de confirmation avec le numéro de réservation
+        this.router.navigate(['/reservation-confirmee'], { queryParams: { numero: reponse.numero, seance: idSeance } });
       },
       error: (err) => {
         // 422 : séance complète ou déjà réservée / 403 : email non confirmé
         this.erreur.set(err.error?.detail || 'Erreur lors de la réservation');
+        this.emailNonConfirme.set(err.status === 403);
       },
+    });
+  }
+
+  // Bouton « Renvoyer l'email » sous le message d'erreur
+  renvoyerEmail(): void {
+    this.authService.renvoyerConfirmation().subscribe({
+      next: (reponse) => {
+        this.erreur.set('');
+        this.emailNonConfirme.set(false);
+        this.message.set(reponse.message + ' Cliquez sur le lien reçu, puis reconnectez-vous.');
+      },
+      error: (err) => this.erreur.set(err.error?.message ?? "Impossible d'envoyer l'email."),
     });
   }
 }

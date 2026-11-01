@@ -1,0 +1,17 @@
+<section class="fond">
+  <span class="points"></span>
+  <span class="rayures"></span>
+
+  <article class="carte">
+    <h1>Vérifiez votre<br /><span class="vert">boîte mail</span></h1>
+    <p class="muted">
+      Nous avons envoyé un lien de confirmation à
+      <strong>{{ email || 'votre adresse email' }}</strong>. Cliquez dessus pour activer votre compte.
+    </p>
+
+    <a class="btn bloc" routerLink="/login">J'ai confirmé, me connecter →</a>
+    <a class="btn btn-outline bloc" routerLink="/inscription">Mauvaise adresse ? Recommencer</a>
+
+    <p class="info"><i class="fa-solid fa-envelope"></i> Pensez à vérifier vos spams. Le compte reste inactif tant que l'email n'est pas confirmé.</p>
+  </article>
+</section>

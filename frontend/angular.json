@@ -65,9 +65,41 @@
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "coverageInclude": [
+              "src/app/auth/auth-service.ts",
+              "src/app/auth/auth-guard.ts",
+              "src/app/auth/auth-interceptor.ts",
+              "src/app/admin/admin-guard.ts",
+              "src/app/reservations/reservation-service.ts",
+              "src/app/salles/salle-service.ts",
+              "src/app/avis/avis-service.ts",
+              "src/app/activites/activite-service.ts",
+              "src/app/theme/theme-service.ts",
+              "src/app/coach/coach-service.ts",
+              "src/app/cours/cours-service.ts",
+              "src/app/seances/seance-service.ts",
+              "src/app/auth/login/login.ts",
+              "src/app/auth/inscription/inscription.ts",
+              "src/app/auth/nouveau-mot-de-passe/nouveau-mot-de-passe.ts",
+              "src/app/reservations/reservations.ts",
+              "src/app/salles/salles.ts",
+              "src/app/calendrier/calendrier.ts",
+              "src/app/layout/header/header.ts",
+              "src/app/avis/donner-avis/donner-avis.ts",
+              "src/app/auth/login/login.html",
+              "src/app/auth/inscription/inscription.html",
+              "src/app/auth/nouveau-mot-de-passe/nouveau-mot-de-passe.html",
+              "src/app/reservations/reservations.html",
+              "src/app/salles/salles.html",
+              "src/app/calendrier/calendrier.html",
+              "src/app/layout/header/header.html",
+              "src/app/avis/donner-avis/donner-avis.html"
+            ]
+          }
         }
       }
     }
   }
-}
+}

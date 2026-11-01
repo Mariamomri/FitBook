@@ -1,0 +1,112 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+.fil {
+  @apply mb-3 text-xs;
+}
+.fil a {
+  @apply text-gris no-underline;
+}
+.fil span {
+  @apply text-accent;
+}
+
+/* Grande photo avec points décoratifs */
+.photo {
+  @apply relative h-64 overflow-hidden rounded-[10px];
+}
+.photo img {
+  @apply h-full w-full object-cover;
+}
+.points {
+  @apply absolute top-0 right-0 h-full w-1/4 opacity-60;
+  background-image: radial-gradient(var(--accent) 2px, transparent 2px);
+  background-size: 12px 12px;
+}
+
+/* Nom + boutons */
+.entete {
+  @apply my-5 flex flex-wrap items-end justify-between gap-4 border-b border-bordure pb-5;
+}
+.entete h1 {
+  @apply m-0 text-5xl;
+}
+.entete p {
+  @apply my-1 text-sm;
+}
+.actions {
+  @apply flex gap-3;
+}
+.etoiles {
+  @apply text-yellow-400;
+}
+
+/* Deux colonnes */
+.mise-en-page {
+  @apply grid grid-cols-1 gap-8 lg:grid-cols-[1fr_300px];
+}
+h2 {
+  @apply mt-6 mb-3 text-2xl;
+}
+
+/* Séances */
+.ligne {
+  @apply mb-2 flex flex-wrap items-center gap-3 rounded-md border border-bordure bg-carte px-4 py-3;
+}
+.ligne div {
+  @apply flex flex-1 flex-col;
+}
+.ligne span.muted {
+  @apply text-xs;
+}
+.places {
+  @apply rounded-full bg-accent/15 px-2 py-0.5 text-xs font-bold text-accent;
+}
+.places.complet {
+  @apply bg-danger/15 text-danger;
+}
+.petit-btn {
+  @apply px-3 py-1.5 text-xs;
+}
+
+/* Coachs */
+.coachs {
+  @apply flex flex-wrap gap-5;
+}
+.coach {
+  @apply flex flex-col items-center gap-1 text-xs text-texte no-underline;
+}
+.coach img {
+  @apply h-16 w-16 rounded-full border-2 border-accent object-cover object-top;
+}
+.initiales {
+  @apply flex h-16 w-16 items-center justify-center rounded-full bg-carte font-titre text-xl font-black text-accent;
+}
+
+/* Ouvert / fermé aujourd'hui */
+.etat {
+  @apply mt-2 inline-block rounded-full px-2 py-0.5 text-xs font-bold;
+}
+.etat.ouvert {
+  @apply bg-accent/15 text-accent;
+}
+.etat.ferme {
+  @apply bg-danger/15 text-danger;
+}
+
+/* Colonne de droite */
+.cote iframe {
+  @apply block h-48 w-full rounded-[10px] border-0;
+}
+.ligne-info {
+  @apply my-1 flex justify-between text-sm;
+}
+.ligne-info span {
+  @apply text-gris capitalize;
+}
+.pastilles {
+  @apply flex flex-wrap gap-2;
+}
+.pastilles span {
+  @apply rounded-full bg-carte px-3 py-1 text-xs;
+}

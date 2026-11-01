@@ -1,0 +1,33 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+.titre-bloc {
+  @apply mb-4 flex flex-wrap items-center justify-between gap-3;
+}
+.titre-bloc h2 {
+  @apply m-0 text-2xl;
+}
+.titre-bloc select {
+  @apply rounded-md border border-bordure bg-nav px-3 py-2 text-texte;
+}
+
+/* Une ligne par jour de la semaine */
+.semaine {
+  @apply flex flex-col gap-2;
+}
+.jour {
+  @apply grid grid-cols-[90px_1fr_auto_1fr] items-center gap-2 md:grid-cols-[110px_130px_auto_130px_auto_auto];
+}
+.jour strong {
+  @apply capitalize;
+}
+.jour input[type='time'] {
+  @apply rounded-md border border-bordure bg-nav px-2 py-1.5 text-texte;
+  color-scheme: dark;
+}
+.case {
+  @apply m-0 flex items-center gap-2 text-xs normal-case;
+}
+.case input {
+  accent-color: var(--accent);
+}

@@ -5,7 +5,9 @@
   padding: 2.5rem 2rem;
   margin-bottom: 2.5rem;
   border: 2px solid var(--accent);
-  background: linear-gradient(90deg, #151518 45%, #2a2a30);
+  background:
+    linear-gradient(90deg, #151518 40%, rgba(21, 21, 24, 0.4)),
+    url('/img/strength.jpg') center / cover;
 }
 
 .bandeau h1 {
@@ -190,4 +192,4 @@ textarea {
   font-size: 0.7rem;
   margin: 0.3rem 0 0;
   text-align: right;
-}
+}

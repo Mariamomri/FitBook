@@ -1,8 +1,9 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
+import { DatePipe, NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ReservationService } from '../reservations/reservation-service';
 import { ReservationInterface } from '../reservations/reservation-interface';
+import { SidebarSportif } from '../layout/sidebar-sportif/sidebar-sportif';
 
 // Une case du calendrier : un numéro de jour (ou vide) + les séances de ce jour
 interface CaseJour {
@@ -12,13 +13,16 @@ interface CaseJour {
 
 @Component({
   selector: 'app-calendrier',
-  imports: [DatePipe, RouterLink],
+  imports: [DatePipe, RouterLink, NgTemplateOutlet, SidebarSportif],
   templateUrl: './calendrier.html',
   styleUrl: './calendrier.css',
 })
 export class Calendrier implements OnInit {
   private reservationService = inject(ReservationService);
   reservations = signal<ReservationInterface[]>([]);
+
+  // false quand le calendrier est affiché dans le dashboard (pas de bandeau ni de menu)
+  bandeau = input(true);
 
   joursSemaine = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
   aujourdhui = new Date();
@@ -82,4 +86,4 @@ export class Calendrier implements OnInit {
     const m = this.moisAffiche();
     this.moisAffiche.set(new Date(m.getFullYear(), m.getMonth() + 1, 1));
   }
-}
+}

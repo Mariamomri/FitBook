@@ -1,9 +1,21 @@
-<section class="bandeau">
-  <h1>Mon <span class="vert">calendrier</span></h1>
-  <p class="muted">Tes séances réservées, mois par mois.</p>
-</section>
+@if (bandeau()) {
+  <div class="espace">
+    <app-sidebar-sportif />
+    <div class="espace-contenu">
+      <section class="bandeau">
+        <h1>Mon <span class="vert">calendrier</span></h1>
+        <p class="muted">Tes séances réservées, mois par mois.</p>
+      </section>
+      <ng-container [ngTemplateOutlet]="grilleMois" />
+    </div>
+  </div>
+} @else {
+  <ng-container [ngTemplateOutlet]="grilleMois" />
+}
 
-<div class="calendrier">
+<!-- Grille du mois, utilisée dans les deux cas ci-dessus -->
+<ng-template #grilleMois>
+<div class="calendrier" [class.compact]="!bandeau()">
   <!-- Mois affiché + flèches -->
   <div class="entete">
     <button class="fleche" (click)="moisPrecedent()" aria-label="Mois précédent">‹</button>
@@ -38,3 +50,4 @@
     }
   </div>
 </div>
+</ng-template>

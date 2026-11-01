@@ -1,0 +1,124 @@
+<div class="titre-bloc">
+  <h2>Mes salles</h2>
+  <button class="btn petit-btn" (click)="ouvrirAjout()">+ Ajouter une salle</button>
+</div>
+
+<!-- Formulaire d'ajout ou de modification -->
+@if (idFormulaire() !== null) {
+  <form class="formulaire" [formGroup]="salleForm" (ngSubmit)="enregistrer()">
+    <h3>{{ idFormulaire() === 0 ? 'Nouvelle salle' : 'Modifier la salle' }}</h3>
+    <div class="grille-champs">
+      <div class="large">
+        <label for="nom">Nom de la salle</label>
+        <input id="nom" type="text" formControlName="nom" />
+      </div>
+      <div>
+        <label for="adresse">Adresse</label>
+        <input id="adresse" type="text" formControlName="adresse" />
+      </div>
+      <div>
+        <label for="codePostal">Code postal</label>
+        <input id="codePostal" type="text" formControlName="codePostal" />
+      </div>
+      <div>
+        <label for="ville">Ville</label>
+        <input id="ville" type="text" formControlName="ville" />
+      </div>
+      <div>
+        <label for="telephone">Téléphone</label>
+        <input id="telephone" type="tel" formControlName="telephone" />
+      </div>
+      <div>
+        <label for="capacite">Capacité maximale</label>
+        <input id="capacite" type="number" min="1" formControlName="capacite" />
+      </div>
+      <div>
+        <label for="equipements">Équipements</label>
+        <input id="equipements" type="text" formControlName="equipements" placeholder="Vestiaires, douches, parking..." />
+      </div>
+      <div>
+        <label for="latitude">Latitude (carte)</label>
+        <input id="latitude" type="text" formControlName="latitude" placeholder="50.8466" />
+      </div>
+      <div>
+        <label for="longitude">Longitude (carte)</label>
+        <input id="longitude" type="text" formControlName="longitude" placeholder="4.3528" />
+      </div>
+      <div class="large">
+        <label for="description">Description</label>
+        <textarea id="description" rows="3" formControlName="description"></textarea>
+      </div>
+      <div class="large">
+        <label for="photo-formulaire">Photo de la salle (facultatif)</label>
+        <div class="choix-photo">
+          @if (apercuPhoto()) {
+            <img [src]="apercuPhoto()" alt="Aperçu de la photo" />
+          }
+          <label for="photo-formulaire" class="btn btn-outline petit-btn">Choisir une photo</label>
+          <input
+            id="photo-formulaire"
+            type="file"
+            accept="image/png, image/jpeg, image/webp"
+            (change)="choisirPhotoFormulaire($event)"
+            hidden
+          />
+          <span class="muted petit">PNG, JPG, WEBP · 2 Mo max</span>
+        </div>
+      </div>
+    </div>
+    <div class="boutons">
+      <button type="submit" class="btn">Enregistrer</button>
+      <button type="button" class="btn btn-outline" (click)="idFormulaire.set(null)">Annuler</button>
+    </div>
+  </form>
+}
+<!-- Messages juste sous le formulaire, près du bouton -->
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
+}
+
+<!-- Une carte par salle, avec sa photo -->
+<div class="cartes">
+  @for (salle of mesSalles(); track salle.id) {
+    <article class="carte-salle">
+      <img [src]="salleService.photo(salle)" [alt]="salle.nom" />
+      <div class="contenu">
+        <h3>{{ salle.nom }}</h3>
+        <p class="muted">{{ salle.adresse }}, {{ salle.codePostal }} {{ salle.ville }}</p>
+        <p class="muted">{{ salle.capacite }} personnes · {{ salle.telephone }}</p>
+
+        <div class="actions">
+          <!-- Le bouton ouvre le choix de fichier caché -->
+          <label class="btn-petit" [for]="'photo-' + salle.id">Changer la photo</label>
+          <input
+            [id]="'photo-' + salle.id"
+            type="file"
+            accept="image/png, image/jpeg, image/webp"
+            (change)="choisirPhoto(salle, $event)"
+            hidden
+          />
+          <button class="btn-petit" (click)="ouvrirModification(salle)">Modifier</button>
+          <button class="btn-petit danger" (click)="aSupprimer.set(salle)">Supprimer</button>
+        </div>
+      </div>
+    </article>
+  } @empty {
+    <p class="muted">Vous n'avez pas encore de salle. Ajoutez-en une.</p>
+  }
+</div>
+
+@if (aSupprimer(); as salle) {
+  <div class="fond-modale" (click)="aSupprimer.set(null)">
+    <div class="modale" (click)="$event.stopPropagation()">
+      <h3>Supprimer cette salle ?</h3>
+      <p class="muted">{{ salle.nom }} et tous ses cours seront supprimés définitivement.</p>
+      <div class="boutons">
+        <button class="btn btn-outline" (click)="aSupprimer.set(null)">Annuler</button>
+        <button class="btn bouton-danger" (click)="confirmerSuppression()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+}

@@ -28,7 +28,7 @@
 
 /* Barre de recherche qui chevauche le bas du bandeau */
 .recherche {
-  @apply relative mx-8 -mt-10 mb-8 grid grid-cols-1 gap-4 rounded-md border border-bordure bg-nav p-4 md:grid-cols-[2fr_1fr_1fr];
+  @apply relative mx-8 -mt-10 mb-8 grid grid-cols-1 gap-4 rounded-md border border-bordure bg-nav p-4 md:grid-cols-[2fr_1fr_1fr_1fr];
 }
 .recherche label {
   @apply mb-1 text-[0.6rem];
@@ -91,7 +91,7 @@
 
 /* Bouton en bas à droite */
 .droite {
-  @apply flex items-end p-3;
+  @apply flex flex-col items-end justify-between gap-2 p-3;
 }
 .droite .btn {
   @apply px-3 py-2 text-xs;
@@ -106,4 +106,23 @@
 }
 .carte iframe {
   @apply block h-[520px] w-full border-0;
+}
+
+/* Bouton cœur : vide = pas favori, plein (couleur d'accent) = favori */
+.coeur {
+  @apply cursor-pointer border-0 bg-transparent text-2xl leading-none text-gris;
+}
+.coeur.actif {
+  @apply text-accent;
+}
+
+/* Recherche par distance */
+.pres-de-moi {
+  @apply w-full whitespace-nowrap;
+}
+.message-position {
+  @apply mx-8 -mt-5 mb-6 text-xs;
+}
+.distance {
+  @apply my-1 text-xs font-bold text-accent;
 }

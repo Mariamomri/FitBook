@@ -1,0 +1,103 @@
+<div class="barre">
+  <input #champ type="search" placeholder="Rechercher un coach..." [value]="recherche()" (input)="recherche.set(champ.value)" />
+  <button class="btn petit-btn" (click)="ouvrirAjout()">+ Ajouter une fiche coach</button>
+</div>
+
+<!-- Formulaire d'ajout ou de modification -->
+@if (idFormulaire() !== null) {
+  <form class="formulaire" [formGroup]="coachForm" (ngSubmit)="enregistrer()">
+    <h3>{{ idFormulaire() === 0 ? 'Nouvelle fiche coach' : 'Modifier la fiche coach' }}</h3>
+    <div class="grille-champs">
+      <div class="large">
+        <label for="user">Compte du coach</label>
+        <select id="user" formControlName="user">
+          <option value="">Choisir un compte Coach sans fiche...</option>
+          @for (compte of comptesDisponibles(); track compte.id) {
+            <option [value]="'/api/users/' + compte.id">{{ compte.firstname }} {{ compte.lastname }} ({{ compte.email }})</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="anneesExperience">Années d'expérience</label>
+        <input id="anneesExperience" type="number" min="0" formControlName="anneesExperience" />
+      </div>
+      <div>
+        <label for="tarif">Tarif (€ / heure)</label>
+        <input id="tarif" type="text" formControlName="tarif" placeholder="45.00" />
+      </div>
+      <div>
+        <label for="langues">Langues</label>
+        <input id="langues" type="text" formControlName="langues" placeholder="Français, Anglais" />
+      </div>
+      <div>
+        <label for="certifications">Certifications</label>
+        <input id="certifications" type="text" formControlName="certifications" />
+      </div>
+      <div class="large">
+        <label for="biographie">Biographie</label>
+        <textarea id="biographie" rows="3" formControlName="biographie"></textarea>
+      </div>
+    </div>
+    <div class="boutons">
+      <button type="submit" class="btn" [disabled]="envoiEnCours()">Enregistrer</button>
+      <button type="button" class="btn btn-outline" (click)="idFormulaire.set(null)">Annuler</button>
+    </div>
+    @if (idFormulaire() === 0 && comptesDisponibles().length === 0) {
+      <p class="muted">Tous les comptes Coach ont déjà une fiche. Créez d'abord un compte avec le rôle Coach.</p>
+    }
+  </form>
+}
+<!-- Messages juste sous le formulaire, près du bouton -->
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
+}
+
+<div class="tableau">
+  <table>
+    <thead>
+      <tr>
+        <th>Coach</th>
+        <th>Langues</th>
+        <th>Expérience</th>
+        <th>Tarif</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (coach of coachesFiltres(); track coach.id) {
+        <tr>
+          <td><strong>{{ coach.nomComplet }}</strong></td>
+          <td class="muted">{{ coach.langues }}</td>
+          <td>{{ coach.anneesExperience }} ans</td>
+          <td>{{ coach.tarif }} € / h</td>
+          <td>
+            <div class="actions">
+              <button class="btn-petit" (click)="ouvrirModification(coach)">Modifier</button>
+              <button class="btn-petit danger" (click)="aSupprimer.set(coach)">Supprimer</button>
+            </div>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="5" class="muted vide">Aucun coach.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+@if (aSupprimer(); as coach) {
+  <div class="fond-modale" (click)="aSupprimer.set(null)">
+    <div class="modale" (click)="$event.stopPropagation()">
+      <h3>Supprimer cette fiche coach ?</h3>
+      <p class="muted">La fiche de {{ coach.nomComplet }} sera supprimée (le compte utilisateur reste).</p>
+      <div class="boutons">
+        <button class="btn btn-outline" (click)="aSupprimer.set(null)">Annuler</button>
+        <button class="btn bouton-danger" (click)="confirmerSuppression()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+}

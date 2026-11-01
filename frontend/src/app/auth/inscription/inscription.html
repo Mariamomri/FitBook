@@ -16,23 +16,6 @@
     <p class="muted petit">Rejoins FitBook pour réserver tes séances de sport.</p>
 
     <form [formGroup]="inscriptionForm" (ngSubmit)="inscription()">
-      <!-- Photo de profil (aperçu seulement pour l'instant) -->
-      <label>Photo de profil (facultatif)</label>
-      <div class="photo">
-        <span class="photo-rond">
-          @if (apercuPhoto()) {
-            <img [src]="apercuPhoto()" alt="Aperçu de la photo de profil" />
-          } @else {
-            +
-          }
-        </span>
-        <div>
-          <label for="photo" class="btn btn-outline petit-btn">Choisir un fichier</label>
-          <input id="photo" type="file" accept="image/png, image/jpeg" (change)="choisirPhoto($event)" hidden />
-          <p class="muted mini">PNG, JPG, JPEG · 2 Mo max · modifiable plus tard</p>
-        </div>
-      </div>
-
       <!-- Prénom et nom sur la même ligne -->
       <div class="deux-colonnes">
         <div>

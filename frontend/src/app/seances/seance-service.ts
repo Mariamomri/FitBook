@@ -21,8 +21,34 @@ export class SeanceService {
   }
 
   // Réserver : on envoie seulement la séance, Symfony ajoute l'utilisateur connecté
-  reserver(idSeance: number): Observable<unknown> {
+  // Symfony renvoie la réservation créée (avec son numéro, ex. FB-2026-000123)
+  reserver(idSeance: number): Observable<{ id: number; numero: string }> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/ld+json' });
-    return this.http.post(`${this.api}/reservations`, { seance: `/api/seances/${idSeance}` }, { headers });
+    return this.http.post<{ id: number; numero: string }>(
+      `${this.api}/reservations`,
+      { seance: `/api/seances/${idSeance}` },
+      { headers },
+    );
+  }
+
+  // Une séance par son id (page de confirmation)
+  getUneSeance(id: number): Observable<SeanceInterface> {
+    return this.http.get<SeanceInterface>(`${this.api}/seances/${id}`);
+  }
+
+  // Ajouter une séance à un cours (admin, gestionnaire de la salle ou coach du cours)
+  creerSeance(seance: { cours: string; dateDebut: string; dateFin: string; statut: string }): Observable<SeanceInterface> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/ld+json' });
+    return this.http.post<SeanceInterface>(`${this.api}/seances`, seance, { headers });
+  }
+
+  // Modifier une séance (par exemple la passer en « annulee »)
+  modifierSeance(id: number, seance: Partial<SeanceInterface>): Observable<SeanceInterface> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/merge-patch+json' });
+    return this.http.patch<SeanceInterface>(`${this.api}/seances/${id}`, seance, { headers });
+  }
+
+  supprimerSeance(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.api}/seances/${id}`);
   }
 }
