@@ -289,3 +289,20 @@ input[type='radio'] {
 .espace-contenu {
   min-width: 0;
 }
+
+/* Tableaux : défilement horizontal sur petit écran au lieu de déborder de la page */
+.tableau {
+  overflow-x: auto;
+}
+
+/* Mobile : titres plus petits pour qu'ils tiennent dans l'écran
+   (!important car chaque page donne une grande taille à son titre) */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2.6rem !important;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+}
