@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ActiviteInterface } from './activite-interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ActiviteService {
   private http = inject(HttpClient);
-  private api = 'https://127.0.0.1:8000/api/activites';
+  private api = environment.apiUrl + '/api/activites';
 
   // API Platform renvoie la liste dans "member"
   getActivites(): Observable<{ member: ActiviteInterface[] }> {

@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserInterface } from '../auth/user-interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminService {
   private http = inject(HttpClient);
-  private api = 'https://127.0.0.1:8000/api/users';
+  private api = environment.apiUrl + '/api/users';
 
   // Rôles proposés dans les listes (valeur choisie + libellé affiché + rôles Symfony)
   roles = [

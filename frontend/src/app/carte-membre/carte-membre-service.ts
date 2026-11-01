@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CarteMembreAdminInterface, CarteMembreInterface } from './carte-membre-interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CarteMembreService {
   private http = inject(HttpClient);
-  private api = 'https://127.0.0.1:8000/api';
+  private api = environment.apiUrl + '/api';
 
   // Ma carte (null si je n'en ai pas encore)
   getMaCarte(): Observable<CarteMembreInterface | null> {

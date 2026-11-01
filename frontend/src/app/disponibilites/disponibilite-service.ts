@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DisponibiliteInterface } from './disponibilite-interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DisponibiliteService {
   private http = inject(HttpClient);
-  private api = 'https://127.0.0.1:8000/api/disponibilites';
+  private api = environment.apiUrl + '/api/disponibilites';
 
   // API Platform renvoie la liste dans "member"
   getDisponibilites(): Observable<{ member: DisponibiliteInterface[] }> {

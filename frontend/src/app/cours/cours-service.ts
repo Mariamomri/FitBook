@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CoursInterface } from './cours-interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CoursService {
   private http = inject(HttpClient);
-  private api = 'https://127.0.0.1:8000/api/cours';
+  private api = environment.apiUrl + '/api/cours';
 
   // API Platform renvoie la liste dans "member"
   getCours(): Observable<{ member: CoursInterface[] }> {

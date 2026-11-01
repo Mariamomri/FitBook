@@ -2,16 +2,17 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserInterface } from '../auth/user-interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProfilService {
   private http = inject(HttpClient);
-  private api = 'https://127.0.0.1:8000/api';
+  private api = environment.apiUrl + '/api';
 
   // Dossier public où Symfony range les photos de profil
-  dossierPhotos = 'https://127.0.0.1:8000/images/users/';
+  dossierPhotos = environment.apiUrl + '/images/users/';
 
   // PATCH : on n'envoie que les champs modifiés (format merge-patch d'API Platform)
   modifier(id: number, donnees: Partial<UserInterface>): Observable<UserInterface> {

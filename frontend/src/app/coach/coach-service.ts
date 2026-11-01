@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CoachInterface } from './coach-interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CoachService {
   private http = inject(HttpClient);
-  private api = 'https://127.0.0.1:8000/api/coaches';
+  private api = environment.apiUrl + '/api/coaches';
 
   // API Platform renvoie la liste dans "member"
   getCoaches(): Observable<{ member: CoachInterface[] }> {
@@ -22,7 +23,7 @@ export class CoachService {
 
   // Photo envoyée par le coach, ou avatar par défaut s'il n'en a pas
   photo(coach: CoachInterface): string {
-    return coach.imageName ? 'https://127.0.0.1:8000/images/coaches/' + coach.imageName : 'img/avatar-defaut.svg';
+    return coach.imageName ? environment.apiUrl + '/images/coaches/' + coach.imageName : 'img/avatar-defaut.svg';
   }
 
   // Ajouter une fiche coach (admin) : API Platform attend du JSON-LD
