@@ -25,6 +25,7 @@ import { VerifiezEmail } from './auth/verifiez-email/verifiez-email';
 import { CompteConfirme } from './auth/compte-confirme/compte-confirme';
 import { MotDePasseOublie } from './auth/mot-de-passe-oublie/mot-de-passe-oublie';
 import { NouveauMotDePasse } from './auth/nouveau-mot-de-passe/nouveau-mot-de-passe';
+import { MaCarte } from './carte-membre/ma-carte/ma-carte';
 import { PageIntrouvable } from './erreurs/page-introuvable/page-introuvable';
 import { AccesRefuse } from './erreurs/acces-refuse/acces-refuse';
 
@@ -52,6 +53,7 @@ export const routes: Routes = [
   { path: 'historique', component: Historique, canActivate: [authGuard] },
   { path: 'favoris', component: MesFavoris, canActivate: [authGuard] },
   { path: 'mes-avis', component: MesAvis, canActivate: [authGuard] },
+  { path: 'carte-membre', component: MaCarte, canActivate: [authGuard] },
   { path: 'admin/utilisateurs/nouveau', component: AjouterUtilisateur, canActivate: [authGuard, adminGuard] },
   { path: 'acces-refuse', component: AccesRefuse },
   // Toute autre adresse : page 404 (toujours en dernier)

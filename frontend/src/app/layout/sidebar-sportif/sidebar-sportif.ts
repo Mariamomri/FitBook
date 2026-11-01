@@ -61,6 +61,7 @@ export class SidebarSportif implements OnInit {
     { onglet: 'activites', libelle: 'Activités', icone: 'fa-list' },
     { onglet: 'reservations', libelle: 'Réservations', icone: 'fa-check' },
     { onglet: 'avis', libelle: 'Avis à modérer', icone: 'fa-star' },
+    { onglet: 'cartes', libelle: 'Cartes membre', icone: 'fa-id-card' },
   ];
 
   // Un lien n'est actif que si l'adresse correspond exactement (onglet et ancre compris)
