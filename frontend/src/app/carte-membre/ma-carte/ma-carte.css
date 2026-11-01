@@ -1,0 +1,78 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+.bandeau {
+  @apply mb-5 rounded-[10px] px-8 pt-10 pb-8;
+  background:
+    linear-gradient(90deg, #0f0f11 40%, rgba(15, 15, 17, 0.4)),
+    url('/img/crossfit.jpg') center / cover;
+}
+.bandeau h1 {
+  @apply m-0 text-5xl;
+}
+.bandeau p {
+  @apply mt-2 mb-0 text-sm;
+}
+.vert {
+  @apply text-accent;
+}
+.bloc-carte {
+  @apply mb-5 rounded-[10px] border border-bordure bg-carte p-6;
+}
+.petit {
+  @apply text-xs;
+}
+
+/* La carte : format carte bancaire avec bordure accent */
+.carte-membre {
+  @apply relative mb-3 flex aspect-[1.6] w-full max-w-md flex-col justify-between overflow-hidden rounded-2xl border-2 border-accent p-6;
+  background: linear-gradient(135deg, #1b1b1f, #080809);
+}
+.carte-membre.inactive {
+  @apply border-bordure opacity-70;
+}
+.points {
+  @apply absolute top-0 right-0 h-full w-1/2 opacity-30;
+  background-image: radial-gradient(var(--accent) 2px, transparent 2px);
+  background-size: 12px 12px;
+}
+.rayures {
+  @apply absolute top-1/2 right-6 h-4 w-24 -translate-y-1/2;
+  background: repeating-linear-gradient(-60deg, var(--accent) 0 5px, transparent 5px 12px);
+}
+.haut,
+.bas {
+  @apply relative flex items-start justify-between gap-4;
+}
+.logo {
+  @apply font-titre text-xl font-black italic;
+}
+.logo-f {
+  @apply rounded bg-accent px-1.5 text-sur-accent;
+}
+.statut {
+  @apply rounded-full bg-danger/20 px-3 py-1 text-xs font-bold text-danger;
+}
+.statut.active {
+  @apply bg-accent/20 text-accent;
+}
+.numero {
+  @apply relative m-0 font-titre text-3xl font-black tracking-widest;
+}
+.bas div {
+  @apply flex flex-col;
+}
+.etiquette-carte {
+  @apply text-[0.6rem] uppercase tracking-wider text-gris;
+}
+
+/* Pas encore de carte */
+.vide {
+  @apply py-6 text-center;
+}
+.vide i {
+  @apply mb-3 text-5xl text-accent;
+}
+.vide h2 {
+  @apply mt-0 mb-2 text-2xl;
+}

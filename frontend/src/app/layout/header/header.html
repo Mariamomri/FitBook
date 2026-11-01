@@ -22,8 +22,65 @@
     @if (authService.connecte()) {
       <button class="btn btn-outline pill" (click)="deconnexion()">Se déconnecter</button>
     } @else {
-      <a routerLink="login" class="btn btn-outline pill">Connexion</a>
-      <a routerLink="inscription" class="btn pill">Inscription</a>
+      <!-- Le bouton de la page ouverte est plein, l'autre en contour (Inscription plein par défaut) -->
+      <a
+        routerLink="login"
+        class="btn pill"
+        routerLinkActive
+        #lienConnexion="routerLinkActive"
+        [class.btn-outline]="!lienConnexion.isActive"
+        >Connexion</a
+      >
+      <a routerLink="inscription" class="btn pill" [class.btn-outline]="lienConnexion.isActive">Inscription</a>
     }
   </div>
+
+  <!-- Bouton burger : visible seulement sur mobile et tablette -->
+  <button
+    type="button"
+    class="burger"
+    [class.ouvert]="menuOuvert()"
+    (click)="menuOuvert.set(!menuOuvert())"
+    [attr.aria-label]="menuOuvert() ? 'Fermer le menu' : 'Ouvrir le menu'"
+    [attr.aria-expanded]="menuOuvert()"
+  >
+    <i class="fa-solid" [class.fa-bars]="!menuOuvert()" [class.fa-xmark]="menuOuvert()"></i>
+  </button>
 </nav>
+
+<!-- Menu mobile plein écran -->
+@if (menuOuvert()) {
+  <div class="menu-mobile">
+    <nav class="menu-liens">
+      <a routerLink="" routerLinkActive="actif" [routerLinkActiveOptions]="{ exact: true }" (click)="fermerMenu()">Accueil <span class="fleches">›››</span></a>
+      <a routerLink="activites" routerLinkActive="actif" (click)="fermerMenu()">Activités <span class="fleches">›››</span></a>
+      <a routerLink="salles" routerLinkActive="actif" (click)="fermerMenu()">Salles <span class="fleches">›››</span></a>
+      <a routerLink="coach" routerLinkActive="actif" (click)="fermerMenu()">Coachs <span class="fleches">›››</span></a>
+      <a routerLink="contact" routerLinkActive="actif" (click)="fermerMenu()">Contact <span class="fleches">›››</span></a>
+      @if (authService.connecte()) {
+        <a routerLink="dashboard" routerLinkActive="actif" (click)="fermerMenu()">Dashboard <span class="fleches">›››</span></a>
+        <a routerLink="profil" routerLinkActive="actif" (click)="fermerMenu()">Profil <span class="fleches">›››</span></a>
+      }
+    </nav>
+
+    <div class="menu-boutons">
+      @if (authService.connecte()) {
+        <button class="btn btn-outline pill" (click)="deconnexion()">Se déconnecter</button>
+      } @else {
+        <a routerLink="login" class="btn btn-outline pill" (click)="fermerMenu()">Connexion</a>
+        <a routerLink="inscription" class="btn pill" (click)="fermerMenu()">Inscription</a>
+      }
+    </div>
+
+    <p class="suivez">Suivez-nous</p>
+    <div class="reseaux">
+      <a href="https://www.facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://x.com" target="_blank" aria-label="X"><i class="fab fa-x-twitter"></i></a>
+      <a href="https://www.instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.tiktok.com" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+    </div>
+
+    <span class="menu-points"></span>
+    <span class="menu-rayures"></span>
+  </div>
+}

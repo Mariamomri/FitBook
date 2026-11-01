@@ -1,0 +1,72 @@
+<div class="barre">
+  <input
+    type="search"
+    placeholder="Rechercher un numéro ou un membre..."
+    [value]="recherche()"
+    (input)="recherche.set($any($event.target).value)"
+  />
+</div>
+
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
+}
+
+<div class="tableau">
+  <table>
+    <thead>
+      <tr>
+        <th>Numéro</th>
+        <th>Membre</th>
+        <th>Émise le</th>
+        <th>Expire le</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (carte of cartesFiltrees(); track carte.id) {
+        @let statut = statutReel(carte);
+        <tr>
+          <td class="muted">{{ carte.numeroAffiliation }}</td>
+          <td><strong>{{ membre(carte.user) }}</strong></td>
+          <td class="muted">{{ carte.dateEmission | date: 'dd/MM/yyyy' }}</td>
+          <td class="muted">{{ carte.dateExpiration | date: 'dd/MM/yyyy' }}</td>
+          <td>
+            <span class="statut" [class.ok]="statut === 'active'" [class.ko]="statut !== 'active'">
+              {{ carteMembreService.libelleStatut(statut) }}
+            </span>
+          </td>
+          <td>
+            @if (carte.statut === 'suspendue') {
+              <button class="btn-petit" (click)="changerStatut(carte, 'active')">Réactiver</button>
+            } @else {
+              <button class="btn-petit" (click)="changerStatut(carte, 'suspendue')">Suspendre</button>
+            }
+            <button class="btn-petit danger" (click)="aSupprimer.set(carte)">Supprimer</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6" class="muted vide">Aucune carte de membre.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<!-- Confirmation avant suppression -->
+@if (aSupprimer(); as carte) {
+  <div class="fond-modale" (click)="aSupprimer.set(null)">
+    <div class="modale" (click)="$event.stopPropagation()">
+      <h3>Supprimer la carte ?</h3>
+      <p class="muted">La carte {{ carte.numeroAffiliation }} de {{ membre(carte.user) }} sera supprimée. Le membre pourra en demander une nouvelle.</p>
+      <div class="boutons">
+        <button class="btn btn-outline" (click)="aSupprimer.set(null)">Garder</button>
+        <button class="btn bouton-danger" (click)="confirmerSuppression()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+}

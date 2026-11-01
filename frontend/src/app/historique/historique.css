@@ -1,0 +1,96 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../styles.css";
+
+/* Bandeau avec photo */
+.bandeau {
+  @apply mb-5 rounded-[10px] px-8 pt-10 pb-8;
+  background:
+    linear-gradient(90deg, #0f0f11 40%, rgba(15, 15, 17, 0.3)),
+    url('/img/yoga.jpg') center 40% / cover;
+}
+.bandeau h1 {
+  @apply m-0 text-5xl;
+}
+.bandeau p {
+  @apply mt-2 mb-0 text-sm;
+}
+
+/* Recherche + statut */
+.filtres {
+  @apply mb-4 grid grid-cols-1 gap-3 md:grid-cols-[2fr_1fr];
+}
+.filtres input,
+.filtres select {
+  @apply w-full rounded-md border border-bordure bg-carte px-3 py-2 text-texte;
+}
+
+/* Tableau */
+.tableau {
+  @apply overflow-x-auto rounded-[10px] border border-bordure bg-carte;
+}
+table {
+  @apply w-full border-collapse text-sm;
+}
+th {
+  @apply border-b border-bordure px-4 py-3 text-left text-xs font-bold text-gris uppercase;
+}
+td {
+  @apply border-b border-bordure px-4 py-3;
+}
+.vide {
+  @apply py-8 text-center;
+}
+
+/* Pastilles de statut */
+.statut {
+  @apply rounded-full px-2 py-0.5 text-xs font-bold;
+}
+.effectuee {
+  @apply bg-accent/15 text-accent;
+}
+.annulee {
+  @apply bg-danger/15 text-danger;
+}
+
+/* Bouton « Laisser un avis » */
+.bouton-avis {
+  @apply cursor-pointer rounded-md border-0 bg-accent px-3 py-1 text-xs font-bold text-sur-accent uppercase;
+}
+.petit {
+  @apply ml-2 text-xs;
+}
+
+/* Fenêtre de l'avis */
+.fond-modale {
+  @apply fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4;
+}
+.modale {
+  @apply w-full max-w-lg rounded-[10px] border border-bordure bg-carte p-6;
+}
+.modale h3 {
+  @apply mt-0;
+}
+.titre-champ {
+  @apply mt-4 mb-2 text-xs font-bold text-gris uppercase;
+}
+.cibles {
+  @apply flex flex-col gap-2;
+}
+.cibles button {
+  @apply cursor-pointer rounded-md border border-bordure bg-nav px-3 py-2 text-left text-sm text-texte;
+}
+.cibles button.choisie {
+  @apply border-accent text-accent;
+}
+.cibles button:disabled {
+  @apply cursor-not-allowed opacity-50;
+}
+.etoiles-choix button {
+  @apply cursor-pointer border-0 bg-transparent text-3xl text-gris;
+}
+.etoiles-choix button.allumee {
+  @apply text-yellow-400;
+}
+.boutons {
+  @apply mt-5 flex justify-end gap-3;
+}

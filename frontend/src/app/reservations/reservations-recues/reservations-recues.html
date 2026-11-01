@@ -1,0 +1,64 @@
+<h2>Réservations <span class="compteur">{{ confirmeesAVenir() }} à venir</span></h2>
+
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+
+<div class="barre">
+  <input
+    type="search"
+    placeholder="Rechercher un sportif ou un cours..."
+    [value]="recherche()"
+    (input)="recherche.set($any($event.target).value)"
+  />
+  <select #choixPeriode [value]="periode()" (change)="periode.set(choixPeriode.value)">
+    <option value="a-venir">À venir</option>
+    <option value="passees">Passées</option>
+    <option value="toutes">Toutes</option>
+  </select>
+</div>
+
+<div class="tableau">
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Cours</th>
+        @if (pour() === 'coach') {
+          <th>Salle</th>
+        }
+        <th>Sportif</th>
+        <th>Numéro</th>
+        <th>Statut</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (reservation of reservationsFiltrees(); track reservation.id) {
+        <tr>
+          <!-- 'UTC' : afficher l'heure enregistrée en base sans décalage horaire -->
+          <td class="muted">{{ reservation.dateDebut | date: 'EEE d MMM · HH:mm' : 'UTC' : 'fr' }}</td>
+          <td><strong>{{ reservation.cours }}</strong></td>
+          @if (pour() === 'coach') {
+            <td>{{ reservation.salle }}</td>
+          }
+          <td>
+            {{ reservation.sportif }}
+            <span class="muted email">{{ reservation.email }}</span>
+          </td>
+          <td class="muted">{{ reservation.numero }}</td>
+          <td>
+            @if (reservation.statut === 'annulee') {
+              <span class="statut ko">Annulée</span>
+            } @else {
+              <span class="statut ok">Confirmée</span>
+            }
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6" class="muted vide">Aucune réservation.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

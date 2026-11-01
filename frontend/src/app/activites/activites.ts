@@ -1,6 +1,6 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SeanceService } from '../seances/seance-service';
 import { SeanceInterface } from '../seances/seance-interface';
 import { ActiviteService } from './activite-service';
@@ -17,12 +17,15 @@ export class Activites implements OnInit {
   private seanceService = inject(SeanceService);
   private activiteService = inject(ActiviteService);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   authService = inject(AuthService);
 
   seances = signal<SeanceInterface[]>([]);
   activites = signal<ActiviteInterface[]>([]);
   message = signal('');
   erreur = signal('');
+  // 403 à la réservation : l'email du compte n'est pas encore confirmé
+  emailNonConfirme = signal(false);
 
   // Filtres (panneau de gauche)
   activitesChoisies = signal<string[]>([]);
@@ -101,16 +104,30 @@ export class Activites implements OnInit {
   reserver(idSeance: number): void {
     this.message.set('');
     this.erreur.set('');
+    this.emailNonConfirme.set(false);
 
     this.seanceService.reserver(idSeance).subscribe({
-      next: () => {
-        this.message.set('Réservation confirmée !');
-        this.chargerSeances(); // met à jour les places restantes
+      next: (reponse) => {
+        // On affiche la page de confirmation avec le numéro de réservation
+        this.router.navigate(['/reservation-confirmee'], { queryParams: { numero: reponse.numero, seance: idSeance } });
       },
       error: (err) => {
         // 422 : séance complète ou déjà réservée / 403 : email non confirmé
         this.erreur.set(err.error?.detail || 'Erreur lors de la réservation');
+        this.emailNonConfirme.set(err.status === 403);
       },
+    });
+  }
+
+  // Bouton « Renvoyer l'email » sous le message d'erreur
+  renvoyerEmail(): void {
+    this.authService.renvoyerConfirmation().subscribe({
+      next: (reponse) => {
+        this.erreur.set('');
+        this.emailNonConfirme.set(false);
+        this.message.set(reponse.message + ' Cliquez sur le lien reçu, puis reconnectez-vous.');
+      },
+      error: (err) => this.erreur.set(err.error?.message ?? "Impossible d'envoyer l'email."),
     });
   }
 }

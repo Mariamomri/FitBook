@@ -79,7 +79,7 @@
   <div class="grille-4">
     @for (seance of prochainesSeances(); track seance.id) {
       <article class="carte">
-        <div class="carte-image">
+        <div class="carte-image" [style.background-image]="'linear-gradient(0deg, rgba(8, 8, 9, 0.6), rgba(8, 8, 9, 0)), url(' + activiteService.photo(seance.activiteNom) + ')'">
           <span class="tag">{{ seance.activiteNom }}</span>
           <span class="prix">{{ seance.prix }}€</span>
         </div>
@@ -112,20 +112,30 @@
 
   @if (salleVedette(); as vedette) {
     <div class="salles">
-      <article class="salle-vedette">
+      <article
+        class="salle-vedette"
+        [style.background-image]="'linear-gradient(0deg, #080809 15%, rgba(8, 8, 9, 0.2)), url(' + salleService.photo(vedette) + ')'"
+      >
         <span class="tag">★ Top de la semaine</span>
         <h3>{{ vedette.nom }}</h3>
         <p class="muted">{{ vedette.ville }} · {{ vedette.equipements }}</p>
-        <a class="btn petit-btn" routerLink="/salles">Voir la salle</a>
+        <a class="btn petit-btn" [routerLink]="['/salles', vedette.id]">Voir la salle</a>
       </article>
 
       <div class="salles-petites">
         @for (salle of autresSalles(); track salle.id) {
-          <article class="salle-petite">
-            <h3>{{ salle.nom }}</h3>
-            <p class="muted">{{ salle.ville }}</p>
-            <a routerLink="/salles">→</a>
-          </article>
+          <a class="salle-petite" [routerLink]="['/salles', salle.id]">
+            <img [src]="salleService.photo(salle)" [alt]="salle.nom" />
+            <div>
+              <h3>{{ salle.nom }}</h3>
+              <p class="muted">{{ salle.ville }}</p>
+              @if (nombreAvisSalle(salle) > 0) {
+                <p class="note">★ {{ noteSalle(salle) }} ({{ nombreAvisSalle(salle) }} avis)</p>
+              }
+              <span class="capacite">{{ salle.capacite }} places</span>
+            </div>
+            <i class="fa-solid fa-arrow-right fleche"></i>
+          </a>
         }
       </div>
     </div>
@@ -162,9 +172,39 @@
   </div>
 </section>
 
+<!-- Avis des sportifs -->
+@if (derniersAvis().length > 0) {
+  <section class="section">
+    <p class="eyebrow">— Avis</p>
+    <h2>Ce que disent nos sportifs</h2>
+    <div class="grille-avis">
+      @for (unAvis of derniersAvis(); track unAvis.id) {
+        <article class="carte-avis">
+          <div class="avis-haut">
+            <span class="avatar"><i class="fa-solid fa-user"></i></span>
+            <div>
+              <strong>Sportif FitBook</strong>
+              <span class="etoiles">{{ avisService.etoiles(unAvis.note) }}</span>
+            </div>
+            <i class="fa-solid fa-quote-right guillemets"></i>
+          </div>
+          <p>{{ unAvis.commentaire }}</p>
+          <span class="sujet">{{ sujetAvis(unAvis) }}</span>
+        </article>
+      }
+    </div>
+  </section>
+}
+
 <!-- Appel à l'action -->
 <section class="cta">
-  <h2>Prêt à transpirer ?</h2>
+  <span class="cta-points"></span>
+  <span class="cta-fleches">››››</span>
+  <div class="cta-texte">
+    <span class="cta-rayures"></span>
+    <h2>Prêt à transpirer ?</h2>
+    <p>Créez votre compte gratuit et réservez votre première séance dès aujourd'hui.</p>
+  </div>
   @if (authService.connecte()) {
     <a class="btn btn-noir" routerLink="/activites">Réserver une séance →</a>
   } @else {

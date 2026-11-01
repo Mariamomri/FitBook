@@ -107,3 +107,11 @@
 .par-heure {
   @apply m-0 text-right text-xs font-semibold text-accent;
 }
+
+/* Bouton cœur : vide = pas favori, plein (couleur d'accent) = favori */
+.coeur {
+  @apply cursor-pointer border-0 bg-transparent text-2xl leading-none text-gris;
+}
+.coeur.actif {
+  @apply text-accent;
+}

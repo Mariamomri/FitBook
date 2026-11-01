@@ -1,0 +1,12 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+/* Nombre de réservations à venir à côté du titre */
+.compteur {
+  @apply ml-2 rounded-full bg-accent/15 px-3 py-1 align-middle font-corps text-xs font-bold not-italic normal-case text-accent;
+}
+
+/* Email du sportif sous son nom */
+.email {
+  @apply block text-xs;
+}

@@ -33,7 +33,27 @@ export class AuthService {
     this.connecte.set(false);
   }
 
-    // Inscription : POST /api/users (API Platform attend du JSON-LD)
+  // Mot de passe oublié : Symfony envoie un lien valable 1 heure (même réponse si l'email n'existe pas)
+  motDePasseOublie(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>('https://127.0.0.1:8000/api/mot-de-passe-oublie', { email });
+  }
+
+  // Nouveau mot de passe : le token vient du lien reçu par email
+  nouveauMotDePasse(token: string, password: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>('https://127.0.0.1:8000/api/nouveau-mot-de-passe', { token, password });
+  }
+
+  // Renvoie le mail de confirmation à l'utilisateur connecté
+  renvoyerConfirmation(): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>('https://127.0.0.1:8000/api/me/renvoyer-confirmation', {});
+  }
+
+  // Utilisateur connecté (Symfony le retrouve grâce au token)
+  getMoi(): Observable<UserInterface> {
+    return this.http.get<UserInterface>('https://127.0.0.1:8000/api/me');
+  }
+
+  // Inscription : POST /api/users (API Platform attend du JSON-LD)
   inscription(user: UserInterface): Observable<UserInterface> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/ld+json' });
     return this.http.post<UserInterface>('https://127.0.0.1:8000/api/users', user, { headers });

@@ -21,6 +21,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\State\UserPasswordHasher;
+use Symfony\Component\HttpFoundation\File\File; // fichier envoyé lors de l'upload
+use Vich\UploaderBundle\Mapping\Attribute as Vich; // pour l'upload des photos
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -36,6 +38,8 @@ use App\State\UserPasswordHasher;
 
 #[ORM\HasLifecycleCallbacks] // dit à Doctrine de lire les PrePersist et PreUpdate de cette classe. Sans cette ligne, les dates ne se remplissent pas.
 #[ORM\Table(name: "users")]
+
+#[Vich\Uploadable] // l'utilisateur photo 
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -84,7 +88,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 20)]
     #[Assert\NotBlank()]
+    #[Assert\Choice(choices: ['vert', 'orange', 'jaune', 'bleu', 'rose', 'rouge'], message: 'Couleur non valide.')]
     private ?string $accentColor = null;
+
+
+    // fichier photo reçu (pas enregistré en base, utilisé seulement pendant l'upload)
+    #[Vich\UploadableField(mapping: 'users', fileNameProperty: 'imageName', size: 'imageSize')]
+    #[ApiProperty(readable: false, writable: false)]
+    private ?File $imageFile = null;
+
+    // nom du fichier enregistré dans public/images/users
+    #[ORM\Column(nullable: true)]
+    #[ApiProperty(writable: false)]
+    private ?string $imageName = null;
+
+    // taille du fichier en octets
+    #[ORM\Column(nullable: true)]
+    #[ApiProperty(writable: false)]
+    private ?int $imageSize = null;
 
     #[ApiProperty(securityPostDenormalize: "is_granted('ROLE_ADMIN')")] // seul un admin peut modifier ce champ
     #[ORM\Column]
@@ -473,5 +494,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->isVerified = $isVerified;
 
         return $this;
+    }
+
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    // quand une nouvelle photo arrive, on change updatedAt pour que Doctrine enregistre la modification
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if ($imageFile !== null) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageSize(): ?int
+    {
+        return $this->imageSize;
+    }
+
+    public function setImageSize(?int $imageSize): void
+    {
+        $this->imageSize = $imageSize;
     }
 }

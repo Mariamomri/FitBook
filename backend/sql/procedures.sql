@@ -34,14 +34,15 @@ DROP PROCEDURE IF EXISTS getNoteMoyenneSalle;
 DELIMITER $$
 CREATE PROCEDURE getNoteMoyenneSalle(IN idSalle INT, OUT moyenne DECIMAL(3,1))
     BEGIN
+        -- seulement les avis validés par l'admin (statut publie)
         SELECT AVG(note) INTO moyenne
         FROM avis_notes
-        WHERE salle_id = idSalle;
+        WHERE salle_id = idSalle AND statut = 'publie';
     END $$
 DELIMITER ;
 
 -- Exemples d'appel
---sans paramètre : les séances à venir
+-- sans paramètre : les séances à venir
 -- CALL getProchainesSeances();
 
 -- avec paramètre d'entrée : places restantes d'une séance

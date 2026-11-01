@@ -27,6 +27,7 @@
 
       <label for="password">Mot de passe</label>
       <input id="password" type="password" formControlName="password" placeholder="Votre mot de passe" />
+      <a class="oublie" routerLink="/mot-de-passe-oublie">Mot de passe oublié ?</a>
 
       @if (erreur()) {
         <p class="alerte">⚠ {{ erreur() }}</p>

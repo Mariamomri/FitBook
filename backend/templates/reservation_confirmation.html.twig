@@ -1,15 +1,29 @@
-<h1>Votre réservation est confirmée !</h1>
+{# Email envoyé au sportif juste après sa réservation #}
+<div style="background:#1b1b1f;padding:24px;font-family:Arial,sans-serif;color:#ffffff;">
+  <div style="max-width:560px;margin:0 auto;background:#151518;border-radius:12px;overflow:hidden;">
+    <div style="background:#080809;padding:20px 28px;border-bottom:3px solid #a8ff00;">
+      <span style="background:#a8ff00;color:#080809;font-weight:900;font-style:italic;padding:2px 8px;border-radius:4px;">F</span>
+      <strong style="color:#ffffff;font-style:italic;font-size:20px;">FIT<span style="color:#a8ff00;">BOOK</span></strong>
+    </div>
 
-<p>Bonjour {{ reservation.user.firstname }},</p>
+    <div style="padding:28px;">
+      <h1 style="color:#ffffff;margin:0 0 12px;font-size:28px;font-style:italic;text-transform:uppercase;">Votre réservation est confirmée !</h1>
+      <p style="color:#c8c8cc;line-height:1.5;">Bonjour {{ reservation.user.firstname }}, votre place est bien réservée.</p>
 
-<p>Votre réservation <strong>{{ reservation.numero }}</strong> est bien enregistrée :</p>
+      <table role="presentation" cellpadding="0" cellspacing="0" style="color:#ffffff;width:100%;margin:20px 0;background:#080809;border:1px solid #2a2a30;border-radius:8px;padding:12px;font-size:14px;">
+        <tr><td style="color:#8a8a90;padding:6px;">Séance</td><td style="padding:6px;font-weight:bold;color:#ffffff;">{{ reservation.seance.cours.titre }} · {{ reservation.seance.cours.niveau }}</td></tr>
+        <tr><td style="color:#8a8a90;padding:6px;">Date</td><td style="padding:6px;font-weight:bold;color:#ffffff;">{{ reservation.seance.dateDebut|date('d/m/Y') }} · {{ reservation.seance.dateDebut|date('H:i') }} – {{ reservation.seance.dateFin|date('H:i') }}</td></tr>
+        <tr><td style="color:#8a8a90;padding:6px;">Lieu</td><td style="padding:6px;font-weight:bold;color:#ffffff;">{{ reservation.seance.cours.salle.nom }}, {{ reservation.seance.cours.salle.adresse }}, {{ reservation.seance.cours.salle.ville }}</td></tr>
+        {% if reservation.seance.coachNom %}
+        <tr><td style="color:#8a8a90;padding:6px;">Coach</td><td style="padding:6px;font-weight:bold;color:#ffffff;">{{ reservation.seance.coachNom }}</td></tr>
+        {% endif %}
+        <tr><td style="color:#8a8a90;padding:6px;">Prix</td><td style="padding:6px;font-weight:bold;color:#ffffff;">{{ reservation.seance.cours.prix }} €</td></tr>
+        <tr><td style="color:#8a8a90;padding:6px;">N°</td><td style="padding:6px;font-weight:bold;color:#a8ff00;">{{ reservation.numero }}</td></tr>
+      </table>
 
-<ul>
-    <li>Cours : {{ reservation.seance.cours.titre }}</li>
-    <li>Salle : {{ reservation.seance.cours.salle.nom }}</li>
-    <li>Date : {{ reservation.seance.dateDebut|date('d/m/Y') }} de {{ reservation.seance.dateDebut|date('H:i') }} à {{ reservation.seance.dateFin|date('H:i') }}</li>
-</ul>
-
-<p>Vous pouvez annuler votre réservation depuis votre espace « Mes réservations » tant que la séance n'a pas commencé.</p>
-
-<p>À bientôt sur FitBook !</p>
+      <p style="color:#8a8a90;font-size:13px;">Vous pouvez annuler votre réservation depuis votre espace « Mes réservations » tant que la séance n'a pas commencé.</p>
+      <p style="color:#c8c8cc;">À bientôt sur FitBook !</p>
+    </div>
+  </div>
+  <p style="text-align:center;color:#8a8a90;font-size:12px;">Vous recevez cet email car vous avez réservé sur FitBook. © 2026 FitBook · Bruxelles</p>
+</div>

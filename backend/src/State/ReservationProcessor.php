@@ -7,7 +7,6 @@ use ApiPlatform\State\ProcessorInterface;
 use App\Entity\Reservation;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -18,17 +17,25 @@ final class ReservationProcessor implements ProcessorInterface
   public function __construct(
     #[Autowire(service: 'api_platform.doctrine.orm.state.persist_processor')]
     private ProcessorInterface $persistProcessor,
+    private MailerInterface $mailer,
     private Security $security,
-    private MailerInterface $mailer
   ) {}
 
   public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): Reservation
   {
-    // Le propriétaire de la réservation est toujours l'utilisateur connecté
+    // La réservation appartient toujours à l'utilisateur connecté (on ne fait pas confiance au JSON envoyé)
     $data->setUser($this->security->getUser());
 
     $seance = $data->getSeance();
     $capacite = $seance->getCours()->getCapacite();
+
+    // On ne réserve qu'une séance ouverte qui n'a pas encore commencé
+    if ($seance->getStatut() !== 'ouverte') {
+      throw new UnprocessableEntityHttpException('Cette séance n\'est pas ouverte aux réservations.');
+    }
+    if ($seance->getDateDebut() <= new \DateTimeImmutable()) {
+      throw new UnprocessableEntityHttpException('Cette séance a déjà commencé.');
+    }
 
     // On compte seulement les réservations confirmées de cette séance
     $confirmees = 0;
@@ -47,21 +54,18 @@ final class ReservationProcessor implements ProcessorInterface
       throw new UnprocessableEntityHttpException('Cette séance est complète.');
     }
 
+    // Enregistrement en base (persist + flush)
     $reservation = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
 
-    // Email de confirmation de la réservation
-    $email = (new TemplatedEmail())
-      ->from(new Address('noreply@fitbook.be', 'FitBook'))
-      ->to((string) $reservation->getUser()->getEmail())
-      ->subject('Confirmation de votre réservation - FitBook')
-      ->htmlTemplate('reservation_confirmation.html.twig')
-      ->context(['reservation' => $reservation]);
-
-    try {
-      $this->mailer->send($email);
-    } catch (TransportExceptionInterface $exception) {
-      // La réservation est enregistrée même si l'email ne part pas (serveur mail indisponible)
-    }
+    // Email de confirmation au sportif (template reservation_confirmation.html.twig)
+    $this->mailer->send(
+      (new TemplatedEmail())
+        ->from(new Address('noreply@fitbook.be', 'FitBook'))
+        ->to((string) $reservation->getUser()->getEmail())
+        ->subject('Réservation confirmée - FitBook')
+        ->htmlTemplate('reservation_confirmation.html.twig')
+        ->context(['reservation' => $reservation])
+    );
 
     return $reservation;
   }

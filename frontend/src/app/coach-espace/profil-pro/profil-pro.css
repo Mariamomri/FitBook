@@ -1,0 +1,26 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+h2 {
+  @apply mt-0 mb-4 text-2xl;
+}
+
+/* Photo à gauche, formulaire à droite */
+.mise-en-page {
+  @apply grid grid-cols-1 gap-5 md:grid-cols-[200px_1fr];
+}
+.photo {
+  @apply flex flex-col items-center gap-2 text-center;
+}
+.photo img {
+  @apply h-44 w-44 rounded-[10px] border-2 border-accent object-cover object-top;
+}
+.photo label {
+  @apply m-0 tracking-normal;
+}
+.petit {
+  @apply text-xs;
+}
+textarea {
+  @apply w-full rounded-md border border-bordure bg-nav px-3 py-2 text-texte;
+}

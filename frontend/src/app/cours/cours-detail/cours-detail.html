@@ -1,6 +1,6 @@
 @if (cours(); as c) {
-  <!-- Bandeau du haut (image plus tard) -->
-  <section class="bandeau">
+  <!-- Bandeau du haut avec la photo de l'activité -->
+  <section class="bandeau" [style.background-image]="'linear-gradient(90deg, rgba(21, 21, 24, 0.95) 35%, rgba(21, 21, 24, 0.3)), url(' + photoActivite(c.activiteNom) + ')'">
     <p class="fil">
       <a routerLink="/">Accueil</a> › <a routerLink="/activites">Recherche</a> › <span>{{ c.titre }}</span>
     </p>
@@ -14,9 +14,18 @@
     <div class="contenu">
       @if (c.coachNom) {
         <div class="carte-coach">
-          <span class="avatar">{{ c.coachNom.charAt(0) }}</span>
-          <p><strong>{{ c.coachNom }}</strong> · Coach</p>
-          <a routerLink="/coach">Voir le profil →</a>
+          @if (coach(); as fiche) {
+            <img class="photo-coach" [src]="coachService.photo(fiche)" [alt]="c.coachNom" />
+          } @else {
+            <span class="avatar">{{ c.coachNom.charAt(0) }}</span>
+          }
+          <div>
+            <p><strong>{{ c.coachNom }}</strong> · Coach</p>
+            @if (avisDuCoach().length > 0) {
+              <p class="petit"><span class="etoiles">{{ avisService.etoiles(noteCoach()) }}</span> {{ noteCoach() }} ({{ avisDuCoach().length }} avis)</p>
+            }
+          </div>
+          <a [routerLink]="['/coach', idCoach(c.coach)]">Voir le profil →</a>
         </div>
       }
 
@@ -34,6 +43,8 @@
           <p class="muted">Aucun autre créneau.</p>
         }
       </div>
+
+      <app-donner-avis cible="cours" [lien]="lienCours()" />
     </div>
 
     <!-- Carte de réservation (droite) -->
@@ -45,7 +56,7 @@
         <p class="date">
           {{ s.dateDebut | date: 'EEE d MMM · HH:mm' : 'UTC' : 'fr' }} – {{ s.dateFin | date: 'HH:mm' : 'UTC' }}
         </p>
-        <p class="petit"><strong>{{ s.placesRestantes }} places restantes</strong> <span class="muted">sur {{ c.capacite }}</span></p>
+        <p class="petit"><strong>{{ s.placesRestantes }} places restantes</strong>&nbsp;<span class="muted">sur {{ c.capacite }}</span></p>
         <div class="barre"><div class="barre-remplie" [style.width.%]="pourcentage(s, c.capacite)"></div></div>
 
         @if (message()) {
@@ -53,6 +64,9 @@
         }
         @if (erreur()) {
           <p class="erreur">{{ erreur() }}</p>
+          @if (emailNonConfirme()) {
+            <button type="button" class="renvoyer" (click)="renvoyerEmail()">Renvoyer l'email de confirmation →</button>
+          }
         }
 
         @if (s.statut === 'ouverte' && s.placesRestantes > 0) {
@@ -68,7 +82,14 @@
         <p class="muted">Aucune séance prévue.</p>
       }
 
-      <button class="btn btn-outline bloc">♡ Ajouter aux favoris</button>
+      <!-- Favori : connecté = ajoute / retire ; sinon renvoie vers la connexion -->
+      @if (authService.connecte()) {
+        <button class="btn btn-outline bloc" (click)="favoriService.basculer('favoriCours', lienCours())">
+          {{ favoriService.estFavori('favoriCours', lienCours()) ? '♥ Retirer des favoris' : '♡ Ajouter aux favoris' }}
+        </button>
+      } @else {
+        <a class="btn btn-outline bloc" routerLink="/login">♡ Ajouter aux favoris</a>
+      }
     </aside>
   </div>
 } @else {

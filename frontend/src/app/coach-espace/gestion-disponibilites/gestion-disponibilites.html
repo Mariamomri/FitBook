@@ -1,0 +1,55 @@
+<div class="titre-bloc">
+  <h2>Disponibilités</h2>
+  <button class="btn petit-btn" (click)="ouvrirAjout()">+ Ajouter un créneau</button>
+</div>
+
+@if (idFormulaire() !== null) {
+  <form class="formulaire" [formGroup]="disponibiliteForm" (ngSubmit)="enregistrer()">
+    <h3>{{ idFormulaire() === 0 ? 'Nouveau créneau' : 'Modifier le créneau' }}</h3>
+    <div class="ligne-formulaire">
+      <div>
+        <label for="jour">Jour</label>
+        <select id="jour" formControlName="jour">
+          @for (jour of jours; track jour) {
+            <option [value]="jour">{{ jour }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="heureDebut">De</label>
+        <input id="heureDebut" type="time" formControlName="heureDebut" />
+      </div>
+      <div>
+        <label for="heureFin">À</label>
+        <input id="heureFin" type="time" formControlName="heureFin" />
+      </div>
+    </div>
+    <div class="boutons">
+      <button type="submit" class="btn">Enregistrer</button>
+      <button type="button" class="btn btn-outline" (click)="idFormulaire.set(null)">Annuler</button>
+    </div>
+  </form>
+}
+<!-- Messages juste sous le formulaire, près du bouton -->
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
+}
+
+<!-- Ses créneaux, groupés visuellement par jour -->
+<div class="creneaux">
+  @for (disponibilite of mesDisponibilites(); track disponibilite.id) {
+    <div class="creneau">
+      <strong>{{ disponibilite.jour }}</strong>
+      <span>{{ heure(disponibilite.heureDebut) }} – {{ heure(disponibilite.heureFin) }}</span>
+      <div class="actions">
+        <button class="btn-petit" (click)="ouvrirModification(disponibilite)">Modifier</button>
+        <button class="btn-petit danger" (click)="supprimer(disponibilite)">Supprimer</button>
+      </div>
+    </div>
+  } @empty {
+    <p class="muted">Aucun créneau. Ajoutez vos disponibilités pour que les salles sachent quand vous êtes libre.</p>
+  }
+</div>

@@ -1,0 +1,19 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+/* Carte centrée */
+.page-erreur {
+  @apply flex min-h-[60vh] items-center justify-center px-4 py-10;
+}
+.carte {
+  @apply w-full max-w-md rounded-[10px] border border-bordure bg-carte p-8 text-center;
+}
+.code {
+  @apply m-0 font-titre text-8xl font-black italic leading-none text-accent;
+}
+.carte h1 {
+  @apply mt-3 mb-2 text-2xl normal-case not-italic;
+}
+.carte p.muted {
+  @apply mb-6 text-sm;
+}

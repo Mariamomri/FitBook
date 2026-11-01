@@ -7,7 +7,7 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../auth-service';
 
 // Vérifie que le mot de passe et sa confirmation sont identiques
@@ -24,6 +24,7 @@ function motsDePasseIdentiques(formulaire: AbstractControl): ValidationErrors | 
   styleUrl: './inscription.css',
 })
 export class Inscription {
+  private router = inject(Router);
   private authService = inject(AuthService);
   erreur = signal('');
   succes = signal('');
@@ -31,9 +32,6 @@ export class Inscription {
   // Afficher / cacher les mots de passe (bouton œil)
   voirMotDePasse = signal(false);
   voirConfirmation = signal(false);
-
-  // Aperçu de la photo choisie (l'envoi au serveur viendra avec VichUploader)
-  apercuPhoto = signal<string | null>(null);
 
   // Couleurs du site proposées (comme sur la maquette)
   couleurs = [
@@ -74,17 +72,6 @@ export class Inscription {
     return ['', 'Faible', 'Moyen', 'Bon', 'Fort'][this.force()];
   }
 
-  // Lit l'image choisie pour l'afficher dans le cercle
-  choisirPhoto(evenement: Event): void {
-    const fichier = (evenement.target as HTMLInputElement).files?.[0];
-    if (!fichier) {
-      return;
-    }
-    const lecteur = new FileReader();
-    lecteur.onload = () => this.apercuPhoto.set(lecteur.result as string);
-    lecteur.readAsDataURL(fichier);
-  }
-
   inscription() {
     this.erreur.set('');
     this.succes.set('');
@@ -107,9 +94,7 @@ export class Inscription {
       })
       .subscribe({
         next: () => {
-          this.succes.set('Compte créé ! Vérifiez votre email pour confirmer votre inscription.');
-          this.inscriptionForm.reset({ accentColor: 'vert', cgu: false });
-          this.apercuPhoto.set(null);
+          this.router.navigate(['/verifiez-email'], { queryParams: { email: email } });
         },
         error: (err) => {
           // 422 = validation Symfony (ex. email déjà utilisé)
