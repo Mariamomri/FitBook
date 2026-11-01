@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\CarteMembre;
 use App\Entity\Reservation;
 use App\Entity\User;
 use App\Repository\ReservationRepository;
@@ -93,6 +94,73 @@ final class MeController extends AbstractController
         );
 
         return $this->json(['message' => 'Email de confirmation envoyé à ' . $user->getEmail() . '.']);
+    }
+
+    // Carte de membre de l'utilisateur connecté (null s'il n'en a pas encore)
+    #[Route('/api/me/carte', name: 'api_me_carte', methods: ['GET'])]
+    public function maCarte(): JsonResponse
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        return $this->json($this->carteEnTableau($user->getCarteMembre()));
+    }
+
+    // Demander sa carte (première fois) ou la renouveler quand elle a expiré : valable 1 an
+    #[Route('/api/me/carte', name: 'api_me_carte_demander', methods: ['POST'])]
+    public function demanderCarte(EntityManagerInterface $entityManager): JsonResponse
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $carte = $user->getCarteMembre();
+        $maintenant = new \DateTimeImmutable();
+
+        if ($carte && $carte->getStatut() === 'suspendue') {
+            return $this->json(['message' => "Votre carte est suspendue. Contactez l'administrateur."], 403);
+        }
+        if ($carte && $carte->getDateExpiration() > $maintenant) {
+            return $this->json(['message' => 'Votre carte est encore valable.'], 422);
+        }
+
+        // Première carte : numéro unique basé sur l'id de l'utilisateur (ex. FB-2026-002007)
+        if (!$carte) {
+            $carte = new CarteMembre();
+            $carte->setNumeroAffiliation('FB-' . $maintenant->format('Y') . '-' . str_pad((string) $user->getId(), 6, '0', STR_PAD_LEFT));
+            $user->setCarteMembre($carte);
+            $entityManager->persist($carte);
+        }
+
+        $carte->setDateEmission($maintenant);
+        $carte->setDateExpiration($maintenant->modify('+1 year'));
+        $carte->setStatut('active');
+        $entityManager->flush();
+
+        return $this->json($this->carteEnTableau($carte), 201);
+    }
+
+    // Carte en tableau simple pour le JSON ; une carte dont la date est passée est « expiree »
+    private function carteEnTableau(?CarteMembre $carte): ?array
+    {
+        if (!$carte) {
+            return null;
+        }
+
+        $statut = $carte->getStatut();
+        if ($statut === 'active' && $carte->getDateExpiration() < new \DateTimeImmutable()) {
+            $statut = 'expiree';
+        }
+
+        return [
+            'id' => $carte->getId(),
+            'numero' => $carte->getNumeroAffiliation(),
+            'dateEmission' => $carte->getDateEmission()->format('Y-m-d'),
+            'dateExpiration' => $carte->getDateExpiration()->format('Y-m-d'),
+            'statut' => $statut,
+        ];
     }
 
     // Réservations des salles du gestionnaire connecté
