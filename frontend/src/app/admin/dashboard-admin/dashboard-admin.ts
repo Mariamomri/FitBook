@@ -11,6 +11,7 @@ import { OngletCoachs } from '../onglet-coachs/onglet-coachs';
 import { OngletActivites } from '../onglet-activites/onglet-activites';
 import { OngletReservations } from '../onglet-reservations/onglet-reservations';
 import { OngletAvis } from '../onglet-avis/onglet-avis';
+import { OngletCartes } from '../onglet-cartes/onglet-cartes';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -23,6 +24,7 @@ import { OngletAvis } from '../onglet-avis/onglet-avis';
     OngletActivites,
     OngletReservations,
     OngletAvis,
+    OngletCartes,
   ],
   templateUrl: './dashboard-admin.html',
   styleUrl: './dashboard-admin.css',
@@ -42,6 +44,7 @@ export class DashboardAdmin implements OnInit {
     { valeur: 'activites', libelle: 'Activités' },
     { valeur: 'reservations', libelle: 'Réservations' },
     { valeur: 'avis', libelle: 'Avis' },
+    { valeur: 'cartes', libelle: 'Cartes membre' },
   ];
   onglet = signal('utilisateurs');
 
