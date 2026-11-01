@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Validator\Constraints as Assert; // règles de validation des données envoyées
 
 #[ORM\Entity(repositoryClass: SeanceRepository::class)]
 #[ORM\Table(name: 'seances')]
@@ -35,16 +36,21 @@ class Seance
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'La date de début est obligatoire.')]
     private ?\DateTimeImmutable $dateDebut = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'La date de fin est obligatoire.')]
+    #[Assert\GreaterThan(propertyPath: 'dateDebut', message: 'La fin doit être après le début.')]
     private ?\DateTimeImmutable $dateFin = null;
 
     #[ORM\Column(length: 20)]
+    #[Assert\Choice(choices: ['ouverte', 'complete', 'annulee', 'terminee'], message: 'Statut invalide.')]
     private ?string $statut = null;
 
     #[ORM\ManyToOne(inversedBy: 'seances')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'Le cours est obligatoire.')]
     private ?Cours $cours = null;
 
     /**
