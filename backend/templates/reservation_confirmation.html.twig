@@ -21,6 +21,12 @@
         <tr><td style="color:#8a8a90;padding:6px;">N°</td><td style="padding:6px;font-weight:bold;color:#a8ff00;">{{ reservation.numero }}</td></tr>
       </table>
 
+      <!-- QR code joint à l'email (embed dans ReservationProcessor) -->
+      <div style="text-align:center;margin:20px 0;">
+        <img src="cid:qrcode" alt="QR code de la réservation {{ reservation.numero }}" width="180" height="180" style="background:#ffffff;padding:8px;border-radius:8px;" />
+        <p style="color:#c8c8cc;font-size:13px;margin:8px 0 0;">Présentez ce QR code à l'accueil de la salle.</p>
+      </div>
+
       <p style="color:#8a8a90;font-size:13px;">Vous pouvez annuler votre réservation depuis votre espace « Mes réservations » tant que la séance n'a pas commencé.</p>
       <p style="color:#c8c8cc;">À bientôt sur FitBook !</p>
     </div>
