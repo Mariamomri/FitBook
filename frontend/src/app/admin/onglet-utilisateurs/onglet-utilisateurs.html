@@ -75,7 +75,7 @@
           } @else {
             <td>{{ adminService.libelleRole(adminService.roleDe(user)) }}</td>
             <td>
-              @if (user.isActive === false) {
+              @if (!estActif(user)) {
                 <span class="statut ko">Suspendu</span>
               } @else {
                 <span class="statut ok">Actif</span>

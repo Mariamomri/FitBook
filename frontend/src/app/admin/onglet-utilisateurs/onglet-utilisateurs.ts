@@ -35,7 +35,7 @@ export class OngletUtilisateurs implements OnInit {
       (u) =>
         (u.firstname + ' ' + u.lastname + ' ' + u.email).toLowerCase().includes(texte) &&
         (this.roleFiltre() === 'tous' || this.adminService.roleDe(u) === this.roleFiltre()) &&
-        (this.statutFiltre() === 'tous' || (this.statutFiltre() === 'actif') === (u.isActive !== false)),
+        (this.statutFiltre() === 'tous' || (this.statutFiltre() === 'actif') === this.estActif(u)),
     );
   });
 
@@ -58,7 +58,7 @@ export class OngletUtilisateurs implements OnInit {
   commencerModification(user: UserInterface): void {
     this.idEnModification.set(user.id!);
     this.nouveauRole.set(this.adminService.roleDe(user));
-    this.nouveauStatut.set(user.isActive === false ? 'suspendu' : 'actif');
+    this.nouveauStatut.set(this.estActif(user) ? 'actif' : 'suspendu');
   }
 
   enregistrerModification(user: UserInterface): void {
@@ -98,5 +98,10 @@ export class OngletUtilisateurs implements OnInit {
         this.aSupprimer.set(null);
       },
     });
+  }
+
+  // L'API renvoie « active » (getter isActive() de Symfony)
+  estActif(user: UserInterface): boolean {
+    return (user.active ?? user.isActive) !== false;
   }
 }
