@@ -183,7 +183,8 @@ export class GestionSeances implements OnInit {
     this.seanceService.modifierSeance(seance.id, { statut: 'annulee' }).subscribe({
       next: () => {
         this.seances.update((liste) => liste.map((s) => (s.id === seance.id ? { ...s, statut: 'annulee' } : s)));
-        this.succes.set('Séance annulée.');
+        // Symfony annule aussi les réservations et prévient chaque sportif par email
+        this.succes.set('Séance annulée. Les sportifs inscrits ont été prévenus par email.');
       },
       error: (err) => this.erreur.set(this.adminService.messageErreur(err)),
     });
