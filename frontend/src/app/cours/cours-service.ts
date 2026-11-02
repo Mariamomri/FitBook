@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { CoursInterface } from './cours-interface';
 import { environment } from '../../environments/environment';
 import { ActiviteService } from '../activites/activite-service';
+import { photoDuCours } from './cours-photos';
 
 @Injectable({
   providedIn: 'root',
@@ -39,9 +40,12 @@ export class CoursService {
     return this.http.delete<void>(`${this.api}/${id}`);
   }
 
-  // Photo du cours : celle envoyée par le coach, sinon la photo de son activité
-  photo(imageName: string | null | undefined, activiteNom: string | undefined): string {
-    return imageName ? environment.apiUrl + '/images/cours/' + imageName : this.activiteService.photo(activiteNom);
+  // Photo du cours : celle envoyée par le coach, sinon celle choisie pour ce cours, sinon la photo de son activité
+  photo(imageName: string | null | undefined, activiteNom: string | undefined, titre?: string): string {
+    if (imageName) {
+      return environment.apiUrl + '/images/cours/' + imageName;
+    }
+    return photoDuCours(titre) ?? this.activiteService.photo(activiteNom);
   }
 
   // Envoi d'une nouvelle photo pour le cours (coach du cours, gestionnaire ou admin)

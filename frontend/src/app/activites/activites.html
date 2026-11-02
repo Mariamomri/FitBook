@@ -78,7 +78,7 @@
 
     @for (seance of seancesFiltrees(); track seance.id) {
       <article class="ligne">
-        <img class="ligne-image" [src]="photoActivite(seance.activiteNom, seance.coursImage)" [alt]="seance.activiteNom" />
+        <img class="ligne-image" [src]="photoActivite(seance.activiteNom, seance.coursImage, seance.coursTitre)" [alt]="seance.activiteNom" />
 
         <div class="ligne-infos">
           <h3>

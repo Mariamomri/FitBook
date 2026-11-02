@@ -23,7 +23,7 @@ export class PhotosCours {
   liste = computed(() =>
     this.cours().map((c) => ({
       ...c,
-      photo: this.coursService.photo(this.nouvellesPhotos()[c.id!] ?? c.imageName, c.activiteNom),
+      photo: this.coursService.photo(this.nouvellesPhotos()[c.id!] ?? c.imageName, c.activiteNom, c.titre),
     })),
   );
 

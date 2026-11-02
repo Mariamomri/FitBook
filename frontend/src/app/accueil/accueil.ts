@@ -172,6 +172,6 @@ export class Accueil implements OnInit, OnDestroy {
 
   // Photo de la carte : photo du cours si le coach en a envoyé une, sinon celle de l'activité
   photoSeance(seance: SeanceInterface): string {
-    return this.coursService.photo(seance.coursImage, seance.activiteNom);
+    return this.coursService.photo(seance.coursImage, seance.activiteNom, seance.coursTitre);
   }
 }
