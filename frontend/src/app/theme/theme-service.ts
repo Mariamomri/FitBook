@@ -1,4 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
+
+// Mode du site : sombre ou clair
+export type Mode = 'dark' | 'light';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +17,9 @@ export class ThemeService {
     { nom: 'rouge', libelle: 'Rouge', code: '#ee5253' },
   ];
 
+  // Mode actuel (le bouton du header suit ce signal)
+  mode = signal<Mode>('dark');
+
   // Change la couleur de tout le site : <html data-accent="orange">
   // Les variables CSS de styles.css font le reste
   appliquer(couleur: string): void {
@@ -21,8 +27,26 @@ export class ThemeService {
     localStorage.setItem('couleur', couleur);
   }
 
-  // Au démarrage : reprend la couleur gardée dans le navigateur
+  // Change le mode : <html data-theme="light">
+  appliquerMode(mode: Mode): void {
+    this.poserMode(mode);
+    localStorage.setItem('mode', mode);
+  }
+
+  // Bouton lune / soleil
+  basculerMode(): void {
+    this.appliquerMode(this.mode() === 'dark' ? 'light' : 'dark');
+  }
+
+  // Au démarrage : on remet la couleur et le mode gardés dans le navigateur
   restaurer(): void {
     this.appliquer(localStorage.getItem('couleur') ?? 'vert');
+    this.poserMode(localStorage.getItem('mode') === 'light' ? 'light' : 'dark');
+  }
+
+  // Met le mode sur la page sans le sauvegarder
+  private poserMode(mode: Mode): void {
+    document.documentElement.dataset['theme'] = mode;
+    this.mode.set(mode);
   }
 }

@@ -7,8 +7,11 @@
   width: 100vw;
   margin: -2rem 0 0 calc(50% - 50vw);
 }
+
 @media (min-width: 900px) {
-  .auth { grid-template-columns: 1fr 1fr; }
+  .auth {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 /* Panneau de gauche : dégradé sombre + cercle vert */
@@ -19,8 +22,9 @@
   min-height: 260px;
   padding: 2.5rem;
   overflow: hidden;
-  background: linear-gradient(160deg, #2a2a30, #0f0f11 70%);
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.9) 100%), url('/img/boxing1.jpg') center 40% / cover;
 }
+
 .cercle {
   position: absolute;
   top: -80px;
@@ -30,17 +34,34 @@
   border-radius: 50%;
   background: var(--accent);
 }
-.auth-texte { position: relative; }
-.auth-texte h1 { font-size: 3.5rem; }
-.vert { color: var(--accent); }
+
+.auth-texte {
+  position: relative;
+}
+
+.auth-texte h1 {
+  font-size: 3.5rem;
+}
+
+.vert {
+  color: var(--accent-text);
+}
 
 /* Formulaire de droite */
 .auth-form {
   max-width: 460px;
   padding: 4rem 2.5rem;
 }
-.auth-form h1 { font-size: 3rem; margin-bottom: 0.5rem; }
-.auth-form a { font-weight: 600; text-decoration: none; }
+
+.auth-form h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.auth-form a {
+  font-weight: 600;
+  text-decoration: none;
+}
 
 /* Lien « Mot de passe oublié ? » sous le champ */
 .oublie {
@@ -48,5 +69,5 @@
   margin-top: 0.4rem;
   text-align: right;
   font-size: 0.8rem;
-  color: var(--accent);
-}
+  color: var(--accent-text);
+}

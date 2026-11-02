@@ -15,7 +15,7 @@
   @apply mt-2 mb-0 text-sm;
 }
 .vert {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 
 /* Quatre cartes de chiffres */
@@ -29,7 +29,7 @@
   @apply flex justify-between text-xs text-gris;
 }
 .chiffre span i {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 .chiffre strong {
   @apply font-titre text-4xl font-black italic;
@@ -80,5 +80,5 @@ td {
   @apply cursor-pointer rounded-md border border-danger bg-transparent px-3 py-1 text-xs font-bold text-danger uppercase;
 }
 .voir-tout {
-  @apply mt-3 inline-block text-sm font-semibold text-accent no-underline;
+  @apply mt-3 inline-block text-sm font-semibold text-accent-texte no-underline;
 }

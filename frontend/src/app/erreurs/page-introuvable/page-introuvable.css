@@ -9,7 +9,7 @@
   @apply w-full max-w-md rounded-[10px] border border-bordure bg-carte p-8 text-center;
 }
 .code {
-  @apply m-0 font-titre text-8xl font-black italic leading-none text-accent;
+  @apply m-0 font-titre text-8xl font-black italic leading-none text-accent-texte;
 }
 .carte h1 {
   @apply mt-3 mb-2 text-2xl normal-case not-italic;

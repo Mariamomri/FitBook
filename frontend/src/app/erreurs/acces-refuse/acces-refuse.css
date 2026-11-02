@@ -9,7 +9,7 @@
   @apply w-full max-w-md rounded-[10px] border border-bordure bg-carte p-8 text-center;
 }
 .cadenas {
-  @apply mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-nav text-xl text-accent;
+  @apply mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-nav text-xl text-accent-texte;
 }
 .carte h1 {
   @apply mt-4 mb-2 text-2xl normal-case not-italic;

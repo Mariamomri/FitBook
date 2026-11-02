@@ -19,7 +19,7 @@
 }
 .fil span,
 .vert {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 .points {
   @apply absolute top-0 right-0 h-full w-1/3 opacity-60;
@@ -45,7 +45,7 @@
   background: url('/img/barbell.jpg') center / cover;
 }
 .avatar {
-  @apply -mt-12 mb-3 flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 border-accent bg-nav font-titre text-3xl font-black text-accent italic;
+  @apply -mt-12 mb-3 flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 border-accent bg-nav font-titre text-3xl font-black text-accent-texte italic;
 }
 .avatar img,
 .mini-avatar img {
@@ -69,7 +69,7 @@
   @apply bg-nav;
 }
 .menu a.actif {
-  @apply border-l-4 border-accent bg-nav font-semibold text-accent;
+  @apply border-l-4 border-accent bg-nav font-semibold text-accent-texte;
 }
 .menu span {
   @apply text-gris;
@@ -87,7 +87,7 @@
   @apply mb-4 flex items-center gap-4;
 }
 .mini-avatar {
-  @apply flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-accent bg-nav font-titre font-black text-accent italic;
+  @apply flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-accent bg-nav font-titre font-black text-accent-texte italic;
 }
 
 .deux-colonnes {

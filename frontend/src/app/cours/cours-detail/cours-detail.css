@@ -18,7 +18,7 @@
 }
 
 .fil span {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* Étiquette « Niveau débutant » */
@@ -39,7 +39,7 @@
 }
 
 .vert {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .sous-titre {
@@ -84,7 +84,7 @@
 }
 
 .carte-coach a {
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 0.8rem;
   font-weight: 600;
   text-decoration: none;
@@ -203,7 +203,7 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 700;
   font-size: 0.8rem;
   cursor: pointer;

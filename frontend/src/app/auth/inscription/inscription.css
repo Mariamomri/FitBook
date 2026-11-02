@@ -7,31 +7,67 @@
   width: 100vw;
   margin: -2rem 0 0 calc(50% - 50vw);
 }
+
 @media (min-width: 900px) {
-  .auth { grid-template-columns: 40% 1fr; }
+  .auth {
+    grid-template-columns: 40% 1fr;
+  }
 }
 
 /* Panneau de gauche : dégradé sombre + points verts */
 .auth-visuel {
   position: relative;
-  align-self: start;
+  /* le panneau prend toute la hauteur du formulaire, comme sur la maquette */
+  align-self: stretch;
   display: flex;
   align-items: flex-end;
-  min-height: 620px;
+  min-height: 340px;
   padding: 3rem;
   overflow: hidden;
-  background: linear-gradient(160deg, #3a3a40, #0f0f11 75%);
+  background: url('/img/strength.jpg') right 15% / cover;
 }
+
+@media (min-width: 900px) {
+  .auth-visuel {
+    min-height: 620px;
+  }
+}
+
+/* Dégradé sombre en bas pour que le texte reste lisible */
+.auth-visuel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(8, 8, 9, 0.9) 0%, rgba(8, 8, 9, 0.35) 45%, rgba(8, 8, 9, 0.1) 100%);
+}
+
+/* Grille de points verts en haut à droite, qui s'estompe vers le bas */
 .points {
   position: absolute;
   top: 0;
   right: 0;
-  width: 45%;
-  height: 160px;
-  background-image: radial-gradient(var(--accent) 2px, transparent 2px);
-  background-size: 12px 12px;
-  opacity: 0.8;
+  z-index: 1;
+  width: 60%;
+  height: 300px;
+  background-image: radial-gradient(var(--accent) 3px, transparent 3px);
+  background-size: 16px 16px;
+  opacity: 0.85;
+  -webkit-mask-image: linear-gradient(200deg, #000 20%, transparent 75%);
+  mask-image: linear-gradient(200deg, #000 20%, transparent 75%);
 }
+
+/* Petite étoile blanche à 4 branches */
+.etoile {
+  position: absolute;
+  top: 18%;
+  left: 55%;
+  z-index: 1;
+  width: 26px;
+  height: 26px;
+  background: #ffffff;
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+}
+
 .rayures {
   display: block;
   width: 110px;
@@ -39,23 +75,58 @@
   margin-bottom: 1rem;
   background: repeating-linear-gradient(-60deg, var(--accent) 0 6px, transparent 6px 14px);
 }
-.auth-texte { position: relative; }
-.auth-texte h1 { font-size: 3.8rem; margin-bottom: 1rem; }
-.auth-texte p { margin: 0; font-size: 0.85rem; }
-.vert { color: var(--accent); }
+
+.auth-texte {
+  position: relative;
+  z-index: 2;
+}
+
+.auth-texte h1 {
+  font-size: 3.8rem;
+  margin-bottom: 1rem;
+}
+
+.auth-texte p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.vert {
+  color: var(--accent-text);
+}
 
 /* Formulaire de droite */
 .auth-form {
   max-width: 420px;
   padding: 3rem 1rem 2rem;
 }
-.auth-form h1 { font-size: 3rem; margin-bottom: 0.4rem; }
-.auth-form a { font-weight: 600; text-decoration: none; }
-.petit { font-size: 0.8rem; }
-.mini { font-size: 0.7rem; margin: 0.3rem 0 0; }
+
+.auth-form h1 {
+  font-size: 3rem;
+  margin-bottom: 0.4rem;
+}
+
+.auth-form a {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.petit {
+  font-size: 0.8rem;
+}
+
+.mini {
+  font-size: 0.7rem;
+  margin: 0.3rem 0 0;
+}
 
 /* Photo de profil : rond + bouton */
-.photo { display: flex; align-items: center; gap: 1rem; }
+.photo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .photo-rond {
   display: flex;
   align-items: center;
@@ -65,11 +136,17 @@
   height: 56px;
   border: 2px solid var(--accent);
   border-radius: 50%;
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 1.5rem;
   overflow: hidden;
 }
-.photo-rond img { width: 100%; height: 100%; object-fit: cover; }
+
+.photo-rond img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .petit-btn {
   margin: 0;
   padding: 0.5rem 1rem;
@@ -86,8 +163,14 @@
 }
 
 /* Champ mot de passe avec le bouton œil */
-.champ-mdp { position: relative; }
-.champ-mdp input { padding-right: 2.8rem; }
+.champ-mdp {
+  position: relative;
+}
+
+.champ-mdp input {
+  padding-right: 2.8rem;
+}
+
 .oeil {
   position: absolute;
   top: 50%;
@@ -106,11 +189,15 @@
   gap: 0.4rem;
   margin-top: 0.5rem;
 }
+
 .force span {
   height: 3px;
   background: var(--border);
 }
-.force span.rempli { background: var(--accent); }
+
+.force span.rempli {
+  background: var(--accent);
+}
 
 /* Choix de la couleur du site : 3 par ligne */
 .couleurs {
@@ -118,6 +205,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
 }
+
 .couleur {
   display: flex;
   align-items: center;
@@ -130,8 +218,15 @@
   font-size: 0.65rem;
   cursor: pointer;
 }
-.couleur input { display: none; }
-.couleur.choisie { border-color: var(--accent); }
+
+.couleur input {
+  display: none;
+}
+
+.couleur.choisie {
+  border-color: var(--accent);
+}
+
 .pastille {
   display: flex;
   align-items: center;
@@ -155,7 +250,10 @@
   font-size: 0.8rem;
 }
 
-.centre { text-align: center; margin-top: 1rem; }
+.centre {
+  text-align: center;
+  margin-top: 1rem;
+}
 
 /* Encadré d'information */
 .info {
@@ -174,9 +272,9 @@
 /* Flèches décoratives en bas à droite */
 .fleches {
   text-align: right;
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 1.6rem;
   font-weight: 900;
   letter-spacing: -0.15em;
   margin: 1rem 0 0;
-}
+}

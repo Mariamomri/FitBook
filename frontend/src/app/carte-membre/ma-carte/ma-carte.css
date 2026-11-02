@@ -14,7 +14,7 @@
   @apply mt-2 mb-0 text-sm;
 }
 .vert {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 .bloc-carte {
   @apply mb-5 rounded-[10px] border border-bordure bg-carte p-6;
@@ -54,7 +54,7 @@
   @apply rounded-full bg-danger/20 px-3 py-1 text-xs font-bold text-danger;
 }
 .statut.active {
-  @apply bg-accent/20 text-accent;
+  @apply bg-accent/20 text-accent-texte;
 }
 .numero {
   @apply relative m-0 font-titre text-3xl font-black tracking-widest;
@@ -71,7 +71,7 @@
   @apply py-6 text-center;
 }
 .vide i {
-  @apply mb-3 text-5xl text-accent;
+  @apply mb-3 text-5xl text-accent-texte;
 }
 .vide h2 {
   @apply mt-0 mb-2 text-2xl;
