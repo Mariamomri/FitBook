@@ -60,7 +60,7 @@
 }
 
 .vert {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* Formulaire de droite */
@@ -104,7 +104,7 @@
   height: 56px;
   border: 2px solid var(--accent);
   border-radius: 50%;
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 1.5rem;
   overflow: hidden;
 }
@@ -240,9 +240,9 @@
 /* Flèches décoratives en bas à droite */
 .fleches {
   text-align: right;
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 1.6rem;
   font-weight: 900;
   letter-spacing: -0.15em;
   margin: 1rem 0 0;
-}
+}

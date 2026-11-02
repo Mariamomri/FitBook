@@ -26,5 +26,5 @@
   @apply w-24 capitalize;
 }
 .creneau span {
-  @apply font-semibold text-accent;
+  @apply font-semibold text-accent-texte;
 }
