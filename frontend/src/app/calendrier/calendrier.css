@@ -18,7 +18,7 @@
 }
 
 .vert {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 
 /* Bloc du calendrier */
@@ -40,7 +40,7 @@
 }
 
 .fleche:hover {
-  @apply border-accent text-accent;
+  @apply border-accent text-accent-texte;
 }
 
 /* Grille de 7 colonnes (une par jour de la semaine) */
@@ -71,7 +71,7 @@
 }
 
 .aujourdhui .numero {
-  @apply font-bold text-accent;
+  @apply font-bold text-accent-texte;
 }
 
 /* Séance réservée : pastille de la couleur d'accent */

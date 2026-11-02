@@ -46,7 +46,7 @@ td {
   @apply rounded-full px-2 py-0.5 text-xs font-bold;
 }
 .effectuee {
-  @apply bg-accent/15 text-accent;
+  @apply bg-accent/15 text-accent-texte;
 }
 .annulee {
   @apply bg-danger/15 text-danger;
@@ -80,7 +80,7 @@ td {
   @apply cursor-pointer rounded-md border border-bordure bg-nav px-3 py-2 text-left text-sm text-texte;
 }
 .cibles button.choisie {
-  @apply border-accent text-accent;
+  @apply border-accent text-accent-texte;
 }
 .cibles button:disabled {
   @apply cursor-not-allowed opacity-50;

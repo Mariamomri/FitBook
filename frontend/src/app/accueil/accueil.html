@@ -70,15 +70,15 @@
 <section class="section">
   <div class="section-titre">
     <div>
-      <p class="eyebrow">— Cours & séances</p>
-      <h2>Activités à venir</h2>
+      <p class="eyebrow" appReveal="gauche">— Cours & séances</p>
+      <h2 appReveal="texte">Activités à venir</h2>
     </div>
-    <a routerLink="/activites">Voir tout →</a>
+    <a routerLink="/activites" appReveal="droite">Voir tout →</a>
   </div>
 
   <div class="grille-4">
-    @for (seance of prochainesSeances(); track seance.id) {
-      <article class="carte">
+    @for (seance of prochainesSeances(); track seance.id; let i = $index) {
+      <article class="carte" appReveal="droite" [revealDelay]="i * 0.12">
         <div class="carte-image" [style.background-image]="'linear-gradient(0deg, rgba(8, 8, 9, 0.6), rgba(8, 8, 9, 0)), url(' + photoSeance(seance) + ')'">
           <span class="tag">{{ seance.activiteNom }}</span>
           <span class="prix">{{ seance.prix }}€</span>
@@ -104,16 +104,17 @@
 <section class="section">
   <div class="section-titre">
     <div>
-      <p class="eyebrow">— Où s'entraîner</p>
-      <h2>Salles populaires</h2>
+      <p class="eyebrow" appReveal="gauche">— Où s'entraîner</p>
+      <h2 appReveal="texte">Salles populaires</h2>
     </div>
-    <a routerLink="/salles">Voir toutes les salles →</a>
+    <a routerLink="/salles" appReveal="droite">Voir toutes les salles →</a>
   </div>
 
   @if (salleVedette(); as vedette) {
     <div class="salles">
       <article
         class="salle-vedette"
+        appReveal="gauche"
         [style.background-image]="'linear-gradient(0deg, #080809 15%, rgba(8, 8, 9, 0.2)), url(' + salleService.photo(vedette) + ')'"
       >
         <span class="tag">★ Top de la semaine</span>
@@ -123,8 +124,8 @@
       </article>
 
       <div class="salles-petites">
-        @for (salle of autresSalles(); track salle.id) {
-          <a class="salle-petite" [routerLink]="['/salles', salle.id]">
+        @for (salle of autresSalles(); track salle.id; let i = $index) {
+          <a class="salle-petite" appReveal="droite" [revealDelay]="0.2 + i * 0.15" [routerLink]="['/salles', salle.id]">
             <img [src]="salleService.photo(salle)" [alt]="salle.nom" />
             <div>
               <h3>{{ salle.nom }}</h3>
@@ -145,7 +146,7 @@
 <!-- Coachs -->
 <section class="section coachs">
   <!-- Visuel : rond vert, points et coach détouré qui dépasse du rond -->
-  <div class="coachs-visuel">
+  <div class="coachs-visuel" appReveal="gauche">
     <span class="coachs-points"></span>
     <span class="coachs-rond"></span>
     <img class="coachs-photo" src="img/coach-detoure.webp" alt="Coach FitBook" />
@@ -157,29 +158,29 @@
   </div>
 
   <div>
-    <p class="eyebrow">— Nos coachs</p>
-    <h2>Des coachs qui<br />vous poussent <span class="vert">plus loin.</span></h2>
-    <p class="muted">
+    <p class="eyebrow" appReveal="gauche">— Nos coachs</p>
+    <h2 appReveal="texte">Des coachs qui<br />vous poussent <span class="vert">plus loin.</span></h2>
+    <p class="muted" appReveal [revealDelay]="0.3">
       Des professionnels certifiés, en salle ou en extérieur. Choisissez votre coach selon votre
       objectif : force, cardio, perte de poids ou remise en forme.
     </p>
-    <ul class="coachs-liste">
+    <ul class="coachs-liste" appReveal="liste" [revealDelay]="0.4">
       <li><i class="fa-solid fa-check"></i> Coachs diplômés et certifiés</li>
       <li><i class="fa-solid fa-check"></i> Séances en petit groupe</li>
       <li><i class="fa-solid fa-check"></i> Annulation gratuite avant la séance</li>
     </ul>
-    <a class="btn" routerLink="/coach">Trouver mon coach →</a>
+    <a class="btn" routerLink="/coach" appReveal="zoom" [revealDelay]="0.6">Trouver mon coach →</a>
   </div>
 </section>
 
 <!-- Avis des sportifs -->
 @if (derniersAvis().length > 0) {
   <section class="section">
-    <p class="eyebrow">— Avis</p>
-    <h2>Ce que disent nos sportifs</h2>
+    <p class="eyebrow" appReveal="gauche">— Avis</p>
+    <h2 appReveal="texte">Ce que disent nos sportifs</h2>
     <div class="grille-avis">
-      @for (unAvis of derniersAvis(); track unAvis.id) {
-        <article class="carte-avis">
+      @for (unAvis of derniersAvis(); track unAvis.id; let i = $index) {
+        <article class="carte-avis" [appReveal]="i === 0 ? 'gauche' : i === 1 ? 'haut' : 'droite'" [revealDelay]="i * 0.1">
           <div class="avis-haut">
             <span class="avatar"><i class="fa-solid fa-user"></i></span>
             <div>
@@ -197,12 +198,12 @@
 }
 
 <!-- Appel à l'action -->
-<section class="cta">
+<section class="cta" appReveal="zoom">
   <span class="cta-points"></span>
   <span class="cta-fleches">››››</span>
   <div class="cta-texte">
     <span class="cta-rayures"></span>
-    <h2>Prêt à transpirer ?</h2>
+    <h2 appReveal="texte" [revealDelay]="0.3">Prêt à transpirer ?</h2>
     <p>Créez votre compte gratuit et réservez votre première séance dès aujourd'hui.</p>
   </div>
   @if (authService.connecte()) {

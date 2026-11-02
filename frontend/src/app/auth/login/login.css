@@ -44,7 +44,7 @@
 }
 
 .vert {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* Formulaire de droite */
@@ -69,5 +69,5 @@
   margin-top: 0.4rem;
   text-align: right;
   font-size: 0.8rem;
-  color: var(--accent);
-}
+  color: var(--accent-text);
+}
