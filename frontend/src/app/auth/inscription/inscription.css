@@ -17,24 +17,55 @@
 /* Panneau de gauche : dégradé sombre + points verts */
 .auth-visuel {
   position: relative;
-  align-self: start;
+  /* le panneau prend toute la hauteur du formulaire, comme sur la maquette */
+  align-self: stretch;
   display: flex;
   align-items: flex-end;
-  min-height: 620px;
+  min-height: 340px;
   padding: 3rem;
   overflow: hidden;
-  background: url('/img/strength.jpg') center 40% / cover;
+  background: url('/img/strength.jpg') right 15% / cover;
 }
 
+@media (min-width: 900px) {
+  .auth-visuel {
+    min-height: 620px;
+  }
+}
+
+/* Dégradé sombre en bas pour que le texte reste lisible */
+.auth-visuel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(8, 8, 9, 0.9) 0%, rgba(8, 8, 9, 0.35) 45%, rgba(8, 8, 9, 0.1) 100%);
+}
+
+/* Grille de points verts en haut à droite, qui s'estompe vers le bas */
 .points {
   position: absolute;
   top: 0;
   right: 0;
-  width: 45%;
-  height: 160px;
-  background-image: radial-gradient(var(--accent) 2px, transparent 2px);
-  background-size: 12px 12px;
-  opacity: 0.8;
+  z-index: 1;
+  width: 60%;
+  height: 300px;
+  background-image: radial-gradient(var(--accent) 3px, transparent 3px);
+  background-size: 16px 16px;
+  opacity: 0.85;
+  -webkit-mask-image: linear-gradient(200deg, #000 20%, transparent 75%);
+  mask-image: linear-gradient(200deg, #000 20%, transparent 75%);
+}
+
+/* Petite étoile blanche à 4 branches */
+.etoile {
+  position: absolute;
+  top: 18%;
+  left: 55%;
+  z-index: 1;
+  width: 26px;
+  height: 26px;
+  background: #ffffff;
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
 }
 
 .rayures {
@@ -47,6 +78,7 @@
 
 .auth-texte {
   position: relative;
+  z-index: 2;
 }
 
 .auth-texte h1 {
