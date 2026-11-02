@@ -7,8 +7,11 @@
   width: 100vw;
   margin: -2rem 0 0 calc(50% - 50vw);
 }
+
 @media (min-width: 900px) {
-  .auth { grid-template-columns: 40% 1fr; }
+  .auth {
+    grid-template-columns: 40% 1fr;
+  }
 }
 
 /* Panneau de gauche : dégradé sombre + points verts */
@@ -20,8 +23,9 @@
   min-height: 620px;
   padding: 3rem;
   overflow: hidden;
-  background: linear-gradient(160deg, #3a3a40, #0f0f11 75%);
+  background: url('/img/strength.jpg') center 40% / cover;
 }
+
 .points {
   position: absolute;
   top: 0;
@@ -32,6 +36,7 @@
   background-size: 12px 12px;
   opacity: 0.8;
 }
+
 .rayures {
   display: block;
   width: 110px;
@@ -39,23 +44,57 @@
   margin-bottom: 1rem;
   background: repeating-linear-gradient(-60deg, var(--accent) 0 6px, transparent 6px 14px);
 }
-.auth-texte { position: relative; }
-.auth-texte h1 { font-size: 3.8rem; margin-bottom: 1rem; }
-.auth-texte p { margin: 0; font-size: 0.85rem; }
-.vert { color: var(--accent); }
+
+.auth-texte {
+  position: relative;
+}
+
+.auth-texte h1 {
+  font-size: 3.8rem;
+  margin-bottom: 1rem;
+}
+
+.auth-texte p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.vert {
+  color: var(--accent);
+}
 
 /* Formulaire de droite */
 .auth-form {
   max-width: 420px;
   padding: 3rem 1rem 2rem;
 }
-.auth-form h1 { font-size: 3rem; margin-bottom: 0.4rem; }
-.auth-form a { font-weight: 600; text-decoration: none; }
-.petit { font-size: 0.8rem; }
-.mini { font-size: 0.7rem; margin: 0.3rem 0 0; }
+
+.auth-form h1 {
+  font-size: 3rem;
+  margin-bottom: 0.4rem;
+}
+
+.auth-form a {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.petit {
+  font-size: 0.8rem;
+}
+
+.mini {
+  font-size: 0.7rem;
+  margin: 0.3rem 0 0;
+}
 
 /* Photo de profil : rond + bouton */
-.photo { display: flex; align-items: center; gap: 1rem; }
+.photo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .photo-rond {
   display: flex;
   align-items: center;
@@ -69,7 +108,13 @@
   font-size: 1.5rem;
   overflow: hidden;
 }
-.photo-rond img { width: 100%; height: 100%; object-fit: cover; }
+
+.photo-rond img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .petit-btn {
   margin: 0;
   padding: 0.5rem 1rem;
@@ -86,8 +131,14 @@
 }
 
 /* Champ mot de passe avec le bouton œil */
-.champ-mdp { position: relative; }
-.champ-mdp input { padding-right: 2.8rem; }
+.champ-mdp {
+  position: relative;
+}
+
+.champ-mdp input {
+  padding-right: 2.8rem;
+}
+
 .oeil {
   position: absolute;
   top: 50%;
@@ -106,11 +157,15 @@
   gap: 0.4rem;
   margin-top: 0.5rem;
 }
+
 .force span {
   height: 3px;
   background: var(--border);
 }
-.force span.rempli { background: var(--accent); }
+
+.force span.rempli {
+  background: var(--accent);
+}
 
 /* Choix de la couleur du site : 3 par ligne */
 .couleurs {
@@ -118,6 +173,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
 }
+
 .couleur {
   display: flex;
   align-items: center;
@@ -130,8 +186,15 @@
   font-size: 0.65rem;
   cursor: pointer;
 }
-.couleur input { display: none; }
-.couleur.choisie { border-color: var(--accent); }
+
+.couleur input {
+  display: none;
+}
+
+.couleur.choisie {
+  border-color: var(--accent);
+}
+
 .pastille {
   display: flex;
   align-items: center;
@@ -155,7 +218,10 @@
   font-size: 0.8rem;
 }
 
-.centre { text-align: center; margin-top: 1rem; }
+.centre {
+  text-align: center;
+  margin-top: 1rem;
+}
 
 /* Encadré d'information */
 .info {
