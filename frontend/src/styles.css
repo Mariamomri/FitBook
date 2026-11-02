@@ -1,1 +1,308 @@
-/* You can add global styles to this file, and also import other style files */
+/* Tailwind sans le reset (preflight) : le CSS existant du site ne change pas */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* Couleurs du site utilisables avec @apply (ex. bg-carte, text-accent) */
+@theme inline {
+  --color-accent: var(--accent);
+  --color-sur-accent: var(--on-accent);
+  --color-fond: var(--bg);
+  --color-nav: var(--nav);
+  --color-carte: var(--card);
+  --color-bordure: var(--border);
+  --color-texte: var(--text);
+  --color-gris: var(--muted);
+  --color-danger: var(--danger);
+  --font-titre: var(--font-title);
+  --font-corps: var(--font-body);
+}
+
+/* Styles globaux de FitBook : variables de couleur, polices, boutons.
+   Chaque composant a ensuite son propre fichier CSS. */
+
+/* Variables*/
+:root {
+  --bg: #0f0f11;
+  /* fond des pages */
+  --nav: #080809;
+  /* fond de la barre de navigation */
+  --card: #151518;
+  /* fond des cartes */
+  --border: #24242a;
+  /* bordures */
+  --text: #ffffff;
+  /* texte principal */
+  --muted: #a6a6af;
+  /* texte secondaire */
+  --accent: #a6ff00;
+  /* couleur d'accent (vert par défaut) */
+  --on-accent: #080809;
+  /* texte posé sur la couleur d'accent */
+  --danger: #ff5c5c;
+  --font-title: 'Barlow Condensed', Impact, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+/* Couleur d'accent choisie par l'utilisateur
+   Angular met data-accent="..." sur <html> : seule la variable change. */
+:root[data-accent='orange'] {
+  --accent: #ff6b00;
+}
+
+:root[data-accent='jaune'] {
+  --accent: #ffd600;
+}
+
+:root[data-accent='bleu'] {
+  --accent: #3DA5FF;
+  --on-accent: #ffffff;
+}
+
+:root[data-accent='rose'] {
+  --accent: #ff1493;
+  --on-accent: #ffffff;
+}
+
+:root[data-accent='rouge'] {
+  --accent: #ee5253;
+  --on-accent: #ffffff;
+}
+
+/* Thème clair (bouton soleil/lune) */
+:root[data-theme='light'] {
+  --bg: #f5f5f5;
+  --nav: #ffffff;
+  --card: #ffffff;
+  --border: #dcdcd4;
+  --text: #0b0b0d;
+  --muted: #5f5f68;
+}
+
+/* Base */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  overflow-x: hidden;
+  /* évite une barre de défilement horizontale (pages en pleine largeur) */
+}
+
+a {
+  color: var(--accent);
+}
+
+/* Titres : Barlow Condensed Black Italic en majuscules */
+h1,
+h2,
+h3 {
+  font-family: var(--font-title);
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  margin: 0 0 1rem;
+}
+
+h1 {
+  font-size: 3.5rem;
+}
+
+h2 {
+  font-size: 2.2rem;
+}
+
+h3 {
+  font-size: 1.4rem;
+}
+
+/* Petit texte vert au-dessus d'un titre (ex. « COURS & SÉANCES ») */
+.eyebrow {
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* Boutons (utilisés partout) */
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--on-accent);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 0.75rem 1.4rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  filter: brightness(0.9);
+}
+
+/* Bouton contour (ex. « Connexion ») */
+.btn-outline {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border);
+}
+
+/* Messages de succès / d'erreur */
+.succes {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.erreur {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+/* Contenu centré des pages */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Formulaires (utilisés sur toutes les pages) */
+label {
+  display: block;
+  margin: 1.1rem 0 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='tel'],
+input[type='number'],
+input[type='date'],
+input[type='time'],
+input[type='search'],
+select,
+textarea {
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color-scheme: dark;
+  /* calendrier et horloge du navigateur en sombre */
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  accent-color: var(--accent);
+}
+
+/* Petit message rouge sous un champ */
+.champ-erreur {
+  color: var(--danger);
+  font-size: 0.75rem;
+  margin: 0.3rem 0 0;
+}
+
+/* Encadrés d'alerte (erreur en rouge, succès en vert) */
+.alerte,
+.alerte-ok {
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin: 1rem 0;
+}
+
+.alerte {
+  color: var(--danger);
+  background: rgba(255, 92, 92, 0.1);
+  border: 1px solid var(--danger);
+}
+
+.alerte-ok {
+  color: var(--accent);
+  background: rgba(166, 255, 0, 0.08);
+  border: 1px solid var(--accent);
+}
+
+/* Petite étiquette verte (ex. « ESPACE MEMBRE ») */
+.etiquette {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+/* Bouton sur toute la largeur */
+.bloc {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+/* Espace membre : menu à gauche, contenu à droite */
+.espace {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1000px) {
+  .espace {
+    grid-template-columns: 220px 1fr;
+  }
+}
+
+.espace-contenu {
+  min-width: 0;
+}
+
+/* Tableaux : défilement horizontal sur petit écran au lieu de déborder de la page */
+.tableau {
+  overflow-x: auto;
+}
+
+/* Mobile : titres plus petits pour qu'ils tiennent dans l'écran
+   (!important car chaque page donne une grande taille à son titre) */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2.6rem !important;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+}

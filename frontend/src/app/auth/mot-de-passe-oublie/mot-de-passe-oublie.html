@@ -1,0 +1,42 @@
+<section class="fond">
+  <span class="points"></span>
+  <span class="rayures"></span>
+
+  <article class="carte">
+    <h1>Mot de passe<br /><span class="vert">oublié ?</span></h1>
+
+    @if (succes()) {
+      <!-- Demande envoyée : on remplace le formulaire par un message bien visible -->
+      <div class="envoye">
+        <i class="fa-solid fa-envelope-circle-check"></i>
+        <p><strong>Email envoyé !</strong></p>
+        <p>{{ succes() }}</p>
+        <p class="muted">Ouvrez votre boîte mail et cliquez sur le lien pour choisir un nouveau mot de passe. Pensez à vérifier vos spams.</p>
+      </div>
+      <a class="btn bloc" routerLink="/login">Retour à la connexion →</a>
+      <button type="button" class="retour lien" (click)="succes.set('')">Je n'ai rien reçu, recommencer</button>
+    } @else {
+      <p class="muted">Entrez votre email : vous recevrez un lien pour choisir un nouveau mot de passe.</p>
+
+      <form [formGroup]="oublieForm" (ngSubmit)="envoyer()">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" placeholder="mariam@exemple.be" />
+        @if (oublieForm.controls.email.touched && oublieForm.controls.email.invalid) {
+          <p class="champ-erreur">⚠ Format d'email invalide</p>
+        }
+
+        <!-- Message d'erreur juste au-dessus du bouton -->
+        @if (erreur()) {
+          <p class="alerte">{{ erreur() }}</p>
+        }
+
+        <button type="submit" class="btn bloc" [disabled]="envoiEnCours()">
+          {{ envoiEnCours() ? 'Envoi en cours...' : 'Envoyer le lien →' }}
+        </button>
+      </form>
+
+      <a class="retour" routerLink="/login">← Retour à la connexion</a>
+      <p class="info"><i class="fa-solid fa-envelope"></i> Si un compte existe, un lien valable 1 h sera envoyé.</p>
+    }
+  </article>
+</section>

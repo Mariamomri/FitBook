@@ -1,0 +1,128 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../styles.css";
+
+/* Bandeau du haut */
+.bandeau {
+  @apply relative px-8 pt-8 pb-16;
+  /* Dégradé sombre à gauche pour lire le titre, photo de salle à droite */
+  background:
+    linear-gradient(90deg, #0f0f11 35%, rgba(15, 15, 17, 0.4)),
+    url('/img/boxing1.jpg') center / cover;
+}
+.bandeau h1 {
+  @apply mb-3 text-6xl leading-none;
+}
+.bandeau p {
+  @apply m-0 text-sm;
+}
+.fil {
+  @apply mb-3 text-xs!;
+}
+.fil a {
+  @apply text-gris no-underline;
+}
+.fil span,
+.vert {
+  @apply text-accent;
+}
+
+/* Barre de recherche qui chevauche le bas du bandeau */
+.recherche {
+  @apply relative mx-8 -mt-10 mb-8 grid grid-cols-1 gap-4 rounded-md border border-bordure bg-nav p-4 md:grid-cols-[2fr_1fr_1fr_1fr];
+}
+.recherche label {
+  @apply mb-1 text-[0.6rem];
+}
+.recherche input,
+.recherche select {
+  @apply w-full rounded-md border border-bordure bg-carte px-3 py-2 text-texte;
+}
+.recherche input:focus {
+  @apply border-accent outline-none;
+}
+
+/* Deux colonnes : liste + carte */
+.mise-en-page {
+  @apply grid grid-cols-1 gap-6 lg:grid-cols-2;
+}
+
+.compteur {
+  @apply mt-0 mb-4 text-sm;
+}
+
+/* Une ligne par salle */
+.ligne {
+  @apply mb-3 grid cursor-pointer grid-cols-[110px_1fr_auto] gap-4 overflow-hidden rounded-[10px] border border-bordure bg-carte transition-colors;
+}
+.ligne:hover,
+.ligne.active {
+  @apply border-accent;
+}
+
+/* Photo de la salle */
+.photo {
+  @apply relative min-h-24 bg-nav;
+}
+.photo img {
+  @apply absolute inset-0 h-full w-full object-cover;
+}
+.numero {
+  @apply absolute top-2 left-2 flex h-6 w-6 items-center justify-center rounded-full border border-accent bg-nav text-xs font-bold text-accent;
+}
+.active .numero {
+  @apply bg-accent text-sur-accent;
+}
+
+.infos {
+  @apply py-3;
+}
+.infos h3 {
+  @apply mb-1;
+}
+.infos p {
+  @apply my-0.5 text-xs;
+}
+.equipements {
+  @apply italic;
+}
+.ouvert {
+  @apply mt-1 inline-block rounded bg-nav px-2 py-0.5 text-[0.6rem] font-bold uppercase text-accent;
+}
+
+/* Bouton en bas à droite */
+.droite {
+  @apply flex flex-col items-end justify-between gap-2 p-3;
+}
+.droite .btn {
+  @apply px-3 py-2 text-xs;
+}
+
+/* Carte collée en haut pendant le défilement */
+.carte {
+  @apply sticky top-24 self-start overflow-hidden rounded-[10px] border border-bordure bg-carte;
+}
+.legende {
+  @apply m-0 px-4 py-3 text-sm font-semibold;
+}
+.carte iframe {
+  @apply block h-[520px] w-full border-0;
+}
+
+/* Bouton cœur : vide = pas favori, plein (couleur d'accent) = favori */
+.coeur {
+  @apply cursor-pointer border-0 bg-transparent text-2xl leading-none text-gris;
+}
+.coeur.actif {
+  @apply text-accent;
+}
+
+/* Recherche par distance */
+.pres-de-moi {
+  @apply w-full whitespace-nowrap;
+}
+.message-position {
+  @apply mx-8 -mt-5 mb-6 text-xs;
+}
+.distance {
+  @apply my-1 text-xs font-bold text-accent;
+}

@@ -1,0 +1,63 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+.titre-bloc {
+  @apply mb-4 flex flex-wrap items-center justify-between gap-3;
+}
+.titre-bloc h2 {
+  @apply m-0 text-2xl;
+}
+.titre-bloc button:disabled {
+  @apply cursor-not-allowed opacity-50;
+}
+
+/* Calendrier à gauche, liste à droite sur grand écran */
+.deux-colonnes {
+  @apply grid grid-cols-1 gap-5 xl:grid-cols-[300px_1fr];
+}
+
+/* Petit calendrier du mois */
+.calendrier {
+  @apply self-start rounded-[10px] border border-bordure bg-nav p-3;
+}
+.entete {
+  @apply mb-3 flex items-center justify-between;
+}
+.entete h3 {
+  @apply m-0 text-lg capitalize;
+}
+.fleche {
+  @apply h-8 w-8 cursor-pointer rounded-md border border-bordure bg-transparent text-texte;
+}
+.grille {
+  @apply grid grid-cols-7 gap-1 text-center text-xs;
+}
+.nom-jour {
+  @apply pb-1 font-bold text-gris;
+}
+.jour {
+  @apply flex h-9 flex-col items-center justify-center rounded-md;
+}
+.aujourdhui {
+  @apply bg-accent font-bold text-sur-accent;
+}
+.point {
+  @apply inline-block h-1.5 w-1.5 rounded-full bg-accent;
+}
+.aujourdhui .point {
+  @apply bg-sur-accent;
+}
+.legende {
+  @apply mt-3 mb-0 flex items-center gap-2 text-xs;
+}
+
+/* Liste des séances */
+.detail {
+  @apply block text-xs text-gris;
+}
+.places {
+  @apply rounded-full bg-carte px-2 py-0.5 text-xs font-bold;
+}
+.places.complet {
+  @apply text-danger;
+}

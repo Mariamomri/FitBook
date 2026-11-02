@@ -1,0 +1,53 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+.bandeau {
+  @apply mb-5 rounded-[10px] px-8 pt-10 pb-8;
+  background:
+    linear-gradient(90deg, #0f0f11 40%, rgba(15, 15, 17, 0.4)),
+    url('/img/gym1.jpg') center / cover;
+}
+.bandeau h1 {
+  @apply m-0 text-5xl;
+}
+.bandeau p {
+  @apply mt-2 mb-0 text-sm;
+}
+.vert {
+  @apply text-accent;
+}
+
+.bloc-carte {
+  @apply mb-5 rounded-[10px] border border-bordure bg-carte p-4;
+}
+.bloc-carte h2 {
+  @apply mt-0 mb-3 text-2xl;
+}
+
+/* Une ligne par favori */
+.liste {
+  @apply grid grid-cols-1 gap-2 md:grid-cols-2;
+}
+.element {
+  @apply flex items-center gap-3 rounded-md border border-bordure bg-nav p-3;
+}
+.element img {
+  @apply h-12 w-12 rounded-md object-cover;
+}
+.element div {
+  @apply flex flex-1 flex-col;
+}
+.element a {
+  @apply text-texte no-underline;
+}
+.element span {
+  @apply text-xs;
+}
+
+/* Bouton cœur */
+.coeur {
+  @apply cursor-pointer border-0 bg-transparent text-2xl text-gris;
+}
+.coeur.actif {
+  @apply text-accent;
+}

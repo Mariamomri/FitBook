@@ -1,0 +1,49 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+.titre-bloc {
+  @apply mb-4 flex flex-wrap items-center justify-between gap-3;
+}
+.titre-bloc h2 {
+  @apply m-0 text-2xl;
+}
+
+/* Cartes des salles : 1 colonne sur mobile, 2 sur grand écran */
+.cartes {
+  @apply grid grid-cols-1 gap-4 md:grid-cols-2;
+}
+.carte-salle {
+  @apply overflow-hidden rounded-[10px] border border-bordure bg-nav;
+}
+.carte-salle img {
+  @apply block h-40 w-full object-cover;
+}
+.contenu {
+  @apply p-4;
+}
+.contenu h3 {
+  @apply mt-0 mb-1 text-xl;
+}
+.contenu p {
+  @apply my-0.5 text-xs;
+}
+.contenu .actions {
+  @apply mt-3;
+}
+label.btn-petit {
+  @apply m-0 inline-block text-xs tracking-normal;
+}
+
+/* Choix de la photo dans le formulaire, avec aperçu */
+.choix-photo {
+  @apply flex flex-wrap items-center gap-3;
+}
+.choix-photo img {
+  @apply h-16 w-24 rounded-md object-cover;
+}
+.choix-photo label {
+  @apply m-0 tracking-normal;
+}
+.petit {
+  @apply text-xs;
+}

@@ -1,0 +1,135 @@
+<!-- Bandeau du haut -->
+<section class="bandeau">
+  <span class="points"></span>
+  <span class="rayures"></span>
+  <p class="fil"><a routerLink="/">Accueil</a> › <span>Contact</span></p>
+  <h1>Contactez-<span class="vert">nous.</span></h1>
+  <p class="muted">
+    Une question, un problème de réservation, ou vous souhaitez proposer vos cours sur FitBook ?
+  </p>
+</section>
+
+<div class="contact">
+  <!-- Formulaire -->
+  <form [formGroup]="contactForm" (ngSubmit)="envoyer()" class="carte">
+    <label for="sujet">Sujet</label>
+    <select id="sujet" formControlName="sujet">
+      <option value="question">Question générale</option>
+      <option value="reservation">Problème de réservation</option>
+      <option value="partenaire">Devenir partenaire</option>
+    </select>
+
+    <div class="deux-colonnes">
+      <div>
+        <label for="nom">Nom complet</label>
+        <input id="nom" type="text" formControlName="nom" placeholder="Mariam Omri" />
+        @if (invalide('nom')) {
+          <p class="champ-erreur">Commence par une majuscule, lettres uniquement</p>
+        }
+        @if (erreursServeur()['nom']) {
+          <p class="champ-erreur">{{ erreursServeur()['nom'] }}</p>
+        }
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" placeholder="mariam@exemple.be" />
+        @if (invalide('email')) {
+          <p class="champ-erreur">Email invalide</p>
+        }
+        @if (erreursServeur()['email']) {
+          <p class="champ-erreur">{{ erreursServeur()['email'] }}</p>
+        }
+      </div>
+    </div>
+
+    <!-- Profil : boutons radio -->
+    <label>Vous êtes</label>
+    <div class="profils">
+      <label class="profil" [class.choisi]="contactForm.value.profil === 'sportif'">
+        <input type="radio" formControlName="profil" value="sportif" /> Sportif
+      </label>
+      <label class="profil" [class.choisi]="contactForm.value.profil === 'coach'">
+        <input type="radio" formControlName="profil" value="coach" /> Coach
+      </label>
+      <label class="profil" [class.choisi]="contactForm.value.profil === 'salle'">
+        <input type="radio" formControlName="profil" value="salle" /> Gérant de Salle
+      </label>
+    </div>
+
+    <!-- Spécialité : seulement pour un coach ou une salle -->
+    @if (contactForm.value.profil !== 'sportif') {
+      <label for="specialite">Spécialité (facultatif)</label>
+      <input
+        id="specialite"
+        type="text"
+        formControlName="specialite"
+        placeholder="Yoga, CrossFit, boxe..."
+      />
+      @if (invalide('specialite')) {
+        <p class="champ-erreur">100 caractères maximum</p>
+      }
+    }
+
+    <label for="message">Message</label>
+    <textarea
+      id="message"
+      rows="6"
+      formControlName="message"
+      placeholder="Votre message (20 caractères minimum)"
+    ></textarea>
+    <p class="muted mini">{{ contactForm.value.message?.length ?? 0 }} / 1000</p>
+    @if (invalide('message')) {
+      <p class="champ-erreur">Entre 20 et 1000 caractères</p>
+    }
+    @if (erreursServeur()['message']) {
+      <p class="champ-erreur">{{ erreursServeur()['message'] }}</p>
+    }
+
+    <label class="case">
+      <input type="checkbox" formControlName="rgpd" />
+      <span>J'accepte que mes données soient utilisées pour répondre à ma demande (RGPD)</span>
+    </label>
+    @if (invalide('rgpd') || erreursServeur()['rgpd']) {
+      <p class="champ-erreur">Vous devez accepter le traitement de vos données</p>
+    }
+
+    @if (erreursServeur()['formulaire']) {
+      <p class="champ-erreur">{{ erreursServeur()['formulaire'] }}</p>
+    }
+    @if (erreur()) {
+      <p class="alerte"><i class="fa-solid fa-triangle-exclamation"></i> {{ erreur() }}</p>
+    }
+    @if (succes()) {
+      <p class="alerte-ok">{{ succes() }}</p>
+    }
+
+    <button type="submit" class="btn bloc">Envoyer le message →</button>
+  </form>
+
+  <!-- Colonne de droite : coordonnées + bloc partenaire -->
+  <!-- Colonne de droite : bloc partenaire + coordonnées + plan -->
+  <aside>
+    <div class="carte partenaire">
+      <span class="points petits"></span>
+      <h2>Vous êtes coach ou<br /><span class="vert">gérant de salle ?</span></h2>
+      <p class="muted">
+        Choisissez le sujet « Devenir partenaire ». Notre équipe vérifie votre activité puis crée
+        votre compte professionnel sous 48 h.
+      </p>
+      <p class="eyebrow">Email</p>
+      <p class="info">contact&#64;fitbook.be</p>
+      <p class="eyebrow">Adresse</p>
+      <p class="info">Rue Royale 1, 1000 Bruxelles</p>
+      <p class="eyebrow">Réponse</p>
+      <p class="info">sous 48 h ouvrées</p>
+    </div>
+
+    <!-- Plan OpenStreetMap (gratuit, sans clé API) -->
+    <iframe
+      class="plan"
+      title="Plan d'accès FitBook"
+      src="https://www.openstreetmap.org/export/embed.html?bbox=4.3560%2C50.8430%2C4.3700%2C50.8500&layer=mapnik&marker=50.8466%2C4.3630"
+      loading="lazy"
+    ></iframe>
+  </aside>
+</div>

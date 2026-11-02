@@ -1,0 +1,17 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+.titre-bloc {
+  @apply mb-4 flex flex-wrap items-center justify-between gap-3;
+}
+.titre-bloc h2 {
+  @apply m-0 text-2xl;
+}
+.titre-bloc button:disabled {
+  @apply cursor-not-allowed opacity-50;
+}
+
+/* Niveau affiché sous le titre du cours */
+.niveau {
+  @apply block text-xs text-gris;
+}

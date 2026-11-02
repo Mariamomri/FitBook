@@ -1,0 +1,46 @@
+<h2>Profil professionnel</h2>
+
+<div class="mise-en-page">
+  <!-- Photo visible sur la page Coachs -->
+  <div class="photo">
+    <img [src]="photo()" [alt]="coach().nomComplet" />
+    <label for="photo-coach" class="btn btn-outline petit-btn">Changer la photo</label>
+    <input id="photo-coach" type="file" accept="image/png, image/jpeg, image/webp" (change)="choisirPhoto($event)" hidden />
+    <span class="muted petit">PNG, JPG, WEBP · 2 Mo max</span>
+  </div>
+
+  <form [formGroup]="profilForm" (ngSubmit)="enregistrer()">
+    <div class="grille-champs">
+      <div>
+        <label for="anneesExperience">Années d'expérience</label>
+        <input id="anneesExperience" type="number" min="0" formControlName="anneesExperience" />
+      </div>
+      <div>
+        <label for="tarif">Tarif (€ / heure)</label>
+        <input id="tarif" type="text" formControlName="tarif" />
+      </div>
+      <div>
+        <label for="langues">Langues</label>
+        <input id="langues" type="text" formControlName="langues" placeholder="Français, Anglais" />
+      </div>
+      <div>
+        <label for="certifications">Certifications</label>
+        <input id="certifications" type="text" formControlName="certifications" />
+      </div>
+      <div class="large">
+        <label for="biographie">Biographie</label>
+        <textarea id="biographie" rows="4" formControlName="biographie"></textarea>
+      </div>
+    </div>
+    <div class="boutons">
+      <button type="submit" class="btn">Enregistrer</button>
+    </div>
+  </form>
+  <!-- Messages juste sous le formulaire, près du bouton -->
+  @if (erreur()) {
+    <p class="alerte">{{ erreur() }}</p>
+  }
+  @if (succes()) {
+    <p class="alerte-ok">{{ succes() }}</p>
+  }
+</div>

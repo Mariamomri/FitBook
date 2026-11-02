@@ -1,10 +1,120 @@
-<h1>Activités</h1>
+<!-- Bandeau du haut -->
+<section class="bandeau">
+  <p class="fil"><a routerLink="/">Accueil</a> › <span>Recherche</span></p>
+  <h1>Recherche <span class="vert">activités</span></h1>
 
-@for (activite of activites(); track activite.id) {
-  <div>
-    <h2>{{ activite.nom }}</h2>
-    <p>{{ activite.description }}</p>
+  <!-- Barre de recherche (les champs sont liés aux mêmes filtres que le panneau) -->
+  <div class="recherche">
+    <div>
+      <label for="recherche">Activité</label>
+      <input #rechercheHaut id="recherche" type="text" placeholder="Yoga, boxe, salle, coach..."
+        [value]="recherche()" (input)="recherche.set(rechercheHaut.value)" />
+    </div>
+    <div>
+      <label for="ville-haut">Ville</label>
+      <input #villeHaut id="ville-haut" type="text" placeholder="Bruxelles"
+        [value]="ville()" (input)="ville.set(villeHaut.value)" />
+    </div>
+    <div>
+      <label for="date-haut">Date</label>
+      <input #dateHaut id="date-haut" type="date"
+        [value]="date()" (input)="date.set(dateHaut.value)" />
+    </div>
   </div>
-} @empty {
-  <p>Aucune activité.</p>
-}
+</section>
+
+<div class="mise-en-page">
+  <!-- Filtres (gauche) -->
+  <aside class="filtres">
+    <h3>Filtres</h3>
+
+    <p class="eyebrow">Activité</p>
+    @for (activite of activites(); track activite.id) {
+      <label class="case">
+        <input
+          type="checkbox"
+          [checked]="activitesChoisies().includes(activite.nom)"
+          (change)="basculerActivite(activite.nom)"
+        />
+        {{ activite.nom }}
+      </label>
+    }
+
+    <label>Ville</label>
+    <input #villeFiltre type="text" placeholder="Bruxelles"
+      [value]="ville()" (input)="ville.set(villeFiltre.value)" />
+
+    <label>Date</label>
+    <input #dateFiltre type="date"
+      [value]="date()" (input)="date.set(dateFiltre.value)" />
+
+    <label>Prix max : {{ prixMax() }} €</label>
+    <!-- valueAsNumber : value est toujours une chaîne de caractères -->
+    <input #prix type="range" min="5" max="30"
+      [value]="prixMax()" (input)="prixMax.set(prix.valueAsNumber)" />
+
+    <label class="case">
+      <input #libres type="checkbox"
+        [checked]="placesLibres()" (change)="placesLibres.set(libres.checked)" />
+      Places libres uniquement
+    </label>
+  </aside>
+
+  <!-- Résultats (droite) -->
+  <section class="resultats">
+    <p>
+      <strong>{{ seancesFiltrees().length }} séances</strong> <span class="muted">trouvées</span>
+    </p>
+
+    @if (message()) {
+      <p class="succes">{{ message() }}</p>
+    }
+    @if (erreur()) {
+      <p class="erreur">{{ erreur() }}</p>
+      @if (emailNonConfirme()) {
+        <button type="button" class="renvoyer" (click)="renvoyerEmail()">Renvoyer l'email de confirmation →</button>
+      }
+    }
+
+    @for (seance of seancesFiltrees(); track seance.id) {
+      <article class="ligne">
+        <img class="ligne-image" [src]="photoActivite(seance.activiteNom, seance.coursImage)" [alt]="seance.activiteNom" />
+
+        <div class="ligne-infos">
+          <h3>
+            <a [routerLink]="['/activites', seance.coursId]">{{ seance.coursTitre }}</a>
+          </h3>
+          <p class="muted">
+            {{ seance.salleNom }} · {{ seance.ville }}
+            @if (seance.coachNom) {
+              · Coach {{ seance.coachNom }}
+            }
+          </p>
+          <!-- 'UTC' : afficher l'heure enregistrée en base sans décalage horaire -->
+          <p class="muted">
+            {{ seance.dateDebut | date: 'EEE d MMM · HH:mm' : 'UTC' : 'fr' }} →
+            {{ seance.dateFin | date: 'HH:mm' : 'UTC' }}
+          </p>
+        </div>
+
+        <div class="ligne-droite">
+          <p class="prix">{{ seance.prix }} €</p>
+
+          @if (seance.statut === 'ouverte' && seance.placesRestantes > 0) {
+            <p class="places">{{ seance.placesRestantes }} places restantes</p>
+            @if (authService.connecte()) {
+              <button class="btn" (click)="reserver(seance.id)">Réserver</button>
+            } @else {
+              <a class="btn" routerLink="/login">Réserver</a>
+            }
+          } @else {
+            <p class="complet">Complet</p>
+            <button class="btn btn-outline" disabled>Liste d'attente</button>
+          }
+        </div>
+      </article>
+    } @empty {
+      <p>Aucune séance ne correspond aux filtres.</p>
+    }
+  </section>
+</div>

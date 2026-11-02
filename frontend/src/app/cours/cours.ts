@@ -1,10 +1,11 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CoursService } from './cours-service';
 import { CoursInterface } from './cours-interface';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-cours',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './cours.html',
   styleUrl: './cours.css',
 })

@@ -1,17 +1,104 @@
-<h1>Coachs</h1>
+<!-- Bandeau du haut -->
+<section class="bandeau">
+  <span class="points"></span>
+  <span class="rayures"></span>
+  <p class="fil"><a routerLink="/">Accueil</a> › <span>Coachs</span></p>
+  <h1>Nos <span class="vert">coachs</span></h1>
+</section>
 
-@for (coach of coaches(); track coach.id) {
+<!-- Barre de recherche sous le bandeau -->
+<div class="recherche">
   <div>
-    <h2>{{ coach.nomComplet }}</h2>
-    <p>{{ coach.biographie }}</p>
-    <p>Expérience : {{ coach.anneesExperience }} ans</p>
-    <p>Tarif : {{ coach.tarif }} € / heure</p>
-    <p>Langues : {{ coach.langues }}</p>
-
-    @if (coach.certifications) {
-      <p>Certifications : {{ coach.certifications }}</p>
-    }
+    <label for="nom">Coach</label>
+    <input
+      #champ
+      id="nom"
+      type="text"
+      placeholder="Nom du coach"
+      [value]="recherche()"
+      (input)="recherche.set(champ.value)"
+    />
   </div>
-} @empty {
-  <p>Aucun coach.</p>
-}
+  <div>
+    <label for="tri">Trier par</label>
+    <select #choixTri id="tri" [value]="tri()" (change)="tri.set(choixTri.value)">
+      <option value="experience">Expérience</option>
+      <option value="tarif">Tarif</option>
+    </select>
+  </div>
+</div>
+
+<div class="mise-en-page">
+  <!-- Filtres (gauche) -->
+  <aside class="filtres">
+    <h3>Filtres</h3>
+
+    <p class="eyebrow">Langue</p>
+    @for (langue of langues(); track langue) {
+      <label class="case">
+        <input
+          type="checkbox"
+          [checked]="languesChoisies().includes(langue)"
+          (change)="basculerLangue(langue)"
+        />
+        {{ langue }}
+      </label>
+    }
+
+    <label class="titre-filtre">Tarif max : {{ tarifMax() }} € / heure</label>
+    <!-- valueAsNumber : value est toujours une chaîne de caractères -->
+    <input
+      #tarif
+      type="range"
+      min="20"
+      max="100"
+      step="5"
+      [value]="tarifMax()"
+      (input)="tarifMax.set(tarif.valueAsNumber)"
+    />
+  </aside>
+
+  <!-- Résultats (droite) -->
+  <section>
+    <p class="compteur">
+      <strong>{{ coachesFiltres().length }} coachs</strong> <span class="muted">trouvés</span>
+    </p>
+
+    @for (coach of coachesFiltres(); track coach.id) {
+      <article class="ligne">
+        <img class="photo" [src]="coachService.photo(coach)" [alt]="coach.nomComplet" />
+
+        <div class="infos">
+          <h3>{{ coach.nomComplet }}</h3>
+          <p class="muted">Coach · {{ coach.langues }}</p>
+          <p class="muted">{{ coach.anneesExperience }} ans d'expérience</p>
+          <!-- certifications peut être vide (nullable dans Symfony) -->
+          @if (coach.certifications) {
+            <p class="certifs">{{ coach.certifications }}</p>
+          }
+        </div>
+
+        <div class="droite">
+          @if (authService.connecte()) {
+            @let lien = '/api/coaches/' + coach.id;
+            <button
+              class="coeur"
+              [class.actif]="favoriService.estFavori('favoriCoachs', lien)"
+              (click)="favoriService.basculer('favoriCoachs', lien)"
+              aria-label="Favori"
+            >
+              {{ favoriService.estFavori('favoriCoachs', lien) ? '♥' : '♡' }}
+            </button>
+          }
+          <div>
+            <p class="prix">{{ coach.tarif }} €</p>
+            <p class="par-heure">par heure</p>
+          </div>
+          <a class="btn" [routerLink]="['/coach', coach.id]">Voir le profil</a>
+        </div>
+      </article>
+    } @empty {
+      <p class="muted">Aucun coach ne correspond aux filtres.</p>
+    }
+  </section>
+</div>

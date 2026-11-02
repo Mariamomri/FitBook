@@ -1,0 +1,73 @@
+<div class="espace">
+  <app-sidebar-sportif />
+
+  @if (moi(); as user) {
+    <div class="espace-contenu">
+      <!-- Bandeau du haut -->
+      <section class="bandeau">
+        <h1>Dashboard <span class="vert">coach</span></h1>
+        <p class="muted">Bonjour {{ user.firstname }}, voici votre espace coach.</p>
+      </section>
+
+      @if (maFiche(); as fiche) {
+        <!-- Chiffres -->
+        <div class="chiffres">
+          <article class="chiffre">
+            <span>Séances à venir <i class="fa-solid fa-calendar-days"></i></span>
+            <strong>{{ seancesAVenir().length }}</strong>
+          </article>
+          <article class="chiffre">
+            <span>Places restantes <i class="fa-solid fa-users"></i></span>
+            <strong>{{ placesRestantes() }}</strong>
+          </article>
+          <article class="chiffre">
+            <span>Avis publiés <i class="fa-solid fa-comment"></i></span>
+            <strong>{{ mesAvis().length }}</strong>
+          </article>
+          <article class="chiffre mise-en-avant">
+            <span>Note moyenne <i class="fa-solid fa-star"></i></span>
+            <strong>{{ noteMoyenne() }} ★</strong>
+          </article>
+        </div>
+
+        <section class="bloc-carte" id="profil-pro">
+          <app-profil-pro [coach]="fiche" />
+        </section>
+
+        <section class="bloc-carte" id="photos-cours">
+          <app-photos-cours [cours]="mesCours()" />
+        </section>
+
+        <!-- Même composant que le gestionnaire, limité aux cours qu'il anime -->
+        <section class="bloc-carte" id="seances">
+          <app-gestion-seances [moi]="user" [coachLien]="lienFiche()" />
+        </section>
+
+        <section class="bloc-carte" id="disponibilites">
+          <app-gestion-disponibilites [coachLien]="lienFiche()" />
+        </section>
+
+        <section class="bloc-carte" id="reservations">
+          <app-reservations-recues pour="coach" />
+        </section>
+
+        <section class="bloc-carte" id="avis">
+          <h2>Avis sur moi</h2>
+          @for (unAvis of mesAvis(); track unAvis.id) {
+            <div class="avis">
+              <span class="etoiles">{{ etoiles(unAvis.note) }}</span>
+              <p class="muted">« {{ unAvis.commentaire }} »</p>
+            </div>
+          } @empty {
+            <p class="muted">Pas encore d'avis.</p>
+          }
+        </section>
+      } @else if (charge()) {
+        <p class="alerte">
+          Votre fiche coach n'existe pas encore. L'administrateur doit la créer (Dashboard admin › Coachs) pour
+          que vous puissiez gérer vos séances.
+        </p>
+      }
+    </div>
+  }
+</div>

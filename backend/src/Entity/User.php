@@ -21,23 +21,25 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\State\UserPasswordHasher;
+use Symfony\Component\HttpFoundation\File\File; // fichier envoyé lors de l'upload
+use Vich\UploaderBundle\Mapping\Attribute as Vich; // pour l'upload des photos
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'Un compte existe déjà avec cet email')]
 
-#[ApiResource(
-    operations: [
-        new GetCollection(),
-        new Get(),
-        new Post(processor: UserPasswordHasher::class),  // inscription : hash + mail de confirmation
-        new Patch(processor: UserPasswordHasher::class), // modification : hash si nouveau mot de passe
-        new Delete(),
-    ]
-)] //pour exposer l'entité via API Platform
+#[ApiResource(operations: [
+    new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+    new Get(security: "is_granted('ROLE_ADMIN') or object == user"),
+    new Post(processor: UserPasswordHasher::class),
+    new Patch(security: "is_granted('ROLE_ADMIN') or object == user", processor: UserPasswordHasher::class),
+    new Delete(security: "is_granted('ROLE_ADMIN')")
+])] //pour exposer l'entité via API Platform
 
 #[ORM\HasLifecycleCallbacks] // dit à Doctrine de lire les PrePersist et PreUpdate de cette classe. Sans cette ligne, les dates ne se remplissent pas.
 #[ORM\Table(name: "users")]
+
+#[Vich\Uploadable] // l'utilisateur photo 
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -54,6 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var list<string> The user roles
      */
+    #[ApiProperty(securityPostDenormalize: "is_granted('ROLE_ADMIN')")] // seul un admin peut modifier ce champ
     #[ORM\Column]
     private array $roles = [];
 
@@ -85,8 +88,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 20)]
     #[Assert\NotBlank()]
+    #[Assert\Choice(choices: ['vert', 'orange', 'jaune', 'bleu', 'rose', 'rouge'], message: 'Couleur non valide.')]
     private ?string $accentColor = null;
 
+
+    // fichier photo reçu (pas enregistré en base, utilisé seulement pendant l'upload)
+    #[Vich\UploadableField(mapping: 'users', fileNameProperty: 'imageName', size: 'imageSize')]
+    #[ApiProperty(readable: false, writable: false)]
+    private ?File $imageFile = null;
+
+    // nom du fichier enregistré dans public/images/users
+    #[ORM\Column(nullable: true)]
+    #[ApiProperty(writable: false)]
+    private ?string $imageName = null;
+
+    // taille du fichier en octets
+    #[ORM\Column(nullable: true)]
+    #[ApiProperty(writable: false)]
+    private ?int $imageSize = null;
+
+    #[ApiProperty(securityPostDenormalize: "is_granted('ROLE_ADMIN')")] // seul un admin peut modifier ce champ
     #[ORM\Column]
     private ?bool $isActive = true;  //pour éviter qu'un utilisateur qui vient d'être créé soit désactivé par défaut, je le mets à true
 
@@ -129,6 +150,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinTable(name: 'favori_coach')] // association « favori_coach » du MCD (users 0,n — coach 0,n)
     private Collection $favoriCoachs;
 
+    #[ApiProperty(securityPostDenormalize: "is_granted('ROLE_ADMIN')")] // seul un admin peut modifier ce champ
     #[ORM\Column]
     private ?bool $isVerified = false; // un nouvel utilisateur n'a pas encore confirmé son email
 
@@ -207,7 +229,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-        public function getPlainPassword(): ?string
+    public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }
@@ -472,5 +494,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->isVerified = $isVerified;
 
         return $this;
+    }
+
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    // quand une nouvelle photo arrive, on change updatedAt pour que Doctrine enregistre la modification
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if ($imageFile !== null) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageSize(): ?int
+    {
+        return $this->imageSize;
+    }
+
+    public function setImageSize(?int $imageSize): void
+    {
+        $this->imageSize = $imageSize;
     }
 }

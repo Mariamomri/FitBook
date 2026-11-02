@@ -9,9 +9,24 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource; //pour exposer l'entité via l'API Platform
 
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use Symfony\Component\Validator\Constraints as Assert; // règles de validation des données envoyées
+
 #[ORM\Entity(repositoryClass: ActiviteRepository::class)]
 #[ORM\Table(name: 'activites')]
-#[ApiResource] //pour exposer l'entité via l'API Platform
+//pour exposer l'entité via l'API Platform
+// Lecture publique ; création, modification et suppression : admin ou gestionnaire de salle
+#[ApiResource(operations: [
+    new GetCollection(),
+    new Get(),
+    new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SALLE')"),
+    new Patch(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SALLE')"),
+    new Delete(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SALLE')")
+])]
 class Activite
 {
     #[ORM\Id]
@@ -20,9 +35,12 @@ class Activite
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(message: "Le nom de l'activité est obligatoire.")]
+    #[Assert\Length(min: 2, max: 100)]
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'La description est obligatoire.')]
     private ?string $description = null;
 
     /**

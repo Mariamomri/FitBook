@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use Symfony\Component\Validator\Constraints as Assert; // règles de validation des données envoyées
 
 // Un avis vient toujours d'une réservation (donner_lieu 1,1) et porte sur UNE cible :
 // une salle OU un coach OU un cours (noter_salle / noter_coach / noter_cours 0,1).
@@ -19,16 +20,28 @@ use ApiPlatform\Metadata\Post;
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'avis_notes')]
 //pour exposer l'entité via l'API Platform
+// Lecture publique (notes affichées sur les fiches) ; on ne note que ses propres réservations ;
+// modification par l'auteur ou l'admin, suppression (modération) par l'auteur ou l'admin
 #[ApiResource(operations: [
     new GetCollection(),
     new Get(),
     new Post(
         security: "is_granted('ROLE_USER') and user.isVerified()",
-        securityMessage: 'Veuillez confirmer votre email avant de laisser un avis.'
+        securityMessage: 'Veuillez confirmer votre email avant de laisser un avis.',
+        // l'avis doit venir d'une de ses réservations et arriver « en attente » (publié seulement par l'admin)
+        securityPostDenormalize: "object.getReservation()?.getUser() == user and object.getStatut() == 'en_attente'",
+        securityPostDenormalizeMessage: 'Vous ne pouvez donner un avis que sur vos propres réservations, en attente de validation.'
     ),
-    new Patch(),
-    new Delete()
+    new Patch(
+        security: "is_granted('ROLE_ADMIN') or object.getReservation()?.getUser() == user",
+        // l'auteur peut changer la note et le commentaire, pas le statut ni la réservation
+        securityPostDenormalize: "is_granted('ROLE_ADMIN') or (object.getStatut() == previous_object.getStatut() and object.getReservation() == previous_object.getReservation())",
+        securityPostDenormalizeMessage: "Seul l'administrateur peut changer le statut d'un avis."
+    ),
+    new Delete(security: "is_granted('ROLE_ADMIN') or object.getReservation()?.getUser() == user")
 ])]
+// Un avis porte sur une seule cible : une salle OU un coach OU un cours
+#[Assert\Expression("(this.getSalle() ? 1 : 0) + (this.getCoach() ? 1 : 0) + (this.getCours() ? 1 : 0) == 1", message: 'Un avis porte sur une salle, un coach ou un cours (un seul).')]
 class Avis
 {
     #[ORM\Id]
@@ -37,16 +50,22 @@ class Avis
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'La note est obligatoire.')]
+    #[Assert\Range(min: 1, max: 5, notInRangeMessage: 'La note doit être entre {{ min }} et {{ max }}.')]
     private ?int $note = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'Le commentaire est obligatoire.')]
+    #[Assert\Length(min: 3, max: 500, minMessage: 'Le commentaire doit contenir au moins {{ limit }} caractères.', maxMessage: '{{ limit }} caractères maximum.')]
     private ?string $commentaire = null;
 
     #[ORM\Column(length: 20)]
+    #[Assert\Choice(choices: ['en_attente', 'publie', 'refuse'], message: 'Statut invalide.')]
     private ?string $statut = null;
 
     #[ORM\ManyToOne(inversedBy: 'avis')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'La réservation est obligatoire.')]
     private ?Reservation $reservation = null;
 
     #[ORM\ManyToOne(inversedBy: 'avis')]
@@ -147,5 +166,22 @@ class Avis
         $this->cours = $cours;
 
         return $this;
+    }
+
+    // Auteur de l'avis affiché sur les fiches : prénom + initiale du nom (ex. "Mariam O.")
+    public function getAuteur(): ?string
+    {
+        $user = $this->reservation?->getUser();
+        if (!$user) {
+            return null;
+        }
+
+        return $user->getFirstname() . ' ' . mb_substr($user->getLastname() ?? '', 0, 1) . '.';
+    }
+
+    // Photo de profil de l'auteur (null = pas de photo)
+    public function getAuteurImage(): ?string
+    {
+        return $this->reservation?->getUser()?->getImageName();
     }
 }

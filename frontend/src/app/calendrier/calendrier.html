@@ -1,0 +1,53 @@
+@if (bandeau()) {
+  <div class="espace">
+    <app-sidebar-sportif />
+    <div class="espace-contenu">
+      <section class="bandeau">
+        <h1>Mon <span class="vert">calendrier</span></h1>
+        <p class="muted">Tes séances réservées, mois par mois.</p>
+      </section>
+      <ng-container [ngTemplateOutlet]="grilleMois" />
+    </div>
+  </div>
+} @else {
+  <ng-container [ngTemplateOutlet]="grilleMois" />
+}
+
+<!-- Grille du mois, utilisée dans les deux cas ci-dessus -->
+<ng-template #grilleMois>
+<div class="calendrier" [class.compact]="!bandeau()">
+  <!-- Mois affiché + flèches -->
+  <div class="entete">
+    <button class="fleche" (click)="moisPrecedent()" aria-label="Mois précédent">‹</button>
+    <h2 class="titre-mois">{{ moisAffiche() | date: 'MMMM yyyy' : '' : 'fr' }}</h2>
+    <button class="fleche" (click)="moisSuivant()" aria-label="Mois suivant">›</button>
+  </div>
+
+  <!-- Noms des jours -->
+  <div class="grille">
+    @for (nom of joursSemaine; track nom) {
+      <div class="nom-jour">{{ nom }}</div>
+    }
+
+    <!-- Cases du mois -->
+    @for (case of cases(); track $index) {
+      @if (case.jour) {
+        <div class="jour" [class.aujourdhui]="estAujourdhui(case.jour)">
+          <span class="numero">{{ case.jour }}</span>
+          @for (seance of case.seances; track seance.id) {
+            <a
+              class="seance"
+              routerLink="/reservations"
+              [title]="seance.cours + ' · ' + seance.salle"
+            >
+              {{ heure(seance.dateDebut) }} {{ seance.cours }}
+            </a>
+          }
+        </div>
+      } @else {
+        <div class="vide"></div>
+      }
+    }
+  </div>
+</div>
+</ng-template>

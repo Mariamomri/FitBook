@@ -1,5 +1,5 @@
 export interface ActiviteInterface {
-  id: number;
+  id?: number;
   nom: string;
-  description: string;
+  description?: string | null;
 }

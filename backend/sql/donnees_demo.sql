@@ -24,17 +24,17 @@ DELETE FROM users WHERE id >= 2000;
 
 -- 2. Utilisateurs : 3 gestionnaires de salle, 3 coachs, 5 sportifs
 INSERT INTO users (id, email, roles, password, firstname, lastname, phone, accent_color, is_active, is_verified, created_at, updated_at) VALUES
-(2001, 'sophie.martin@fitbook.be', '["ROLE_SALLE"]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Sophie', 'Martin', '0470 11 22 33', '#FF6B00', 1, 1, NOW(), NOW()),
-(2002, 'karim.benali@fitbook.be', '["ROLE_SALLE"]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Karim', 'Benali', '0471 22 33 44', '#2E86DE', 1, 1, NOW(), NOW()),
-(2003, 'pieter.claes@fitbook.be', '["ROLE_SALLE"]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Pieter', 'Claes', '0472 33 44 55', '#10AC84', 1, 1, NOW(), NOW()),
-(2004, 'lucas.dubois@fitbook.be', '["ROLE_COACH"]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Lucas', 'Dubois', '0473 44 55 66', '#EE5253', 1, 1, NOW(), NOW()),
-(2005, 'amina.elidrissi@fitbook.be', '["ROLE_COACH"]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Amina', 'El Idrissi', '0474 55 66 77', '#8E44AD', 1, 1, NOW(), NOW()),
-(2006, 'thomas.peeters@fitbook.be', '["ROLE_COACH"]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Thomas', 'Peeters', '0475 66 77 88', '#F39C12', 1, 1, NOW(), NOW()),
-(2007, 'emma.janssens@gmail.com', '[]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Emma', 'Janssens', '0476 77 88 99', '#FF6B00', 1, 1, NOW(), NOW()),
-(2008, 'nora.haddad@gmail.com', '[]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Nora', 'Haddad', NULL, '#2E86DE', 1, 1, NOW(), NOW()),
-(2009, 'julien.lambert@gmail.com', '[]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Julien', 'Lambert', '0477 88 99 00', '#10AC84', 1, 1, NOW(), NOW()),
-(2010, 'lea.willems@gmail.com', '[]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Léa', 'Willems', NULL, '#EE5253', 1, 1, NOW(), NOW()),
-(2011, 'yassine.moreau@gmail.com', '[]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Yassine', 'Moreau', '0478 99 00 11', '#8E44AD', 1, 0, NOW(), NOW());
+(2001, 'sophie.martin@fitbook.be', '["ROLE_SALLE"]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Sophie', 'Martin', '0470 11 22 33', 'orange', 1, 1, NOW(), NOW()),
+(2002, 'karim.benali@fitbook.be', '["ROLE_SALLE"]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Karim', 'Benali', '0471 22 33 44', 'bleu', 1, 1, NOW(), NOW()),
+(2003, 'pieter.claes@fitbook.be', '["ROLE_SALLE"]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Pieter', 'Claes', '0472 33 44 55', 'vert', 1, 1, NOW(), NOW()),
+(2004, 'lucas.dubois@fitbook.be', '["ROLE_COACH"]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Lucas', 'Dubois', '0473 44 55 66', 'rouge', 1, 1, NOW(), NOW()),
+(2005, 'amina.elidrissi@fitbook.be', '["ROLE_COACH"]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Amina', 'El Idrissi', '0474 55 66 77', 'rose', 1, 1, NOW(), NOW()),
+(2006, 'thomas.peeters@fitbook.be', '["ROLE_COACH"]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Thomas', 'Peeters', '0475 66 77 88', 'jaune', 1, 1, NOW(), NOW()),
+(2007, 'emma.janssens@gmail.com', '[]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Emma', 'Janssens', '0476 77 88 99', 'orange', 1, 1, NOW(), NOW()),
+(2008, 'nora.haddad@gmail.com', '[]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Nora', 'Haddad', NULL, 'bleu', 1, 1, NOW(), NOW()),
+(2009, 'julien.lambert@gmail.com', '[]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Julien', 'Lambert', '0477 88 99 00', 'vert', 1, 1, NOW(), NOW()),
+(2010, 'lea.willems@gmail.com', '[]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Léa', 'Willems', NULL, 'rouge', 1, 1, NOW(), NOW()),
+(2011, 'yassine.moreau@gmail.com', '[]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Yassine', 'Moreau', '0478 99 00 11', 'rose', 1, 0, NOW(), NOW());
 -- Yassine n'a pas confirmé son email (is_verified = 0) : utile pour montrer le blocage de la réservation
 
 -- 3. Cartes de membre des sportifs
@@ -140,3 +140,11 @@ INSERT INTO avis_notes (id, note, commentaire, statut, created_at, updated_at, r
 INSERT INTO favori_salle (user_id, salle_id) VALUES (2007, 2001), (2008, 2003), (2009, 2002);
 INSERT INTO favori_cours (user_id, cours_id) VALUES (2007, 2002), (2008, 2003), (2008, 2004), (2010, 2007);
 INSERT INTO favori_coach (user_id, coach_id) VALUES (2007, 2001), (2008, 2002), (2009, 2003);
+
+-- 15. Photos de démonstration (fichiers déjà présents dans public/images/salles et public/images/coaches)
+UPDATE salles SET image_name = 'salle-2001.jpg' WHERE id = 2001;
+UPDATE salles SET image_name = 'salle-2002.jpg' WHERE id = 2002;
+UPDATE salles SET image_name = 'salle-2003.jpg' WHERE id = 2003;
+UPDATE coaches SET image_name = 'coach-2001.jpg' WHERE id = 2001;
+UPDATE coaches SET image_name = 'coach-2002.jpg' WHERE id = 2002;
+UPDATE coaches SET image_name = 'coach-2003.jpg' WHERE id = 2003;

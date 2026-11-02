@@ -1,0 +1,130 @@
+<div class="titre-bloc">
+  <h2>Cours &amp; activités</h2>
+  <button class="btn petit-btn" (click)="ouvrirAjout()" [disabled]="mesSalles().length === 0">+ Ajouter un cours</button>
+</div>
+
+<!-- Formulaire : un cours = une activité dans une de ses salles, avec ou sans coach -->
+@if (idFormulaire() !== null) {
+  <form class="formulaire" [formGroup]="coursForm" (ngSubmit)="enregistrer()">
+    <h3>{{ idFormulaire() === 0 ? 'Nouveau cours' : 'Modifier le cours' }}</h3>
+    <div class="grille-champs">
+      <div>
+        <label for="salle">Salle</label>
+        <select id="salle" formControlName="salle">
+          <option value="">Choisir une salle...</option>
+          @for (salle of mesSalles(); track salle.id) {
+            <option [value]="'/api/salles/' + salle.id">{{ salle.nom }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="activite">Activité</label>
+        <select id="activite" formControlName="activite">
+          <option value="">Choisir une activité...</option>
+          @for (activite of activites(); track activite.id) {
+            <option [value]="'/api/activites/' + activite.id">{{ activite.nom }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="coach">Coach (facultatif)</label>
+        <select id="coach" formControlName="coach">
+          <option value="">Sans coach</option>
+          @for (coach of coaches(); track coach.id) {
+            <option [value]="'/api/coaches/' + coach.id">{{ coach.nomComplet }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="titre">Titre du cours</label>
+        <input id="titre" type="text" formControlName="titre" placeholder="Yoga du soir" />
+      </div>
+      <div>
+        <label for="niveau">Niveau</label>
+        <select id="niveau" formControlName="niveau">
+          @for (niveau of niveaux; track niveau) {
+            <option [value]="niveau">{{ niveau }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="capacite">Places</label>
+        <input id="capacite" type="number" min="1" formControlName="capacite" />
+      </div>
+      <div>
+        <label for="prix">Prix (€)</label>
+        <input id="prix" type="text" formControlName="prix" placeholder="15.00" />
+      </div>
+      <div class="large">
+        <label for="description">Description</label>
+        <textarea id="description" rows="3" formControlName="description"></textarea>
+      </div>
+    </div>
+    <div class="boutons">
+      <button type="submit" class="btn">Enregistrer</button>
+      <button type="button" class="btn btn-outline" (click)="idFormulaire.set(null)">Annuler</button>
+    </div>
+  </form>
+}
+<!-- Messages juste sous le formulaire, près du bouton -->
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
+}
+
+<div class="barre">
+  <input #champ type="search" placeholder="Rechercher un cours ou un coach..." [value]="recherche()" (input)="recherche.set(champ.value)" />
+</div>
+
+<div class="tableau">
+  <table>
+    <thead>
+      <tr>
+        <th>Cours</th>
+        <th>Activité</th>
+        <th>Coach</th>
+        <th>Salle</th>
+        <th>Places</th>
+        <th>Prix</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (unCours of mesCours(); track unCours.id) {
+        <tr>
+          <td><strong>{{ unCours.titre }}</strong><span class="niveau">{{ unCours.niveau }}</span></td>
+          <td>{{ unCours.activiteNom }}</td>
+          <td class="muted">{{ unCours.coachNom ?? 'Sans coach' }}</td>
+          <td class="muted">{{ unCours.salleNom }}</td>
+          <td>{{ unCours.capacite }}</td>
+          <td>{{ unCours.prix }} €</td>
+          <td>
+            <div class="actions">
+              <button class="btn-petit" (click)="ouvrirModification(unCours)">Modifier</button>
+              <button class="btn-petit danger" (click)="aSupprimer.set(unCours)">Supprimer</button>
+            </div>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="7" class="muted vide">Aucun cours dans vos salles.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+@if (aSupprimer(); as unCours) {
+  <div class="fond-modale" (click)="aSupprimer.set(null)">
+    <div class="modale" (click)="$event.stopPropagation()">
+      <h3>Supprimer ce cours ?</h3>
+      <p class="muted">{{ unCours.titre }} et toutes ses séances seront supprimés définitivement.</p>
+      <div class="boutons">
+        <button class="btn btn-outline" (click)="aSupprimer.set(null)">Annuler</button>
+        <button class="btn bouton-danger" (click)="confirmerSuppression()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+}

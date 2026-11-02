@@ -1,0 +1,76 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+/* Bandeau avec photo */
+.bandeau {
+  @apply mb-5 rounded-[10px] px-8 pt-10 pb-8;
+  background:
+    linear-gradient(90deg, #0f0f11 40%, rgba(15, 15, 17, 0.4)),
+    url('/img/barbell.jpg') center / cover;
+}
+
+.bandeau h1 {
+  @apply m-0 text-5xl;
+}
+
+.bandeau p {
+  @apply mt-2 mb-0 text-sm;
+}
+
+.vert {
+  @apply text-accent;
+}
+
+
+/* Quatre cartes de chiffres */
+.chiffres {
+  @apply mb-5 grid grid-cols-2 gap-3 md:grid-cols-4;
+}
+
+.chiffre {
+  @apply flex flex-col gap-3 rounded-[10px] border border-bordure bg-carte p-4;
+}
+
+.chiffre span {
+  @apply flex justify-between text-xs text-gris;
+}
+
+.chiffre span i {
+  @apply text-accent;
+}
+
+.chiffre strong {
+  @apply font-titre text-4xl font-black italic;
+}
+
+.mise-en-avant {
+  @apply border-accent bg-accent;
+}
+
+.mise-en-avant span,
+.mise-en-avant span i,
+.mise-en-avant strong {
+  @apply text-sur-accent;
+}
+
+/* Blocs */
+.bloc-carte {
+  @apply mb-5 scroll-mt-28 rounded-[10px] border border-bordure bg-carte p-4;
+}
+
+.bloc-carte h2 {
+  @apply mt-0 mb-4 text-2xl;
+}
+
+/* Liste des avis */
+.avis {
+  @apply border-b border-bordure py-3;
+}
+
+.avis p {
+  @apply mt-1 mb-0 text-sm;
+}
+
+.etoiles {
+  @apply text-yellow-400;
+}

@@ -1,0 +1,67 @@
+/* Donne accès aux classes Tailwind et aux couleurs du site */
+@reference "../../../styles.css";
+
+.bandeau {
+  @apply mb-5 rounded-[10px] px-8 pt-10 pb-8;
+  background:
+    linear-gradient(90deg, #0f0f11 40%, rgba(15, 15, 17, 0.4)),
+    url('/img/stretch.jpg') center / cover;
+}
+.bandeau h1 {
+  @apply m-0 text-5xl;
+}
+.bandeau p {
+  @apply mt-2 mb-0 text-sm;
+}
+.vert {
+  @apply text-accent;
+}
+
+.bloc-carte {
+  @apply rounded-[10px] border border-bordure bg-carte p-4;
+}
+
+/* Un avis */
+.avis {
+  @apply border-b border-bordure py-4;
+}
+.haut {
+  @apply mb-1 flex items-center justify-between gap-3;
+}
+.avis p {
+  @apply my-1 text-sm;
+}
+.etoiles {
+  @apply text-yellow-400;
+}
+.actions {
+  @apply mt-2 flex gap-2;
+}
+.petit-btn {
+  @apply px-3 py-1.5 text-xs;
+}
+.danger {
+  @apply border-danger text-danger;
+}
+
+/* Étoiles cliquables */
+.etoiles-choix button {
+  @apply cursor-pointer border-0 bg-transparent text-2xl text-gris;
+}
+.etoiles-choix button.allumee {
+  @apply text-yellow-400;
+}
+
+/* Pastilles de statut */
+.statut {
+  @apply rounded-full px-2 py-0.5 text-xs font-bold;
+}
+.ok {
+  @apply bg-accent/15 text-accent;
+}
+.attente {
+  @apply bg-yellow-400/15 text-yellow-300;
+}
+.ko {
+  @apply bg-danger/15 text-danger;
+}

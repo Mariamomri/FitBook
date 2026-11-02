@@ -1,0 +1,56 @@
+<!-- Menu de l'espace membre : les liens changent selon le rôle -->
+<aside class="menu">
+  @if (moi(); as user) {
+    <div class="utilisateur">
+      <img [src]="profilService.photo(user.imageName)" [alt]="user.firstname" />
+      <div>
+        <strong>{{ user.firstname }} {{ user.lastname[0] }}.</strong>
+        <span>Espace {{ profilService.libelleRole(user.roles).toLowerCase() }}</span>
+      </div>
+    </div>
+  }
+
+  <nav>
+    <a routerLink="/dashboard" routerLinkActive="actif" [routerLinkActiveOptions]="optionsLienExact"><i class="fa-solid fa-gauge"></i> {{ titreDashboard() }}</a>
+    @if (estAdmin()) {
+      <!-- Chaque lien ouvre l'onglet correspondant de la dashboard admin -->
+      @for (lien of liensAdmin; track lien.onglet) {
+        <a
+          routerLink="/dashboard"
+          [queryParams]="{ onglet: lien.onglet }"
+          routerLinkActive="actif"
+          [routerLinkActiveOptions]="optionsLienExact"
+          ><i [class]="'fa-solid ' + lien.icone"></i> {{ lien.libelle }}</a
+        >
+      }
+      <p class="separateur">Espace sportif</p>
+    }
+
+    @if (estGestionnaire() || estCoach()) {
+      <!-- Gestionnaire ou coach : liens vers les parties de sa dashboard -->
+      @for (lien of estCoach() ? liensCoach : liensGestionnaire; track lien.fragment) {
+        <a
+          routerLink="/dashboard"
+          [fragment]="lien.fragment"
+          routerLinkActive="actif"
+          [routerLinkActiveOptions]="optionsLienExact"
+          ><i [class]="'fa-solid ' + lien.icone"></i> {{ lien.libelle }}</a
+        >
+      }
+    } @else {
+      <a routerLink="/reservations" routerLinkActive="actif"><i class="fa-solid fa-ticket"></i> Mes réservations</a>
+      <a routerLink="/historique" routerLinkActive="actif"><i class="fa-solid fa-clock-rotate-left"></i> Historique</a>
+      <a routerLink="/favoris" routerLinkActive="actif"><i class="fa-solid fa-heart"></i> Favoris</a>
+      <a routerLink="/carte-membre" routerLinkActive="actif"><i class="fa-solid fa-id-card"></i> Carte membre</a>
+      <a routerLink="/mes-avis" routerLinkActive="actif"><i class="fa-solid fa-star"></i> Mes avis</a>
+      <a routerLink="/calendrier" routerLinkActive="actif"><i class="fa-solid fa-calendar-days"></i> Calendrier</a>
+    }
+    <a routerLink="/profil" routerLinkActive="actif"><i class="fa-solid fa-user"></i> Mon profil</a>
+  </nav>
+
+  <span class="points"></span>
+
+  <button class="deconnexion" (click)="deconnexion()">
+    <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+  </button>
+</aside>

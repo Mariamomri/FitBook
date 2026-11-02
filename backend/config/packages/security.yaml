@@ -21,6 +21,7 @@ security:
         login:
             pattern: ^/api/login
             stateless: true
+            user_checker: App\Security\UserChecker # bloque les comptes désactivés
             json_login:
                 check_path: /api/login_check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
@@ -30,6 +31,7 @@ security:
         api:
             pattern: ^/api
             stateless: true
+            user_checker: App\Security\UserChecker # un token d'un compte désactivé est refusé
             jwt: ~
 
         main:
@@ -54,8 +56,10 @@ security:
         - { path: ^/api/contexts, roles: PUBLIC_ACCESS }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/users, roles: PUBLIC_ACCESS, methods: [POST] }
+        - { path: ^/api/contact, roles: PUBLIC_ACCESS, methods: [POST] }
+        - { path: ^/api/(mot-de-passe-oublie|nouveau-mot-de-passe), roles: PUBLIC_ACCESS, methods: [POST] }
         - {
-              path: ^/api/(activites|salles|coaches|horaires|seances|cours),
+              path: ^/api/(activites|salles|coaches|horaires|seances|cours|avis),
               roles: PUBLIC_ACCESS,
               methods: [GET],
           }

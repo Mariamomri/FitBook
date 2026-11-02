@@ -1,0 +1,66 @@
+<div class="espace">
+  <app-sidebar-sportif />
+
+  <div class="espace-contenu">
+    <section class="bandeau">
+      <h1>Mes <span class="vert">favoris</span></h1>
+      <p class="muted">Vos salles, cours et coachs préférés. Cliquez sur ♥ pour les retirer.</p>
+    </section>
+
+    <!-- Salles -->
+    <section class="bloc-carte">
+      <h2>Salles</h2>
+      <div class="liste">
+        @for (salle of sallesFavorites(); track salle.id) {
+          <article class="element">
+            <img [src]="salleService.photo(salle)" [alt]="salle.nom" />
+            <div>
+              <strong>{{ salle.nom }}</strong>
+              <span class="muted">{{ salle.ville }}</span>
+            </div>
+            <button class="coeur actif" (click)="favoriService.basculer('favoriSalles', '/api/salles/' + salle.id)" aria-label="Retirer des favoris">♥</button>
+          </article>
+        } @empty {
+          <p class="muted">Aucune salle favorite. <a routerLink="/salles">Voir les salles</a></p>
+        }
+      </div>
+    </section>
+
+    <!-- Cours -->
+    <section class="bloc-carte">
+      <h2>Cours</h2>
+      <div class="liste">
+        @for (unCours of coursFavoris(); track unCours.id) {
+          <article class="element">
+            <div>
+              <a [routerLink]="['/activites', unCours.id]"><strong>{{ unCours.titre }}</strong></a>
+              <span class="muted">{{ unCours.activiteNom }} · {{ unCours.salleNom }}</span>
+            </div>
+            <button class="coeur actif" (click)="favoriService.basculer('favoriCours', '/api/cours/' + unCours.id)" aria-label="Retirer des favoris">♥</button>
+          </article>
+        } @empty {
+          <p class="muted">Aucun cours favori. <a routerLink="/activites">Voir les activités</a></p>
+        }
+      </div>
+    </section>
+
+    <!-- Coachs -->
+    <section class="bloc-carte">
+      <h2>Coachs</h2>
+      <div class="liste">
+        @for (coach of coachesFavoris(); track coach.id) {
+          <article class="element">
+            <img [src]="coachService.photo(coach)" [alt]="coach.nomComplet" />
+            <div>
+              <strong>{{ coach.nomComplet }}</strong>
+              <span class="muted">{{ coach.langues }}</span>
+            </div>
+            <button class="coeur actif" (click)="favoriService.basculer('favoriCoachs', '/api/coaches/' + coach.id)" aria-label="Retirer des favoris">♥</button>
+          </article>
+        } @empty {
+          <p class="muted">Aucun coach favori. <a routerLink="/coach">Voir les coachs</a></p>
+        }
+      </div>
+    </section>
+  </div>
+</div>

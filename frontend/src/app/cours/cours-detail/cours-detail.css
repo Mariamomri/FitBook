@@ -1,0 +1,210 @@
+/* Bandeau du haut */
+.bandeau {
+  padding: 2.5rem 2rem 3rem;
+  border: 1px solid var(--accent);
+  background: linear-gradient(90deg, #151518 35%, #3a2a30);
+  background-size: cover;
+  background-position: center;
+}
+
+.fil {
+  font-size: 0.75rem;
+  margin: 0 0 1rem;
+}
+
+.fil a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.fil span {
+  color: var(--accent);
+}
+
+/* Étiquette « Niveau débutant » */
+.niveau {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  margin-bottom: 0.8rem;
+}
+
+.bandeau h1 {
+  font-size: 4rem;
+  margin-bottom: 0.5rem;
+}
+
+.vert {
+  color: var(--accent);
+}
+
+.sous-titre {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Deux colonnes : contenu + carte de réservation */
+.mise-en-page {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 900px) {
+  .mise-en-page {
+    grid-template-columns: 1fr 320px;
+  }
+
+  /* la carte remonte sur le bandeau */
+  .carte-resa {
+    margin-top: -9rem;
+  }
+}
+
+/* Carte du coach */
+.carte-coach {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.carte-coach p {
+  margin: 0;
+  flex: 1;
+}
+
+.carte-coach a {
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+}
+
+.contenu h2 {
+  margin-top: 2rem;
+}
+
+/* Autres créneaux */
+.creneaux {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.75rem;
+}
+
+.creneau {
+  padding: 0.8rem;
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+.creneau:hover {
+  border-color: var(--accent);
+}
+
+/* Carte de réservation */
+.carte-resa {
+  align-self: start;
+  position: sticky;
+  top: 100px;
+  padding: 1.5rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: 10px;
+}
+
+.prix {
+  margin: 0;
+  font-family: var(--font-title);
+  font-weight: 900;
+  font-style: italic;
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.petit {
+  font-size: 0.8rem;
+  margin: 0.2rem 0;
+}
+
+.date {
+  margin: 1rem 0 0.3rem;
+  font-size: 0.85rem;
+}
+
+/* Barre de remplissage des places */
+.barre {
+  height: 6px;
+  margin: 0.5rem 0 1.2rem;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.barre-remplie {
+  height: 100%;
+  background: var(--accent);
+}
+
+/* Boutons sur toute la largeur */
+.bloc {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 0.6rem;
+}
+
+/* Étoiles */
+.etoiles {
+  color: #facc15;
+}
+
+/* Photo du coach dans sa carte */
+.photo-coach {
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.carte-coach div {
+  flex: 1;
+}
+
+/* Lien « Renvoyer l'email de confirmation » sous l'erreur */
+.renvoyer {
+  margin: 0 0 0.8rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+}

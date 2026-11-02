@@ -1,0 +1,109 @@
+<!-- Bandeau du haut -->
+<section class="bandeau">
+  <span class="points"></span>
+  <p class="fil">
+    <a routerLink="/">Accueil</a> › <a routerLink="/profil">Mon profil</a> › <span>Modifier</span>
+  </p>
+  <h1>Modifier<br /><span class="vert">mon profil.</span></h1>
+  <span class="rayures"></span>
+</section>
+
+@if (moi(); as user) {
+  <div class="mise-en-page">
+    <!-- Colonne de gauche : carte et menu -->
+    <aside class="cote">
+      <div class="couverture"></div>
+      <div class="avatar">
+        <img [src]="profilService.photo(user.imageName)" [alt]="user.firstname" />
+      </div>
+      <h2>{{ user.firstname }} {{ user.lastname }}</h2>
+      <p class="muted petit">{{ profilService.libelleRole(user.roles) }}</p>
+
+      <nav class="menu">
+        <a routerLink="/profil" class="actif">Mon profil <span>→</span></a>
+        <a routerLink="/reservations">Mes réservations <span>→</span></a>
+        <a routerLink="/calendrier">Mon calendrier <span>→</span></a>
+      </nav>
+    </aside>
+
+    <!-- Formulaire -->
+    <form class="formulaire" [formGroup]="profilForm" (ngSubmit)="enregistrer()">
+      <p class="eyebrow">Informations personnelles</p>
+
+      <!-- Photo de profil : envoyée dès qu'on choisit un fichier -->
+      <label>Photo de profil</label>
+      <div class="photo">
+        <span class="mini-avatar">
+          <img [src]="profilService.photo(user.imageName)" alt="Photo actuelle" />
+        </span>
+        <div>
+          <label for="photo" class="btn btn-outline petit-btn">Choisir une photo</label>
+          <input id="photo" type="file" accept="image/png, image/jpeg, image/webp" (change)="choisirPhoto($event)" hidden />
+          <p class="muted mini">PNG, JPG, WEBP · 2 Mo max</p>
+          @if (erreurPhoto()) {
+            <p class="champ-erreur">{{ erreurPhoto() }}</p>
+          }
+        </div>
+      </div>
+
+      <!-- Prénom et nom sur la même ligne -->
+      <div class="deux-colonnes">
+        <div>
+          <label for="firstname">Prénom</label>
+          <input id="firstname" type="text" formControlName="firstname" />
+          @if (profilForm.controls.firstname.invalid && profilForm.controls.firstname.touched) {
+            <p class="champ-erreur">Entre 2 et 50 caractères</p>
+          }
+        </div>
+        <div>
+          <label for="lastname">Nom</label>
+          <input id="lastname" type="text" formControlName="lastname" />
+          @if (profilForm.controls.lastname.invalid && profilForm.controls.lastname.touched) {
+            <p class="champ-erreur">Entre 2 et 50 caractères</p>
+          }
+        </div>
+      </div>
+
+      <label for="email">Email</label>
+      <input id="email" type="email" [value]="user.email" disabled />
+      <p class="muted mini">L'email ne peut pas être modifié ici (contactez le support).</p>
+
+      <label for="phone">Téléphone</label>
+      <input id="phone" type="tel" formControlName="phone" placeholder="0470 12 34 56" />
+
+      <!-- Choix de la couleur : le site change tout de suite (aperçu) -->
+      <label>Couleur du site</label>
+      <div class="couleurs">
+        @for (couleur of themeService.couleurs; track couleur.nom) {
+          <button
+            type="button"
+            class="couleur"
+            [class.choisie]="profilForm.value.accentColor === couleur.nom"
+            (click)="choisirCouleur(couleur.nom)"
+          >
+            <span class="pastille" [style.background]="couleur.code"></span>
+            {{ couleur.libelle }}
+          </button>
+        }
+      </div>
+      <p class="muted mini">La couleur choisie s'applique aux boutons, liens et accents du site.</p>
+
+      <!-- Messages juste au-dessus des boutons pour être vus tout de suite -->
+      @if (succes()) {
+        <p class="alerte alerte-ok">{{ succes() }}</p>
+      }
+      @if (erreur()) {
+        <p class="alerte">{{ erreur() }}</p>
+      }
+
+      <div class="boutons">
+        <button type="button" class="btn btn-outline" (click)="annuler()">Annuler</button>
+        <button type="submit" class="btn">Enregistrer les modifications</button>
+      </div>
+    </form>
+  </div>
+} @else if (erreur()) {
+  <p class="alerte chargement">{{ erreur() }}</p>
+} @else {
+  <p class="muted chargement">Chargement du profil...</p>
+}

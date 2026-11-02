@@ -5,12 +5,26 @@
 
 SET NAMES utf8mb4;
 
+-- Avis et réservations faits pendant les tests (par l'admin ou le coach de test, ou sur la séance de test)
+DELETE FROM avis_notes WHERE reservation_id IN (
+    SELECT id FROM reservations
+    WHERE user_id IN (SELECT id FROM users WHERE email IN ('admin@fitbook.be', 'coach@fitbook.be'))
+       OR seance_id IN (SELECT id FROM seances WHERE cours_id IN (SELECT id FROM courses WHERE titre = 'Yoga du matin'))
+);
+DELETE FROM reservations
+WHERE user_id IN (SELECT id FROM users WHERE email IN ('admin@fitbook.be', 'coach@fitbook.be'))
+   OR seance_id IN (SELECT id FROM seances WHERE cours_id IN (SELECT id FROM courses WHERE titre = 'Yoga du matin'));
+
 DELETE FROM seances WHERE cours_id IN (SELECT id FROM courses WHERE titre = 'Yoga du matin');
 DELETE FROM courses WHERE titre = 'Yoga du matin';
 DELETE FROM salles WHERE nom = 'FitBook Ixelles';
 DELETE FROM activites WHERE nom = 'Yoga';
+
+-- Profil coach et carte de membre éventuels des utilisateurs de test
+DELETE FROM coaches WHERE user_id IN (SELECT id FROM users WHERE email IN ('admin@fitbook.be', 'coach@fitbook.be'));
+DELETE FROM cartes_membre WHERE user_id IN (SELECT id FROM users WHERE email IN ('admin@fitbook.be', 'coach@fitbook.be'));
 DELETE FROM users WHERE email IN ('admin@fitbook.be', 'coach@fitbook.be');
 
 -- Admin créé directement en base (on ne peut plus devenir admin via l'API)
 INSERT INTO users (id, email, roles, password, firstname, lastname, accent_color, is_active, is_verified, created_at, updated_at)
-VALUES (1000, 'admin@fitbook.be', '["ROLE_ADMIN"]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Julien', 'Admin', '#FF6B00', 1, 1, NOW(), NOW());
+VALUES (1000, 'admin@fitbook.be', '["ROLE_ADMIN"]', '$2y$13$Quq/E0TRvWe4d3jDsk217OpYaUi8FqqgFXR/DLz9AAJTEVMzLZ7WG', 'Julien', 'Admin', 'orange', 1, 1, NOW(), NOW());

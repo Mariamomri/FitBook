@@ -1,0 +1,86 @@
+@if (coach(); as c) {
+  <!-- Bandeau : photo dans un rond, nom, note et boutons -->
+  <section class="bandeau">
+    <span class="points"></span>
+    <div class="rond"><img [src]="coachService.photo(c)" [alt]="c.nomComplet" /></div>
+    <div class="infos">
+      <p class="fil"><a routerLink="/">Accueil</a> › <a routerLink="/coach">Coachs</a> › <span>{{ c.nomComplet }}</span></p>
+      <h1>{{ c.nomComplet }}</h1>
+      <p>Coach{{ specialites().length > 0 ? ' · ' + specialites().join(', ') : '' }}</p>
+      @if (avisDuCoach().length > 0) {
+        <p><span class="etoiles">{{ avisService.etoiles(noteArrondie()) }}</span> {{ noteMoyenne() }} · {{ avisDuCoach().length }} avis</p>
+      }
+      <p class="muted">{{ c.anneesExperience }} ans d'expérience · {{ c.langues }} · {{ c.tarif }} € / h</p>
+    </div>
+    <div class="actions">
+      <a class="btn" routerLink="/activites" [queryParams]="{ quoi: c.nomComplet }">Voir les séances →</a>
+      @if (authService.connecte()) {
+        <button class="btn btn-outline" (click)="favoriService.basculer('favoriCoachs', lienCoach())">
+          {{ favoriService.estFavori('favoriCoachs', lienCoach()) ? '♥ Dans mes favoris' : '♡ Ajouter aux favoris' }}
+        </button>
+      }
+    </div>
+    <span class="rayures"></span>
+  </section>
+
+  <div class="mise-en-page">
+    <div>
+      <h2>À propos</h2>
+      <p class="muted">{{ c.biographie }}</p>
+      @if (c.certifications) {
+        <p class="certifs">{{ c.certifications }}</p>
+      }
+
+      <h2>Prochaines séances</h2>
+      @for (seance of prochainesSeances(); track seance.id) {
+        <div class="ligne">
+          <div>
+            <strong>{{ seance.coursTitre }}</strong>
+            <!-- 'UTC' : afficher l'heure enregistrée en base sans décalage horaire -->
+            <span class="muted">{{ seance.dateDebut | date: 'EEE d MMM · HH:mm' : 'UTC' : 'fr' }} – {{ seance.dateFin | date: 'HH:mm' : 'UTC' }}</span>
+          </div>
+          <span class="muted lieu">{{ seance.salleNom }}</span>
+          @if (seance.placesRestantes > 0) {
+            <span class="places">{{ seance.placesRestantes }} places</span>
+            <a class="btn petit-btn" [routerLink]="['/activites', seance.coursId]">Réserver</a>
+          } @else {
+            <span class="places complet">Complet</span>
+          }
+        </div>
+      } @empty {
+        <p class="muted">Aucune séance prévue pour le moment.</p>
+      }
+
+      <app-donner-avis cible="coach" [lien]="lienCoach()" />
+    </div>
+
+    <aside class="cote">
+      <h2>Disponibilités</h2>
+      @for (disponibilite of sesDisponibilites(); track disponibilite.id) {
+        <p class="ligne-info"><span>{{ disponibilite.jour }}</span><strong>{{ heure(disponibilite.heureDebut) }} – {{ heure(disponibilite.heureFin) }}</strong></p>
+      } @empty {
+        <p class="muted">Non renseignées.</p>
+      }
+
+      <h2>Lieux de cours</h2>
+      <div class="pastilles">
+        @for (lieu of lieux(); track lieu) {
+          <span>{{ lieu }}</span>
+        } @empty {
+          <p class="muted">Aucun cours pour le moment.</p>
+        }
+      </div>
+
+      <h2>Spécialités</h2>
+      <div class="pastilles accent">
+        @for (specialite of specialites(); track specialite) {
+          <span>{{ specialite }}</span>
+        } @empty {
+          <p class="muted">—</p>
+        }
+      </div>
+    </aside>
+  </div>
+} @else {
+  <p class="muted">Chargement...</p>
+}

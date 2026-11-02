@@ -2,13 +2,14 @@ import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserInterface } from './user-interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private api = 'https://127.0.0.1:8000/api/login_check';
+  private api = environment.apiUrl + '/api/login_check';
 
   // true si un token existe : l'utilisateur est connecté
   connecte = signal(!!localStorage.getItem('token'));
@@ -33,9 +34,30 @@ export class AuthService {
     this.connecte.set(false);
   }
 
-    // Inscription : POST /api/users (API Platform attend du JSON-LD)
+  // Mot de passe oublié : Symfony envoie un lien valable 1 heure (même réponse si l'email n'existe pas)
+  motDePasseOublie(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(environment.apiUrl + '/api/mot-de-passe-oublie', { email });
+  }
+
+  // Nouveau mot de passe : le token vient du lien reçu par email
+  nouveauMotDePasse(token: string, password: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(environment.apiUrl + '/api/nouveau-mot-de-passe', { token, password });
+
+  }
+
+  // Renvoie le mail de confirmation à l'utilisateur connecté
+  renvoyerConfirmation(): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(environment.apiUrl + '/api/me/renvoyer-confirmation', {});
+  }
+
+  // Utilisateur connecté (Symfony le retrouve grâce au token)
+  getMoi(): Observable<UserInterface> {
+    return this.http.get<UserInterface>(environment.apiUrl + '/api/me');
+  }
+
+  // Inscription : POST /api/users (API Platform attend du JSON-LD)
   inscription(user: UserInterface): Observable<UserInterface> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/ld+json' });
-    return this.http.post<UserInterface>('https://127.0.0.1:8000/api/users', user, { headers });
+    return this.http.post<UserInterface>(environment.apiUrl + '/api/users', user, { headers });
   }
 }

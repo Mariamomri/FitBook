@@ -7,6 +7,7 @@
     <p>Niveau : {{ unCours.niveau }}</p>
     <p>Capacité : {{ unCours.capacite }} places</p>
     <p>Prix : {{ unCours.prix }} €</p>
+    <a [routerLink]="['/cours', unCours.id]">Voir le détail</a>
   </div>
 } @empty {
   <p>Aucun cours.</p>
