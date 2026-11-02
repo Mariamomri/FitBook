@@ -993,7 +993,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{ \"statut\": \"complète\" }",
+          "raw": "{ \"statut\": \"complete\" }",
           "options": {
             "raw": {
               "language": "json"
@@ -1046,7 +1046,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{ \"statut\": \"complète\" }",
+          "raw": "{ \"statut\": \"complete\" }",
           "options": {
             "raw": {
               "language": "json"
@@ -1276,6 +1276,96 @@
           ],
           "path": [
             "login_check"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Profil de l'utilisateur connecté",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Profil de l'utilisateur connecté\", function () {\r\n    pm.response.to.have.status(200);\r\n    pm.expect(pm.response.json().email).to.eql(\"admin@fitbook.be\");\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}api/me",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "me"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Photo de la salle enregistrée",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Statut création séance + sauvegarde idLastSeance\", function() {\r\n    if (pm.response.to.have.status(201)){\r\n        pm.environment.set(\"idLastSeance\", pm.response.json().id);\r\n    }\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/ld+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "  {\r\n    \"dateDebut\": \"2026-11-05T09:00:00+01:00\",\r\n    \"dateFin\": \"2026-11-05T10:00:00+01:00\",\r\n    \"statut\": \"ouverte\",\r\n    \"cours\": \"/api/cours/{{idCours}}\"\r\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}api/seances",
+          "host": [
+            "{{url}}api"
+          ],
+          "path": [
+            "seances"
           ]
         }
       },
