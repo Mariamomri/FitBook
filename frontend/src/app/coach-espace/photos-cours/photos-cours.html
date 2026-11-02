@@ -1,0 +1,34 @@
+<h2>Photos de mes cours</h2>
+<p class="muted">Cette photo remplace celle de l'activité sur l'accueil, la recherche et la fiche du cours.</p>
+
+@if (erreur()) {
+  <p class="alerte">{{ erreur() }}</p>
+}
+@if (succes()) {
+  <p class="alerte-ok">{{ succes() }}</p>
+}
+
+@if (liste().length) {
+  <div class="grille-cours">
+    @for (c of liste(); track c.id) {
+      <article class="carte-cours">
+        <img [src]="c.photo" [alt]="'Photo du cours ' + c.titre" />
+        <div class="infos">
+          <strong>{{ c.titre }}</strong>
+          <span class="muted petit">{{ c.activiteNom }} · {{ c.salleNom }}</span>
+          <label [for]="'photo-cours-' + c.id" class="btn btn-outline petit-btn">Changer la photo</label>
+          <input
+            [id]="'photo-cours-' + c.id"
+            type="file"
+            accept="image/png, image/jpeg, image/webp"
+            (change)="choisirPhoto(c, $event)"
+            hidden
+          />
+        </div>
+      </article>
+    }
+  </div>
+  <p class="muted petit">PNG, JPG, WEBP · 2 Mo max</p>
+} @else {
+  <p class="muted">Vous n'animez encore aucun cours.</p>
+}

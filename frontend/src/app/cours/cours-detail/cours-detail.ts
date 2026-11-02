@@ -12,6 +12,7 @@ import { AvisInterface } from '../../avis/avis-interface';
 import { DonnerAvis } from '../../avis/donner-avis/donner-avis';
 import { CoachService } from '../../coach/coach-service';
 import { CoachInterface } from '../../coach/coach-interface';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-cours-detail',
@@ -110,7 +111,11 @@ export class CoursDetail implements OnInit {
 
 
   // Photo du bandeau selon l'activité
-  photoActivite(nom: string | undefined): string {
+  photoActivite(nom: string | undefined, imageCours?: string | null): string {
+    // photo envoyée par le coach pour ce cours
+    if (imageCours) {
+      return environment.apiUrl + '/images/cours/' + imageCours;
+    }
     const photos: Record<string, string> = {
       musculation: 'img/barbell.jpg',
       'hatha yoga': 'img/yoga.jpg',

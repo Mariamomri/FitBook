@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AvisInterface } from './avis-interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AvisService {
   private http = inject(HttpClient);
-  private api = 'https://127.0.0.1:8000/api/avis';
+  private api = environment.apiUrl + '/api/avis';
 
   // API Platform renvoie la liste dans "member"
   getAvis(): Observable<{ member: AvisInterface[] }> {

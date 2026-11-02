@@ -11,4 +11,5 @@ export interface SeanceInterface {
   activiteNom: string;
   ville: string;
   coursId: number;
+  coursImage?: string | null; // photo du cours (null = photo de l'activité)
 }

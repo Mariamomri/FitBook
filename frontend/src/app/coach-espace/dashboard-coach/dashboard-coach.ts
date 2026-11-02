@@ -11,13 +11,14 @@ import { AvisService } from '../../avis/avis-service';
 import { AvisInterface } from '../../avis/avis-interface';
 import { SidebarSportif } from '../../layout/sidebar-sportif/sidebar-sportif';
 import { ProfilPro } from '../profil-pro/profil-pro';
+import { PhotosCours } from '../photos-cours/photos-cours';
 import { GestionDisponibilites } from '../gestion-disponibilites/gestion-disponibilites';
 import { GestionSeances } from '../../gestionnaire/gestion-seances/gestion-seances';
 import { ReservationsRecues } from '../../reservations/reservations-recues/reservations-recues';
 
 @Component({
   selector: 'app-dashboard-coach',
-  imports: [SidebarSportif, ProfilPro, GestionDisponibilites, GestionSeances, ReservationsRecues],
+  imports: [SidebarSportif, ProfilPro, PhotosCours, GestionDisponibilites, GestionSeances, ReservationsRecues],
   templateUrl: './dashboard-coach.html',
   styleUrl: './dashboard-coach.css',
 })
@@ -38,6 +39,9 @@ export class DashboardCoach implements OnInit {
   // Sa fiche coach : celle qui est liée à son compte
   maFiche = computed(() => this.coaches().find((c) => c.user === '/api/users/' + this.moi()?.id));
   lienFiche = computed(() => (this.maFiche() ? '/api/coaches/' + this.maFiche()!.id : ''));
+
+  // Les cours qu'il anime (pour la section des photos)
+  mesCours = computed(() => this.cours().filter((c) => c.coach === this.lienFiche()));
 
   // Ses séances à venir (cours qu'il anime, séances ouvertes)
   seancesAVenir = computed(() => {
