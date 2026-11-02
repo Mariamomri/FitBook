@@ -6,6 +6,7 @@ import { SeanceInterface } from '../seances/seance-interface';
 import { ActiviteService } from './activite-service';
 import { ActiviteInterface } from './activite-interface';
 import { AuthService } from '../auth/auth-service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-activites',
@@ -78,7 +79,11 @@ export class Activites implements OnInit {
   }
 
   // Photo de la séance selon son activité (images dans public/img)
-  photoActivite(nom: string): string {
+  photoActivite(nom: string, imageCours?: string | null): string {
+    // photo envoyée par le coach pour ce cours
+    if (imageCours) {
+      return environment.apiUrl + '/images/cours/' + imageCours;
+    }
     const photos: Record<string, string> = {
       musculation: 'img/barbell.jpg',
       'hatha yoga': 'img/yoga.jpg',

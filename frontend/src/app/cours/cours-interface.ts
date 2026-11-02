@@ -11,4 +11,5 @@ export interface CoursInterface {
   salle?: string; // liens vers les autres entités, ex. "/api/salles/12"
   activite?: string;
   coach?: string | null;
+  imageName?: string | null; // photo envoyée par le coach ou le gestionnaire
 }
