@@ -15,10 +15,14 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use Symfony\Component\Validator\Constraints as Assert; // règles de validation des données envoyées
+use ApiPlatform\Metadata\ApiProperty;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Attribute as Vich; // pour l'upload de la photo du cours
 
 #[ORM\Entity(repositoryClass: CoursRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'courses')]
+#[Vich\Uploadable] // le cours peut avoir sa propre photo
 //pour exposer l'entité via l'API Platform
 // Lecture publique ; l'admin, le gestionnaire de la salle et le coach du cours gèrent le cours
 #[ApiResource(operations: [
@@ -70,6 +74,21 @@ class Cours
 
     #[ORM\ManyToOne(inversedBy: 'cours')]
     private ?Coach $coach = null; // nullable : un cours peut exister sans coach (animer 0,1)
+
+    // fichier photo reçu (pas enregistré en base, utilisé seulement pendant l'upload)
+    #[Vich\UploadableField(mapping: 'cours', fileNameProperty: 'imageName', size: 'imageSize')]
+    #[ApiProperty(readable: false, writable: false)]
+    private ?File $imageFile = null;
+
+    // nom du fichier enregistré dans public/images/cours (null = photo de l'activité)
+    #[ORM\Column(nullable: true)]
+    #[ApiProperty(writable: false)]
+    private ?string $imageName = null;
+
+    // taille du fichier en octets
+    #[ORM\Column(nullable: true)]
+    #[ApiProperty(writable: false)]
+    private ?int $imageSize = null;
 
     /**
      * @var Collection<int, Seance>
@@ -268,5 +287,40 @@ class Cours
     public function getCoachNom(): ?string
     {
         return $this->coach?->getNomComplet();
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    // quand une nouvelle photo arrive, on change updatedAt pour que Doctrine enregistre la modification
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if ($imageFile !== null) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageSize(): ?int
+    {
+        return $this->imageSize;
+    }
+
+    public function setImageSize(?int $imageSize): void
+    {
+        $this->imageSize = $imageSize;
     }
 }
