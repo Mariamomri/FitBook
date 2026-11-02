@@ -34,6 +34,10 @@
           <app-profil-pro [coach]="fiche" />
         </section>
 
+        <section class="bloc-carte" id="photos-cours">
+          <app-photos-cours [cours]="mesCours()" />
+        </section>
+
         <!-- Même composant que le gestionnaire, limité aux cours qu'il anime -->
         <section class="bloc-carte" id="seances">
           <app-gestion-seances [moi]="user" [coachLien]="lienFiche()" />

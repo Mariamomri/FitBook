@@ -79,7 +79,7 @@
   <div class="grille-4">
     @for (seance of prochainesSeances(); track seance.id) {
       <article class="carte">
-        <div class="carte-image" [style.background-image]="'linear-gradient(0deg, rgba(8, 8, 9, 0.6), rgba(8, 8, 9, 0)), url(' + activiteService.photo(seance.activiteNom) + ')'">
+        <div class="carte-image" [style.background-image]="'linear-gradient(0deg, rgba(8, 8, 9, 0.6), rgba(8, 8, 9, 0)), url(' + photoSeance(seance) + ')'">
           <span class="tag">{{ seance.activiteNom }}</span>
           <span class="prix">{{ seance.prix }}€</span>
         </div>
