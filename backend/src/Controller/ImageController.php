@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Coach;
+use App\Entity\Cours;
 use App\Entity\Salle;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -58,6 +59,30 @@ final class ImageController extends AbstractController
     $entityManager->flush();
 
     return $this->json(['message' => 'Photo enregistrée.', 'imageName' => $coach->getImageName()]);
+  }
+
+  // Photo d'un cours : le coach du cours, le gestionnaire de sa salle ou un admin
+  #[Route('/api/cours/{id}/image', name: 'api_cours_image', methods: ['POST'])]
+  public function cours(Cours $cours, Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): JsonResponse
+  {
+    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+    $estCoach = $cours->getCoach()?->getUser() === $this->getUser();
+    $estGestionnaire = $cours->getSalle()?->getGestionnaire() === $this->getUser();
+    if (!$this->isGranted('ROLE_ADMIN') && !$estCoach && !$estGestionnaire) {
+      return $this->json(['message' => 'Vous ne pouvez modifier que la photo de vos propres cours.'], 403);
+    }
+
+    $fichier = $request->files->get('imageFile');
+    $erreur = $this->verifierImage($fichier, $validator);
+    if ($erreur !== null) {
+      return $this->json(['message' => $erreur], 422);
+    }
+
+    $cours->setImageFile($fichier);
+    $entityManager->flush();
+
+    return $this->json(['message' => 'Photo enregistrée.', 'imageName' => $cours->getImageName()]);
   }
 
   // Photo de profil de l'utilisateur connecté

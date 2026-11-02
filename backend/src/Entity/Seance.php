@@ -188,6 +188,12 @@ class Seance
         return $this->cours?->getCoachNom();
     }
 
+    // Photo envoyée pour le cours (null = photo de l'activité)
+    public function getCoursImage(): ?string
+    {
+        return $this->cours?->getImageName();
+    }
+
     public function getActiviteNom(): ?string
     {
         return $this->cours?->getActiviteNom();

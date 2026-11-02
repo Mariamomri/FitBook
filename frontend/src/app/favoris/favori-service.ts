@@ -1,6 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../auth/auth-service';
+import { environment } from '../../environments/environment';
 
 // Les favoris de l'utilisateur : des liens vers les salles, cours et coachs ("/api/salles/12")
 export interface FavorisInterface {
@@ -15,7 +16,7 @@ export interface FavorisInterface {
 export class FavoriService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
-  private api = 'https://127.0.0.1:8000/api/users/';
+  private api = environment.apiUrl + '/api/users/';
 
   // Gardés dans un signal : tous les cœurs du site se mettent à jour en même temps
   readonly favoris = signal<FavorisInterface>({ favoriSalles: [], favoriCours: [], favoriCoachs: [] });

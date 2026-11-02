@@ -47,6 +47,7 @@ export class SidebarSportif implements OnInit {
   // Liens du coach vers les parties de sa dashboard
   liensCoach = [
     { fragment: 'profil-pro', libelle: 'Profil professionnel', icone: 'fa-id-card' },
+    { fragment: 'photos-cours', libelle: 'Photos des cours', icone: 'fa-image' },
     { fragment: 'seances', libelle: 'Séances & calendrier', icone: 'fa-calendar-days' },
     { fragment: 'disponibilites', libelle: 'Disponibilités', icone: 'fa-clock' },
     { fragment: 'reservations', libelle: 'Réservations', icone: 'fa-ticket' },

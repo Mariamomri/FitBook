@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SeanceInterface } from './seance-interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SeanceService {
   private http = inject(HttpClient);
-  private api = 'https://127.0.0.1:8000/api';
+  private api = environment.apiUrl + '/api';
 
   // API Platform renvoie la liste dans "member"
   getSeances(): Observable<{ member: SeanceInterface[] }> {

@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { HoraireInterface } from './horaire-interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HoraireService {
   private http = inject(HttpClient);
-  private api = 'https://127.0.0.1:8000/api/horaires';
+  private api = environment.apiUrl + '/api/horaires';
 
   // API Platform renvoie la liste dans "member"
   getHoraires(): Observable<{ member: HoraireInterface[] }> {

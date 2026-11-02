@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SalleInterface } from './salle-interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SalleService {
   private http = inject(HttpClient);
-  private api = 'https://127.0.0.1:8000/api/salles';
+  private api = environment.apiUrl + '/api/salles';
 
   // API Platform renvoie la liste dans "member"
   getSalles(): Observable<{ member: SalleInterface[] }> {
@@ -22,7 +23,7 @@ export class SalleService {
 
   // Photo envoyée par le gestionnaire, ou image par défaut si la salle n'en a pas
   photo(salle: SalleInterface): string {
-    return salle.imageName ? 'https://127.0.0.1:8000/images/salles/' + salle.imageName : 'img/gym1.jpg';
+    return salle.imageName ? environment.apiUrl + '/images/salles/' + salle.imageName : 'img/gym1.jpg';
   }
 
   // Ajouter une salle (admin ou gestionnaire) : API Platform attend du JSON-LD

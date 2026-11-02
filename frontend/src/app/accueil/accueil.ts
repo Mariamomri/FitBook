@@ -93,4 +93,9 @@ export class Accueil implements OnInit {
       queryParams: { quoi: quoi || null, ou: ou || null, quand: quand || null },
     });
   }
+
+  // Photo de la carte : photo du cours si le coach en a envoyé une, sinon celle de l'activité
+  photoSeance(seance: SeanceInterface): string {
+    return this.coursService.photo(seance.coursImage, seance.activiteNom);
+  }
 }
