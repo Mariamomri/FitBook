@@ -33,7 +33,7 @@
 }
 
 .fil span {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .points {
@@ -173,7 +173,7 @@ textarea {
 
 .profil.choisi {
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* Case RGPD */
@@ -192,4 +192,4 @@ textarea {
   font-size: 0.7rem;
   margin: 0.3rem 0 0;
   text-align: right;
-}
+}

@@ -1,6 +1,6 @@
 @if (cours(); as c) {
   <!-- Bandeau du haut avec la photo de l'activité -->
-  <section class="bandeau" [style.background-image]="'linear-gradient(90deg, rgba(21, 21, 24, 0.95) 35%, rgba(21, 21, 24, 0.3)), url(' + photoActivite(c.activiteNom, c.imageName) + ')'">
+  <section class="bandeau" [style.background-image]="'linear-gradient(90deg, rgba(21, 21, 24, 0.95) 35%, rgba(21, 21, 24, 0.3)), url(' + photoActivite(c.activiteNom, c.imageName, c.titre) + ')'">
     <p class="fil">
       <a routerLink="/">Accueil</a> › <a routerLink="/activites">Recherche</a> › <span>{{ c.titre }}</span>
     </p>

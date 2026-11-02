@@ -36,7 +36,7 @@
   @apply text-gris no-underline;
 }
 .fil span {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 .actions {
   @apply relative flex flex-col gap-3;
@@ -53,7 +53,7 @@ h2 {
   @apply mt-6 mb-3 text-2xl;
 }
 .certifs {
-  @apply text-sm text-accent;
+  @apply text-sm text-accent-texte;
 }
 
 /* Séances */
@@ -67,7 +67,7 @@ h2 {
   @apply text-xs;
 }
 .places {
-  @apply rounded-full bg-accent/15 px-2 py-0.5 text-xs font-bold text-accent;
+  @apply rounded-full bg-accent/15 px-2 py-0.5 text-xs font-bold text-accent-texte;
 }
 .places.complet {
   @apply bg-danger/15 text-danger;

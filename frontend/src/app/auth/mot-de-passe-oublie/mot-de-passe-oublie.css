@@ -26,7 +26,7 @@
   @apply m-0 mb-3 text-4xl leading-none;
 }
 .vert {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 .carte p {
   @apply text-sm;
@@ -52,7 +52,7 @@ input:focus {
   @apply mt-1 mb-0 text-xs text-danger;
 }
 .retour {
-  @apply mt-3 block text-center text-xs font-bold text-accent no-underline;
+  @apply mt-3 block text-center text-xs font-bold text-accent-texte no-underline;
 }
 
 /* Message « Email envoyé » */
@@ -60,7 +60,7 @@ input:focus {
   @apply my-4 rounded-md border border-accent bg-accent/10 p-4 text-center text-sm;
 }
 .envoye i {
-  @apply mb-2 text-3xl text-accent;
+  @apply mb-2 text-3xl text-accent-texte;
 }
 .envoye p {
   @apply my-1;

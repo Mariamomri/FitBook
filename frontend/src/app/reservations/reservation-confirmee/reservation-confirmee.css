@@ -15,7 +15,7 @@
   @apply text-gris no-underline;
 }
 .fil span {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 
 /* Carte de confirmation */
@@ -32,7 +32,7 @@
   @apply m-0 text-4xl;
 }
 .numero {
-  @apply m-0 text-sm font-bold text-accent;
+  @apply m-0 text-sm font-bold text-accent-texte;
 }
 .details {
   @apply my-4 border-t border-bordure pt-3 text-sm;

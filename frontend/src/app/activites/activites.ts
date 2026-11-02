@@ -7,6 +7,7 @@ import { ActiviteService } from './activite-service';
 import { ActiviteInterface } from './activite-interface';
 import { AuthService } from '../auth/auth-service';
 import { environment } from '../../environments/environment';
+import { photoDuCours } from '../cours/cours-photos';
 
 @Component({
   selector: 'app-activites',
@@ -79,10 +80,15 @@ export class Activites implements OnInit {
   }
 
   // Photo de la séance selon son activité (images dans public/img)
-  photoActivite(nom: string, imageCours?: string | null): string {
+  photoActivite(nom: string, imageCours?: string | null, titre?: string): string {
     // photo envoyée par le coach pour ce cours
     if (imageCours) {
       return environment.apiUrl + '/images/cours/' + imageCours;
+    }
+    // photo choisie pour ce cours
+    const photoCours = photoDuCours(titre);
+    if (photoCours) {
+      return photoCours;
     }
     const photos: Record<string, string> = {
       musculation: 'img/barbell.jpg',

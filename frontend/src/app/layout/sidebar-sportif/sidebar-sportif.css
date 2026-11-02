@@ -27,7 +27,7 @@ nav a {
   @apply flex items-center gap-3 rounded-full px-4 py-2 text-sm text-texte no-underline;
 }
 nav a i {
-  @apply w-4 text-accent;
+  @apply w-4 text-accent-texte;
 }
 nav a:hover {
   @apply bg-carte;

@@ -8,7 +8,7 @@
   @apply text-gris no-underline;
 }
 .fil span {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 
 /* Grande photo avec points décoratifs */
@@ -60,7 +60,7 @@ h2 {
   @apply text-xs;
 }
 .places {
-  @apply rounded-full bg-accent/15 px-2 py-0.5 text-xs font-bold text-accent;
+  @apply rounded-full bg-accent/15 px-2 py-0.5 text-xs font-bold text-accent-texte;
 }
 .places.complet {
   @apply bg-danger/15 text-danger;
@@ -80,7 +80,7 @@ h2 {
   @apply h-16 w-16 rounded-full border-2 border-accent object-cover object-top;
 }
 .initiales {
-  @apply flex h-16 w-16 items-center justify-center rounded-full bg-carte font-titre text-xl font-black text-accent;
+  @apply flex h-16 w-16 items-center justify-center rounded-full bg-carte font-titre text-xl font-black text-accent-texte;
 }
 
 /* Ouvert / fermé aujourd'hui */
@@ -88,7 +88,7 @@ h2 {
   @apply mt-2 inline-block rounded-full px-2 py-0.5 text-xs font-bold;
 }
 .etat.ouvert {
-  @apply bg-accent/15 text-accent;
+  @apply bg-accent/15 text-accent-texte;
 }
 .etat.ferme {
   @apply bg-danger/15 text-danger;
