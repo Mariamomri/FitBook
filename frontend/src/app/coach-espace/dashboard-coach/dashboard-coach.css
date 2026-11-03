@@ -18,7 +18,7 @@
 }
 
 .vert {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 
 
@@ -36,7 +36,7 @@
 }
 
 .chiffre span i {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 
 .chiffre strong {
@@ -73,4 +73,4 @@
 
 .etoiles {
   @apply text-yellow-400;
-}
+}

@@ -26,7 +26,7 @@
   @apply m-0 mb-3 text-4xl leading-none;
 }
 .vert {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 .carte p {
   @apply text-sm;

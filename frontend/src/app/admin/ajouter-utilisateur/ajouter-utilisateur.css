@@ -19,7 +19,7 @@
 }
 .fil span,
 .vert {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 
 /* Formulaire à gauche, règles à droite */

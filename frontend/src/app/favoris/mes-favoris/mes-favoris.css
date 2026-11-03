@@ -14,7 +14,7 @@
   @apply mt-2 mb-0 text-sm;
 }
 .vert {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 
 .bloc-carte {
@@ -49,5 +49,5 @@
   @apply cursor-pointer border-0 bg-transparent text-2xl text-gris;
 }
 .coeur.actif {
-  @apply text-accent;
+  @apply text-accent-texte;
 }

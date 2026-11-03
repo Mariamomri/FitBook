@@ -2,6 +2,12 @@
 <html lang="fr" data-theme="dark" data-accent="vert">
   <head>
     <meta charset="utf-8" />
+    <!-- Met le mode clair tout de suite pour éviter un flash sombre -->
+    <script>
+      try {
+        if (localStorage.getItem('mode') === 'light') document.documentElement.dataset.theme = 'light';
+      } catch (e) {}
+    </script>
     <title>FitBook — Salles, cours et coachs</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

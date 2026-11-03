@@ -71,7 +71,7 @@ td {
   @apply rounded-full px-2 py-0.5 text-xs font-bold whitespace-nowrap;
 }
 .statut.ok {
-  @apply bg-accent/15 text-accent;
+  @apply bg-accent/15 text-accent-texte;
 }
 .statut.attente {
   @apply bg-yellow-400/15 text-yellow-300;
@@ -109,5 +109,5 @@ td {
   @apply rounded-full bg-carte px-2 text-gris;
 }
 .filtres-role button.actif {
-  @apply border-accent text-accent;
+  @apply border-accent text-accent-texte;
 }

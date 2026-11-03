@@ -12,7 +12,7 @@ import { ThemeService } from '../../theme/theme-service';
 export class Header {
   authService = inject(AuthService);
   private router = inject(Router);
-  private themeService = inject(ThemeService);
+  themeService = inject(ThemeService);
 
   // Menu mobile (bouton burger) ouvert ou fermé
   menuOuvert = signal(false);

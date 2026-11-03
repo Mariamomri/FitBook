@@ -19,7 +19,7 @@
 }
 .fil span,
 .vert {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 .points {
   @apply absolute top-0 right-0 h-full w-1/3 opacity-60;
@@ -42,7 +42,7 @@
 
 /* Photo ronde avec bordure de la couleur d'accent */
 .avatar {
-  @apply -mt-12 mb-3 flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 border-accent bg-nav font-titre text-3xl font-black text-accent italic;
+  @apply -mt-12 mb-3 flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 border-accent bg-nav font-titre text-3xl font-black text-accent-texte italic;
 }
 .avatar img {
   @apply h-full w-full object-cover;
@@ -79,7 +79,7 @@
   @apply w-full text-center;
 }
 .lien {
-  @apply mt-3 text-sm font-semibold text-accent no-underline;
+  @apply mt-3 text-sm font-semibold text-accent-texte no-underline;
 }
 
 .chargement {

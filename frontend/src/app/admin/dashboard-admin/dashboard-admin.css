@@ -15,7 +15,7 @@
   @apply mt-2 mb-0 text-sm;
 }
 .vert {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 
 /* Quatre cartes de chiffres */
@@ -29,7 +29,7 @@
   @apply flex justify-between text-xs text-gris;
 }
 .chiffre span i {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 .chiffre strong {
   @apply font-titre text-4xl font-black italic;

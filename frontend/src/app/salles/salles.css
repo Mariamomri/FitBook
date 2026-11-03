@@ -23,7 +23,7 @@
 }
 .fil span,
 .vert {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 
 /* Barre de recherche qui chevauche le bas du bandeau */
@@ -67,7 +67,7 @@
   @apply absolute inset-0 h-full w-full object-cover;
 }
 .numero {
-  @apply absolute top-2 left-2 flex h-6 w-6 items-center justify-center rounded-full border border-accent bg-nav text-xs font-bold text-accent;
+  @apply absolute top-2 left-2 flex h-6 w-6 items-center justify-center rounded-full border border-accent bg-nav text-xs font-bold text-accent-texte;
 }
 .active .numero {
   @apply bg-accent text-sur-accent;
@@ -86,7 +86,7 @@
   @apply italic;
 }
 .ouvert {
-  @apply mt-1 inline-block rounded bg-nav px-2 py-0.5 text-[0.6rem] font-bold uppercase text-accent;
+  @apply mt-1 inline-block rounded bg-nav px-2 py-0.5 text-[0.6rem] font-bold uppercase text-accent-texte;
 }
 
 /* Bouton en bas à droite */
@@ -113,7 +113,7 @@
   @apply cursor-pointer border-0 bg-transparent text-2xl leading-none text-gris;
 }
 .coeur.actif {
-  @apply text-accent;
+  @apply text-accent-texte;
 }
 
 /* Recherche par distance */
@@ -124,5 +124,5 @@
   @apply mx-8 -mt-5 mb-6 text-xs;
 }
 .distance {
-  @apply my-1 text-xs font-bold text-accent;
+  @apply my-1 text-xs font-bold text-accent-texte;
 }
