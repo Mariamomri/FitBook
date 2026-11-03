@@ -37,22 +37,6 @@ CREATE TABLE users (
 
 
 -- ----------------------------
--- Table: coachs
--- ----------------------------
-CREATE TABLE coachs (
-  id_coach INT NOT NULL AUTO_INCREMENT,
-  biographie TEXT NOT NULL,
-  annees_experience INT NOT NULL,
-  tarif DECIMAL(6,2) NOT NULL,
-  certifications TEXT NOT NULL,
-  langues VARCHAR(100) NOT NULL,
-  id_user INT NOT NULL,
-  CONSTRAINT coachs_PK PRIMARY KEY (id_coach),
-  CONSTRAINT coachs_id_user_FK FOREIGN KEY (id_user) REFERENCES users (id_user)
-)ENGINE=InnoDB;
-
-
--- ----------------------------
 -- Table: cartes_membre
 -- ----------------------------
 CREATE TABLE cartes_membre (
@@ -83,6 +67,25 @@ CREATE TABLE reset_password_request (
 
 
 -- ----------------------------
+-- Table: coaches
+-- ----------------------------
+CREATE TABLE coaches (
+  id_coach INT NOT NULL AUTO_INCREMENT,
+  biographie TEXT NOT NULL,
+  annees_experience INT NOT NULL,
+  tarif DECIMAL(6,2) NOT NULL,
+  certifications TEXT NOT NULL,
+  langues VARCHAR(100) NOT NULL,
+  image_name VARCHAR(255) NOT NULL,
+  image_size INT NOT NULL,
+  updated_at DATETIME NOT NULL,
+  id_user INT NOT NULL,
+  CONSTRAINT coaches_PK PRIMARY KEY (id_coach),
+  CONSTRAINT coaches_id_user_FK FOREIGN KEY (id_user) REFERENCES users (id_user)
+)ENGINE=InnoDB;
+
+
+-- ----------------------------
 -- Table: salles
 -- ----------------------------
 CREATE TABLE salles (
@@ -95,9 +98,6 @@ CREATE TABLE salles (
   telephone VARCHAR(30) NOT NULL,
   capacite INT NOT NULL,
   equipements VARCHAR(255) NOT NULL,
-  latitude DECIMAL(10,7) NOT NULL,
-  longitude DECIMAL(10,7) NOT NULL,
-  image_name VARCHAR(255) NOT NULL,
 
 /******************************************************************************************************
 *                                                                                                     *
