@@ -12,7 +12,7 @@ administrateur, chacun avec son propre espace et ses propres droits.
 
 ## Stack technique
 
-- **Frontend** : Angular 21, TypeScript, Tailwind-CSS, CSS3
+- **Frontend** : Angular 21, TypeScript, Tailwind-CSS, CSS3, GSAP
 - **Backend** : PHP / Symfony, API Platform
 - **Base de données** : MySQL
 - **Authentification** : JWT (LexikJWTAuthenticationBundle), mots de passe hachés (bcrypt)+
@@ -47,7 +47,7 @@ administrateur, chacun avec son propre espace et ses propres droits.
 cd backend
 composer install
 cp .env .env.local   # puis adapter DATABASE_URL, MAILER_DSN, JWT_PASSPHRASE
-php bin/console doctrine:database:create
+php bin/console doctrine:migrations:diff
 php bin/console doctrine:migrations:migrate
 php bin/console lexik:jwt:generate-keypair
 symfony server:start
