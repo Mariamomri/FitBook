@@ -12,10 +12,10 @@ administrateur, chacun avec son propre espace et ses propres droits.
 
 ## Stack technique
 
-- **Frontend** : Angular 21, TypeScript, SCSS
+- **Frontend** : Angular 21, TypeScript, Tailwind-CSS, CSS3
 - **Backend** : PHP / Symfony, API Platform
 - **Base de données** : MySQL
-- **Authentification** : JWT (LexikJWTAuthenticationBundle), mots de passe hachés (bcrypt)
+- **Authentification** : JWT (LexikJWTAuthenticationBundle), mots de passe hachés (bcrypt)+
 - **Tests** : Postman / Newman (API), k6 (tests de charge)
 - **Déploiement** : Vercel (frontend), AlwaysData (backend + base de données)
 
@@ -70,7 +70,7 @@ L'application est alors accessible sur `http://localhost:4200`, l'API sur `http:
 | Administrateur | admin@fitbook.be | julien123 |
 | Coach | mike@fitbook.be | mike123 |
 | Salle / gestionnaire | vitor@fitbook.be | vitor123 |
-| Sportif | mary@fitbook.be | Mary@123 |
+| Sportif | yanis@fitbook.be | yanis@123 |
 
 ## Tests
 
@@ -89,6 +89,14 @@ milieu, fin), conservées dans `backend/sql/backups/`.
 
 Les documents d'analyse (MCD, MLD, diagramme de classes, cas d'utilisation, user stories, maquettes) se
 trouvent dans le dossier `analyse/` et dans le cahier des charges.
+
+## Les liens utiles :
+
+Site en ligne : https://fit-book-tau.vercel.app
+Dépôt GitHub : https://github.com/Mariamomri/FitBook
+Trello : https://trello.com/b/RnNUL2B7/fitbook
+Maquette Figma : https://www.figma.com/proto/RNarGXC1TB5BIHiGDol844/FitBook?node-id=138-2&starting-point-node-id=138-2&scaling=scale-down-width&hide-ui=1
+Présentation Canva : https://canva.link/klx9lgboonqv952
 
 ## Auteure
 
