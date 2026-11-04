@@ -68,7 +68,7 @@ L'application est alors accessible sur `http://localhost:4200`, l'API sur `http:
 | Rôle | E-mail | Mot de passe |
 |---|---|---|
 | Administrateur | admin@fitbook.be | julien123 |
-| Coach | |vitor@fitbook.be | vitor123 |
+| Coach | vitor@fitbook.be | vitor123 |
 | Gérant de salle  | mike@fitbook.be | mike123 |
 | Sportif | yanis@fitbook.be | yanis@123 |
 
